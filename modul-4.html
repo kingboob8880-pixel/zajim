@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark" data-fontsize="1.0">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <meta name="theme-color" content="#0a0a1a">
+  <title>Модуль 4 — Духовная гигиена и устойчивость | Курс «Особенный»</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================
+       DESIGN SYSTEM TOKENS & RESET
+       ========================================= */
+    :root {
+      --radius: 16px;
+      --transition: 0.4s cubic-bezier(.4,0,.2,1);
+      --shadow: 0 8px 32px rgba(0,0,0,0.3);
+      --glass-fill: rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.1);
+      --backdrop-blur: 16px;
+      --line-height: 1.7;
+      --font-ui: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --font-arabic: 'Amiri', 'Traditional Arabic', serif;
+      --font-scale: 1.0;
+      --header-height: 72px;
+      --accent-gradient: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-1));
+    }
+
+    /* THEMES */
+    [data-theme="dark"] {
+      --bg-1: #0a0a1a; --bg-2: #12122a; --bg-3: #1a1a3a;
+      --text-1: #f0f0ff; --text-2: #b0b0cc; --text-3: #8888aa;
+      --accent-1: #6c5ce7; --accent-2: #a29bfe; --accent-3: #fd79a8;
+      --success: #00b894; --warning: #fdcb6e; --danger: #e17055;
+    }
+    [data-theme="ocean"] {
+      --bg-1: #0a192f; --bg-2: #112240; --bg-3: #1d3557;
+      --text-1: #ccd6f6; --text-2: #8892b0; --text-3: #5a6a8a;
+      --accent-1: #64ffda; --accent-2: #00b4d8; --accent-3: #48bfe3;
+      --success: #00e676; --warning: #f1c40f; --danger: #e74c3c;
+    }
+    [data-theme="ember"] {
+      --bg-1: #1a0a0a; --bg-2: #2d1b1b; --bg-3: #4a2c2c;
+      --text-1: #ffede0; --text-2: #d4a59c; --text-3: #a07068;
+      --accent-1: #ff6b35; --accent-2: #f7c59f; --accent-3: #e07a5f;
+      --success: #2ecc71; --warning: #f39c12; --danger: #c0392b;
+    }
+    [data-theme="forest"] {
+      --bg-1: #0a1a0a; --bg-2: #1a2e1a; --bg-3: #2d4a2d;
+      --text-1: #e8f5e9; --text-2: #a5d6a7; --text-3: #66bb6a;
+      --accent-1: #00e676; --accent-2: #69f0ae; --accent-3: #b9f6ca;
+      --success: #4caf50; --warning: #ffca28; --danger: #f44336;
+    }
+    [data-theme="royal"] {
+      --bg-1: #1a0a2e; --bg-2: #2d1b4e; --bg-3: #4a2d7a;
+      --text-1: #f3e8ff; --text-2: #c9a0dc; --text-3: #9a6bb0;
+      --accent-1: #b388ff; --accent-2: #ea80fc; --accent-3: #e040fb;
+      --success: #00e676; --warning: #ffca28; --danger: #ff5252;
+    }
+
+    /* BASE & RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: calc(100% * var(--font-scale)); }
+    body {
+      font-family: var(--font-ui);
+      color: var(--text-1);
+      background-color: var(--bg-1);
+      line-height: var(--line-height);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      padding-top: calc(var(--header-height) + 16px); /* FIX: Prevents first block from hiding under header */
+      scroll-padding-top: calc(var(--header-height) + 20px); /* FIX: Smooth scroll alignment */
+      font-size: 1rem;
+    }
+    h1, h2, h3 { font-weight: 600; line-height: 1.3; margin-bottom: 0.6em; }
+    h1 { font-size: 1.8rem; } h2 { font-size: 1.5rem; } h3 { font-size: 1.25rem; }
+    p { margin-bottom: 1em; color: var(--text-2); }
+    ul, ol { padding-left: 1.4em; margin-bottom: 1em; } li { margin-bottom: 0.4em; color: var(--text-2); }
+    a { color: var(--accent-2); text-decoration: none; border-bottom: 1px dotted var(--accent-2); transition: var(--transition); }
+    a:hover { color: var(--text-1); border-bottom-style: solid; }
+    img, svg { max-width: 100%; height: auto; }
+
+    /* ACCESSIBILITY */
+    :focus-visible { outline: 2px dashed var(--accent-2); outline-offset: 2px; border-radius: 4px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    }
+
+    /* =========================================
+       LAYOUT & COMPONENTS
+       ========================================= */
+    .container { max-width: 480px; margin: 0 auto; padding: 20px 16px 100px; position: relative; z-index: 2; }
+    section { scroll-margin-top: 80px; }
+    .practice-cta {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 18px; padding: 14px; border-radius: 12px; text-align: center;
+      font-weight: 600; text-decoration: none; border-bottom: none; color: #fff;
+      background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 10s ease infinite;
+    }
+    .practice-cta:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.3); color: #fff; border-bottom: none; }
+    .module-label {
+      display: inline-block; font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px;
+      background: var(--accent-gradient); background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    /* Glass Card */
+    .card {
+      background: var(--glass-fill);
+      backdrop-filter: blur(var(--backdrop-blur));
+      -webkit-backdrop-filter: blur(var(--backdrop-blur));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent-gradient); background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+    .card-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .card-reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Pills & Badges */
+    .pill {
+      display: inline-block; padding: 4px 12px; border-radius: 99px;
+      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;
+      background: rgba(255,255,255,0.08); border: 1px solid var(--glass-border);
+      color: var(--text-2); margin-right: 8px; margin-bottom: 8px;
+    }
+    .pill.success { background: var(--success); color: #000; border: none; }
+    .pill.warning { background: var(--warning); color: #000; border: none; }
+    .pill.danger { background: var(--danger); color: #000; border: none; }
+
+    /* Dua Card */
+    .dua-card {
+      background: rgba(0,0,0,0.25); border: 1px solid var(--glass-border);
+      border-radius: 12px; padding: 18px; margin-bottom: 16px; position: relative;
+    }
+    .dua-card .arabic {
+      font-family: var(--font-arabic); font-size: 1.6rem; direction: rtl; text-align: center;
+      color: var(--text-1); line-height: 1.4; margin-bottom: 10px; display: block;
+    }
+    .dua-card .translit { color: var(--accent-2); font-size: 0.9rem; margin-bottom: 4px; display: block; text-align: center; font-weight: 500; }
+    .dua-card .translation { color: var(--text-3); font-size: 0.85rem; text-align: center; font-style: italic; }
+    .dua-card .dot {
+      position: absolute; top: 12px; left: 12px; width: 8px; height: 8px;
+      border-radius: 50%; background: var(--accent-1); box-shadow: 0 0 6px var(--accent-1);
+    }
+
+    /* Dua Buttons Grid */
+    .dua-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 12px; }
+    .dua-btn {
+      padding: 12px 10px; border-radius: 12px; border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.05); color: var(--text-1); font-size: 0.82rem;
+      font-family: var(--font-ui); cursor: pointer; text-align: center; transition: var(--transition); line-height: 1.3;
+    }
+    .dua-btn:hover, .dua-btn:focus-visible {
+      background: var(--accent-gradient); background-size: 200% 200%;
+      color: #fff; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.35); border-color: transparent;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center;
+      padding: 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-overlay[hidden] { display: none; }
+    .modal-overlay.open { opacity: 1; }
+    .modal {
+      background: var(--bg-2); border: 1px solid var(--glass-border); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 30px 24px 26px; max-width: 440px; width: 100%; position: relative;
+      transform: translateY(20px) scale(0.97); transition: transform 0.3s ease; overflow: hidden;
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 8s ease infinite;
+    }
+    .modal-close {
+      position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%;
+      border: 1px solid var(--glass-border); background: rgba(255,255,255,0.08); color: var(--text-1);
+      cursor: pointer; font-size: 1rem; line-height: 1; transition: 0.2s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.15); }
+    .modal-title {
+      text-align: center; margin-bottom: 16px; color: var(--text-1); font-size: 1.05rem;
+      text-transform: uppercase; letter-spacing: 0.03em; padding: 0 28px;
+    }
+    .modal .dua-card { margin-bottom: 0; }
+
+    /* Accordion */
+    .accordion { border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+    .accordion-item { border-bottom: 1px solid var(--glass-border); }
+    .accordion-item:last-child { border-bottom: none; }
+    .accordion-header {
+      padding: 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+      background: rgba(255,255,255,0.03); font-weight: 500; transition: background 0.2s;
+    }
+    .accordion-header:hover { background: rgba(255,255,255,0.06); }
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; padding: 0 16px; }
+    .accordion-item.active .accordion-content { padding: 12px 16px 16px; max-height: 1200px; }
+    .accordion-icon { transition: transform 0.3s ease; font-size: 0.9rem; }
+    .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--glass-border); margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { background: var(--accent-gradient); background-size: 200% 200%; color: #fff; padding: 12px 10px; text-align: left; font-weight: 500; position: sticky; top: 0; white-space: nowrap; }
+    td { padding: 12px 10px; border-bottom: 1px solid var(--glass-border); color: var(--text-2); vertical-align: top; }
+    tr:nth-child(even) { background: rgba(255,255,255,0.03); }
+    tr:last-child td { border-bottom: none; }
+
+    /* Quote Block */
+    blockquote {
+      border-left: 3px solid var(--accent-1); padding-left: 16px; margin: 20px 0; font-style: italic;
+      color: var(--text-2); background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      position: fixed; top: 0; left: 0; right: 0; height: 64px; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
+      background: rgba(10,10,26,0.8); backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass-border);
+      padding-top: env(safe-area-inset-top);
+    }
+    .brand-pill { background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 8s ease infinite; padding: 6px 12px; border-radius: 99px; font-weight: 600; color: #fff; font-size: 0.85rem; }
+    .controls { display: flex; gap: 10px; align-items: center; }
+    .control-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-1); transition: 0.2s; font-size: 0.9rem; }
+    .control-btn:hover { background: rgba(255,255,255,0.2); }
+    .theme-dots { display: flex; gap: 6px; align-items: center; }
+    .dot { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+    .dot:hover, .dot.active { border-color: #fff; transform: scale(1.2); }
+    .lang-switch {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.03em;
+      padding: 6px 12px; border: none; border-radius: 8px; cursor: pointer;
+      background: rgba(255,255,255,0.92); color: #16162e; transition: 0.2s;
+    }
+    .lang-switch:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 72px; z-index: 100;
+      background: rgba(10,10,26,0.9); backdrop-filter: blur(16px); border-top: 1px solid var(--glass-border);
+      display: flex; justify-content: space-around; align-items: flex-start; padding-top: 12px;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+    .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-3); font-size: 0.7rem; gap: 3px; text-decoration: none; border: none; background: none; cursor: pointer; transition: 0.2s; width: 20%; }
+    .nav-item.active, .nav-item:hover { color: var(--accent-1); }
+    .nav-icon { font-size: 1.5rem; }
+
+    /* Splash Screen */
+    #splash {
+      position: fixed; inset: 0; z-index: 9999; background: var(--bg-1);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+    #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .splash-logo { font-size: 2rem; font-weight: 700; color: var(--text-1); margin-bottom: 12px; text-align: center; letter-spacing: 1px; }
+    .splash-module {
+      font-size: 0.85rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      margin-bottom: 10px; text-align: center;
+      background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 8s ease infinite;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .splash-title {
+      font-size: 1.05rem; font-weight: 500; color: var(--text-2); text-align: center;
+      max-width: 360px; line-height: 1.5; margin: 0 auto 28px; padding: 0 24px;
+    }
+    .loader { width: 140px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 4px; overflow: hidden; }
+    .loader-bar { width: 30%; height: 100%; background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 2s ease infinite, loaderMove 1.5s ease infinite; border-radius: 4px; }
+
+    /* Background & Orbs */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: -2;
+      background: linear-gradient(-45deg, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-1));
+      background-size: 400% 400%; animation: gradientShift 15s ease infinite;
+    }
+    .orb {
+      position: fixed; border-radius: 50%; filter: blur(70px); z-index: -1; opacity: 0.35; pointer-events: none;
+    }
+    .orb-1 { width: 320px; height: 320px; background: var(--accent-1); top: -15%; left: -10%; animation: orbFloat 20s ease-in-out infinite alternate; }
+    .orb-2 { width: 280px; height: 280px; background: var(--accent-2); bottom: 5%; right: -5%; animation: orbFloat 15s ease-in-out infinite alternate-reverse; }
+    .orb-3 { width: 220px; height: 220px; background: var(--accent-3); top: 45%; left: 35%; animation: orbFloat 18s ease-in-out infinite alternate; }
+
+    /* Animations */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes loaderMove { 0% { transform: translateX(-50%); } 100% { transform: translateX(300%); } }
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(20px, 30px) scale(1.05); }
+    }
+
+    /* Footer */
+    .credits { text-align: center; padding: 50px 16px 90px; font-size: 0.9rem; color: var(--text-3); }
+    .credits strong { color: var(--accent-2); font-weight: 600; }
+
+    /* Mobile Optimizations */
+    @media (max-width: 480px) {
+      h1 { font-size: 1.6rem; } h2 { font-size: 1.35rem; }
+      .card { padding: 18px; }
+      td, th { padding: 10px 8px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SPLASH SCREEN -->
+  <div id="splash" role="dialog" aria-label="Загрузка приложения">
+    <div class="splash-logo">🌿 Курс «Особенный»</div>
+    <div class="splash-module">Модуль 4</div>
+    <div class="splash-title">Духовная гигиена, границы и устойчивая чистота</div>
+    <div class="loader"><div class="loader-bar"></div></div>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div class="bg-layer"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- TOP BAR -->
+  <header class="top-bar" role="banner">
+    <div class="brand-pill">Лекарь Абу Мухаммад</div>
+    <div class="controls">
+      <div class="theme-dots" role="group" aria-label="Выбор темы">
+        <div class="dot active" style="background:#6c5ce7" data-theme="dark" title="Dark"></div>
+        <div class="dot" style="background:#64ffda" data-theme="ocean" title="Ocean"></div>
+        <div class="dot" style="background:#ff6b35" data-theme="ember" title="Ember"></div>
+        <div class="dot" style="background:#00e676" data-theme="forest" title="Forest"></div>
+        <div class="dot" style="background:#b388ff" data-theme="royal" title="Royal"></div>
+      </div>
+      <button class="control-btn" id="fontDown" aria-label="Уменьшить шрифт">A-</button>
+      <button class="control-btn" id="fontUp" aria-label="Увеличить шрифт">A+</button>
+      <button class="lang-switch" id="langToggle" type="button" data-lang="ru" aria-label="Сменить язык / Tilni almashtirish">RU</button>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    
+    <!-- INTRO -->
+    <section id="intro" class="card card-reveal">
+      <div class="module-label">Модуль 4</div>
+      <span class="pill">🌙 Введение</span>
+      <h1>Духовная гигиена, границы и устойчивая чистота</h1>
+      <p>Добро пожаловать в завершающий этап курса «Особенный». Если первые три модуля были направлены на активное высвобождение застрявших импульсов, трансформацию эмоций и тонкое духовно-визуальное очищение, то <strong>Модуль 4 переводит исцеление из разовой процедуры в живое, дышащее состояние</strong>.</p>
+      <p>Духовная гигиена — это не попытка добиться стерильности души, а искусство удерживать достигнутое равновесие, превращая внутренний мир в прозрачный сосуд, в котором не остаётся места для отравляющих эмоций, чужих тяжестей и привычных страданий. Когда тело и душа очищены, человек перестаёт быть заложником повторяющихся циклов боли.</p>
+      <blockquote>Чистота здесь становится не отсутствием грязи, а устойчивым внутренним законом. Чистая душа работает подобно отполированной поверхности: она видит, понимает, сочувствует, но не впитывает и не удерживает.</blockquote>
+      <p><strong>Что включает модуль:</strong></p>
+      <ol>
+        <li>Осознанное выстраивание личных границ и защиту внутреннего пространства.</li>
+        <li>Отказ от поглощения чужих излучений и ежедневное наполнение благодарностью.</li>
+        <li>Перевод практики в формат постоянной духовной экологии.</li>
+      </ol>
+      <div class="alert pill success">📌 Выполняется 2–3 раза в день до автоматизации навыков поддержания границ и благодарности.</div>
+      <a class="practice-cta" href="praktika-4.html">🤲 Перейти к практике</a>
+    </section>
+
+    <!-- SAFETY -->
+    <section id="safety" class="card card-reveal">
+      <span class="pill">🛡️ Безопасность</span>
+      <h2>Правила и подготовка</h2>
+      <ul>
+        <li><strong>Противопоказание:</strong> Беременность. При склонности к диссоциации, пограничным состояниям или тяжёлой социальной тревожности практикуйте границы постепенно.</li>
+        <li><strong>Эмоциональная перегрузка:</strong> Чувство вины или страх одиночества при выстраивании границ — нормально. Не форсируйте. Дышите, заземляйтесь, повторяйте формулы мягко.</li>
+        <li><strong>Нормальные реакции:</strong> Лёгкость после завершения контакта, ясность границ, снижение эмоционального «резонанса», естественное появление благодарности, улучшение сна.</li>
+        <li><strong>Стоп-кран:</strong> Истощение, паника при мысли о контакте, «эмоциональный вакуум». Остановитесь, душ, вода, 5 мин тихого дыхания, при необходимости — к специалисту.</li>
+      </ul>
+      <p><strong>Подготовка:</strong> Тихое пространство для уединения (10 мин ×2/день). Вода. Тёплый душ после вечерней сессии. Дневник духовной гигиены.</p>
+    </section>
+
+    <!-- STEPS -->
+    <section id="steps" class="card card-reveal">
+      <span class="pill">🤲 Практика</span>
+      <h2>Пошаговая инструкция</h2>
+      
+      <div class="accordion">
+        <div class="accordion-item active">
+          <div class="accordion-header" aria-expanded="true">
+            <span>1. Утренняя настройка и «Дыхание ясности»</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p>Проснувшись, лягте/сядьте ровно. 5 циклов: вдох (4) → задержка (2) → выдох (6). Мысленно: <em>«Вдыхаю ясность»</em> → <em>«Выдыхаю благодарность»</em>. Быстрое сканирование тела. Лёгкое протирание при тяжести. Формула защиты дня 3 раза. Утро начинается с «Альхамдулиллях».</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" aria-expanded="false">
+            <span>2. Дневное сканирование границ и «чужих теней»</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p>После значимых контактов найдите 2–3 мин. Сядьте спокойно и отследите своё состояние. Спросите себя: <em>«Что из этого разговора действительно моё, а что я принял на свой счёт напрасно?»</em>. При напряжении — 3 глубоких медленных выдоха. Разомните плечи и руки, чтобы снять мышечное напряжение.</p>
+            <ul>
+              <li>🛡️ <strong>Защита от заражения:</strong> твоя душа и тело — чистый сосуд. Не позволяй негативному окружению, токсичным разговорам или тяжёлым новостям заразить тебя своей «грязью».</li>
+              <li>📵 <strong>Информационная гигиена:</strong> дозируй входящий поток — экраны, чаты, ленты. После каждого тяжёлого контакта делай обязательный 1-минутный дыхательный сброс.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" aria-expanded="false">
+            <span>3. Активное выстраивание границ</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p>Определите, какие контакты регулярно вас истощают. Выберите один. Сформулируйте для себя ясную границу: <em>«Я могу выслушать и посочувствовать, но не обязан решать чужие проблемы и нести чужие эмоции»</em>. При необходимости измените формат общения: сократите время, обозначьте чёткое «нет», возьмите паузу. Сделайте 3 спокойных выдоха.</p>
+            <ul>
+              <li>🙌 <strong>Протокол «Это не моё»:</strong> при контакте с тяжёлой энергией мысленно скажи: «Я вижу, понимаю, но не забираю. Возвращаю владельцу». Сопроводи это лёгким физическим стряхиванием кистей рук, отделяя чужое состояние от своего.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" aria-expanded="false">
+            <span>4. Наполнение позитивом и благодарностью</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p>Пустое пространство нужно заполнить. Минимум 3 раза в день: «Альхамдулиллях» за конкретное событие. Практика «Открытой радости»: разрешите себе улыбку/радость без оглядки. При сопротивлении — отсеките формулой и продолжите.</p>
+            <ul>
+              <li>✨ <strong>Благодарность как заполнитель:</strong> пустое пространство после очищения нельзя оставлять пустым. Заполняй его искренним «Альхамдулиллях» за 3 конкретных момента дня и открытой, ничем не оправданной радостью.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" aria-expanded="false">
+            <span>5. Проверка устойчивости и возврат к практике</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p>Раз в 3–4 дня мысленно вызовите старое состояние. Если нет сжатия — чистота держится. При сопротивлении — вернитесь к М1/М2 именно в зоне отклика, затем продолжите М4. Рецидив — точка калибровки, не провал.</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" aria-expanded="false">
+            <span>6. Вечернее завершение и защита сна</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p>Тёплый душ. 5 спокойных циклов дыхания. Отметьте 1–2 хороших момента дня. Положите ладонь на грудь и спокойно скажите себе: <em>«Я завершаю этот день. То, что не в моих силах, я отпускаю до завтра. Альхамдулиллях»</em>. Засыпайте с этим ощущением завершённости.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANATOMY MAP -->
+    <section id="map" class="card card-reveal">
+      <span class="pill">🗺️ Карта</span>
+      <h2>Зоны поддержания чистоты и защиты</h2>
+      <p>В М4 работа смещается на поддержание границ. Зоны первыми реагируют на нарушение границ или поглощение чужих состояний.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Зона</th><th>Роль</th><th>Как проявляется нарушение</th><th>Практика поддержки</th></tr></thead>
+          <tbody>
+            <tr><td>Кожа / Поле</td><td>Первичный фильтр</td><td>«Липкость», холод, желание сжаться</td><td>Протирание, контрастное умывание</td></tr>
+            <tr><td>Солнечное сплетение</td><td>Воля, границы</td><td>Тяжесть, невозможность сказать «нет»</td><td>Дыхание 4-2-8, формула защиты</td></tr>
+            <tr><td>Грудь / Сердце</td><td>Эмпатия, резонанс</td><td>«Резонанс» с чужой болью, сжатие</td><td>Ладонь на сердце, 3 «Альхамдулиллях»</td></tr>
+            <tr><td>Горло</td><td>Голос, отказ</td><td>Ком, проглоченные слова, страх речи</td><td>Звуки «м-м-м», тёплая вода</td></tr>
+            <tr><td>Плечи / Ключицы</td><td>Ответственность</td><td>«Плита на плечах», взятие чужих задач</td><td>Стряхивание, хлопки по ключицам</td></tr>
+            <tr><td>Живот</td><td>Переваривание</td><td>Тошнота, ком, невозможность расслабиться</td><td>Круговые поглаживания, дыхание в живот</td></tr>
+            <tr><td>Таз / Корень</td><td>Заземление, безопасность</td><td>«Парение», страх будущего, потеря опоры</td><td>Стопы на пол, покачивание</td></tr>
+            <tr><td>Кисти / Ладони</td><td>Контакт, приём</td><td>Дрожь, желание стереть, онемение</td><td>Потирание до тепла, прикладывание к груди</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DUAS -->
+    <section id="duas" class="card card-reveal">
+      <span class="pill">📖 Формулы</span>
+      <h2>Духовные формулы (Модуль 4)</h2>
+      <p>Нажмите на нужное состояние — соответствующая духовная формула откроется в окне. Структура: <em>«Бисмиллях аркий мин [влияние]»</em></p>
+
+      <div class="dua-grid" id="duaGrid"></div>
+
+      <div id="duaStore" hidden>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنْ عَوْدَةِ الْأَنْمَاطِ الْقَدِيمَةِ</span><span class="translit">Бисмиллях аркий мин аўдат аль-анмат аль-кадимат</span><span class="translation">С именем Аллаха заклинаю от возврата старых паттернов</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْاِمْتِصَاصِ لِأَثْقَالِ الْآخَرِينَ</span><span class="translit">Бисмиллях аркий мина-ль-имтисас ли-аскаль аль-ахарин</span><span class="translation">С именем Аллаха заклинаю от поглощения чужих тяжестей</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنِ اخْتِرَاقِ الْحُدُودِ الشَّخْصِيَّةِ</span><span class="translit">Бисмиллях аркий мин ихтирак аль-худуд аш-шахсийят</span><span class="translation">С именем Аллаха заклинаю от нарушения личных границ</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنْ قَلَقِ اللَّيْلِ وَعَوْدَةِ الْأَثَرِ</span><span class="translit">Бисмиллях аркий мин каляк аль-ляйли ва авдат аль-асар</span><span class="translation">С именем Аллаха заклинаю от ночных тревог и возвратов</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْخَوْفِ وَالْحِقْدِ وَالْغَضَبِ</span><span class="translit">Бисмиллях аркий мина-ль-хауфи валь-хикди валь-гадаби</span><span class="translation">С именем Аллаха заклинаю от страха, обиды и гнева</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْيَأْسِ وَالْكَآبَةِ وَالْخُمُولِ</span><span class="translit">Бисмиллях аркий мина-ль-я’си валь-ка’абати валь-хумули</span><span class="translation">С именем Аллаха заклинаю от уныния, грусти и апатии</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْقَلَقِ وَالْهَمِّ وَالِاضْطِرَابِ</span><span class="translit">Бисмиллях аркий мина-ль-каляки валь-хамми вад-тыраб</span><span class="translation">С именем Аллаха заклинаю от тревоги, заботы и смятения</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْحَسَدِ وَالْغَيْرَةِ وَالْمُقَارَنَةِ</span><span class="translit">Бисмиллях аркий мина-ль-хасади валь-гирати валь-мукарнат</span><span class="translation">С именем Аллаха заклинаю от зависти, ревности и сравнения</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْخِزْيِ وَالْمَهَانَةِ وَاعْتِمَادِ الرَّأْيِ</span><span class="translit">Бисмиллях аркий мина-ль-хизйи валь-маханати ва и’тимад ар-ра’й</span><span class="translation">С именем Аллаха заклинаю от позора, унижения и зависимости от мнения</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْعُزْلَةِ وَالْإِنْغِلَاقِ وَالِانْفِصَالِ</span><span class="translit">Бисмиллях аркий мина-ль-‘узлати валь-ингилякы валь-инфисал</span><span class="translation">С именем Аллаха заклинаю от изоляции, замкнутости и отчуждения</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْإِنْهَاكِ وَالتَّعَبِ وَالِاسْتِنْفَادِ</span><span class="translit">Бисмиллях аркий мина-ль-инхаки ват-та’аби валь-истинфад</span><span class="translation">С именем Аллаха заклинаю от истощения, усталости и выгорания</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْكِتْمَانِ وَالْكَتْمِ وَالِانْقِبَاضِ</span><span class="translit">Бисмиллях аркий мина-ль-китмани валь-катми валь-инкибас</span><span class="translation">С именем Аллаха заклинаю от скрытности, подавления и зажатости</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْفَيْضِ وَفِقْدَانِ الْحَدِّ وَالثِّقْلِ</span><span class="translit">Бисмиллях аркий мина-ль-файди ва фикдан аль-хадди ват-сикль</span><span class="translation">С именем Аллаха заклинаю от переполнения, сбоя границ и тяжести</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ السُّخْطِ وَالتَّهَيُّجِ وَالِانْتِقَادِ</span><span class="translit">Бисмиллях аркий мина-с-схути ват-тахаййуджи валь-интикад</span><span class="translation">С именем Аллаха заклинаю от недовольства, раздражения и критики</span></div>
+      <div class="dua-card"><span class="dot"></span><span class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنْ حَبْسِ الْفَرَحِ وَمَنْعِ النُّورِ</span><span class="translit">Бисмиллях аркий мин хабс аль-фарахи ва ман’ ан-нур</span><span class="translation">С именем Аллаха заклинаю от блокировки радости и запрета на свет</span></div>
+      </div>
+    </section>
+
+    <!-- CRITERIA -->
+    <section id="criteria" class="card card-reveal">
+      <span class="pill">🛡️ Критерии</span>
+      <h2>Частота выполнения и переход к постоянной практике</h2>
+      <ul>
+        <li><strong>Частота:</strong> 2–3 раза в день (утро, день, вечер). В сложные дни добавляйте «точки возврата» по 2–3 мин.</li>
+        <li><strong>Последовательность:</strong> Начинайте с одной зоны, доведите до устойчивости, расширяйте. Gratitude — ежедневный фон.</li>
+      </ul>
+      <h3>Готовность к интеграции (✅)</h3>
+      <ul>
+        <li>После контактов нет фоновой тяжести или эмоционального «осадка».</li>
+        <li>«Нет» и дистанция возникают естественно, без чувства вины.</li>
+        <li>Вызов старых состояний не вызывает сжатия, дыхание ровное.</li>
+        <li>Благодарность и радость проявляются спонтанно.</li>
+        <li>Сон стабилен, пробуждение лёгкое, сканирование не выявляет блоков.</li>
+      </ul>
+      <p><em>Когда критерии совпадают, курс завершается. М4 переходит в формат ежедневной духовной экологии. Свет, который берегут, не гаснет.</em></p>
+    </section>
+
+    <!-- CONCLUSION -->
+    <section id="conclusion" class="card card-reveal">
+      <span class="pill">🌿 Итог</span>
+      <h2>Заключение четвёртого модуля</h2>
+      <p>Модуль 4 — это мост между очищением и жизнью. Он учит не бояться мира, а встречать его с ясными границами и открытым сердцем. Духовная гигиена здесь превращается в искусство дыхания: вдох ясности, выдох признательности.</p>
+      <blockquote>Чистота — не крепость, а прозрачность. Не стена, а свет.</blockquote>
+      <p>Практикуйте регулярно. Будьте бережны. Возвращайтесь к формулам, когда границы размываются. Позволяйте благодарности звучать без страха, а радости — расцветать без оглядки. Когда тело перестанет быть ареной борьбы, а душа станет пространством естественной чистоты, курс «Особенный» выполнит своё предназначение.</p>
+      <p style="margin-top:20px; text-align:center; font-style:italic;">Да дарует Аллах устойчивость, лёгкость и глубокую внутреннюю свободу каждому, кто проходит этот путь с искренностью и постоянным упованием на Всевышнего. Альхамдулиллях.</p>
+    </section>
+
+  </main>
+
+  <footer class="credits">
+    <p>🌙 Курс «Особенный»</p>
+    <p><strong>Лекарь Абу Мухаммад</strong></p>
+    <p style="font-size: 0.7rem; margin-top: 8px; opacity: 0.6;">v1.0 • Интегративная психосоматическая методика</p>
+  </footer>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" role="navigation" aria-label="Главное меню">
+    <a href="#intro" class="nav-item active" data-section="intro">
+      <span class="nav-icon">🌙</span>
+      <span>Введение</span>
+    </a>
+    <a href="#steps" class="nav-item" data-section="steps">
+      <span class="nav-icon">🤲</span>
+      <span>Практика</span>
+    </a>
+    <a href="#map" class="nav-item" data-section="map">
+      <span class="nav-icon">🗺️</span>
+      <span>Карта</span>
+    </a>
+    <a href="#duas" class="nav-item" data-section="duas">
+      <span class="nav-icon">📖</span>
+      <span>Формулы</span>
+    </a>
+    <a href="#conclusion" class="nav-item" data-section="conclusion">
+      <span class="nav-icon">🛡️</span>
+      <span>Итог</span>
+    </a>
+  </nav>
+
+  <!-- DUA MODAL -->
+  <div class="modal-overlay" id="duaModal" role="dialog" aria-modal="true" aria-labelledby="duaModalTitle" hidden>
+    <div class="modal">
+      <button class="modal-close" id="duaModalClose" aria-label="Закрыть">✕</button>
+      <h3 class="modal-title" id="duaModalTitle"></h3>
+      <div id="duaModalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    // === SPLASH SCREEN ===
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('splash').classList.add('hidden');
+      }, 1800);
+    });
+
+    // === THEME SWITCHER ===
+    const themeDots = document.querySelectorAll('.dot');
+    themeDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        document.documentElement.dataset.theme = dot.dataset.theme;
+        themeDots.forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+        localStorage.setItem('osobenniy-theme', dot.dataset.theme);
+      });
+    });
+
+    // === FONT SCALER ===
+    const root = document.documentElement;
+    let currentScale = parseFloat(localStorage.getItem('osobenniy-font') || '1.0');
+    root.style.setProperty('--font-scale', currentScale);
+
+    document.getElementById('fontDown').addEventListener('click', () => {
+      currentScale = Math.max(0.8, currentScale - 0.1);
+      root.style.setProperty('--font-scale', currentScale);
+      localStorage.setItem('osobenniy-font', currentScale);
+    });
+    document.getElementById('fontUp').addEventListener('click', () => {
+      currentScale = Math.min(1.4, currentScale + 0.1);
+      root.style.setProperty('--font-scale', currentScale);
+      localStorage.setItem('osobenniy-font', currentScale);
+    });
+
+    // === ЯЗЫК: RU / UZ (полный перевод по текстовым узлам) ===
+    const langBtn = document.getElementById('langToggle');
+    let currentLang = 'ru';
+    const UZ = {
+      // Splash / шапка / навигация
+      "🌿 Курс «Особенный»":"🌿 «Особенный» kursi",
+      "Модуль 4":"4-modul",
+      "Лекарь Абу Мухаммад":"Tabib Abu Muhammad",
+      "Введение":"Kirish","Практика":"Amaliyot","Карта":"Xarita","Формулы":"Formulalar","Итог":"Xulosa",
+      // Intro
+      "🤲 Перейти к практике":"🤲 Amaliyotga o'tish",
+      "🌙 Введение":"🌙 Kirish",
+      "Духовная гигиена, границы и устойчивая чистота":"Ma'naviy gigiyena, chegaralar va barqaror poklik",
+      "Добро пожаловать в завершающий этап курса «Особенный». Если первые три модуля были направлены на активное высвобождение застрявших импульсов, трансформацию эмоций и тонкое духовно-визуальное очищение, то":"«Особенный» kursining yakuniy bosqichiga xush kelibsiz. Agar dastlabki uchta modul qotib qolgan impulslarni faol ozod qilish, hissiyotlarni o'zgartirish va nozik ma'naviy-vizual tozalanishga qaratilgan bo'lsa,",
+      "Модуль 4 переводит исцеление из разовой процедуры в живое, дышащее состояние":"4-modul shifoni bir martalik muolajadan tirik, nafas oluvchi holatga aylantiradi",
+      "Духовная гигиена — это не попытка добиться стерильности души, а искусство удерживать достигнутое равновесие, превращая внутренний мир в прозрачный сосуд, в котором не остаётся места для отравляющих эмоций, чужих тяжестей и привычных страданий. Когда тело и душа очищены, человек перестаёт быть заложником повторяющихся циклов боли.":"Ma'naviy gigiyena — qalbni steril qilishga urinish emas, balki erishilgan muvozanatni saqlash san'ati bo'lib, ichki olamni zaharlovchi hissiyotlar, o'zga yuklari va odatiy azoblarga joy qolmaydigan tiniq idishga aylantiradi. Tana va qalb tozalanganda, inson takrorlanuvchi og'riq sikllarining asiri bo'lishdan to'xtaydi.",
+      "Чистота здесь становится не отсутствием грязи, а устойчивым внутренним законом. Чистая душа работает подобно отполированной поверхности: она видит, понимает, сочувствует, но не впитывает и не удерживает.":"Poklik bu yerda kir yo'qligi emas, balki barqaror ichki qonunga aylanadi. Pok qalb sayqallangan yuza kabi ishlaydi: u ko'radi, tushunadi, hamdard bo'ladi, ammo o'ziga singdirmaydi va ushlab qolmaydi.",
+      "Что включает модуль:":"Modul nimani o'z ichiga oladi:",
+      "Осознанное выстраивание личных границ и защиту внутреннего пространства.":"Shaxsiy chegaralarni ongli qurish va ichki makonni himoya qilish.",
+      "Отказ от поглощения чужих излучений и ежедневное наполнение благодарностью.":"O'zganing nurlanishlarini o'ziga yutishdan voz kechish va har kuni shukronalik bilan to'ldirish.",
+      "Перевод практики в формат постоянной духовной экологии.":"Amaliyotni doimiy ma'naviy ekologiya formatiga o'tkazish.",
+      "📌 Выполняется 2–3 раза в день до автоматизации навыков поддержания границ и благодарности.":"📌 Chegaralarni saqlash va shukronalik ko'nikmalari avtomatlashguncha kuniga 2–3 marta bajariladi.",
+      // Safety
+      "🛡️ Безопасность":"🛡️ Xavfsizlik",
+      "Правила и подготовка":"Qoidalar va tayyorgarlik",
+      "Противопоказание:":"Qarshi ko'rsatma:","Беременность. При склонности к диссоциации, пограничным состояниям или тяжёлой социальной тревожности практикуйте границы постепенно.":"Homiladorlik. Dissotsiatsiyaga moyillik, chegaraviy holatlar yoki og'ir ijtimoiy xavotirda chegaralarni asta-sekin mashq qiling.",
+      "Эмоциональная перегрузка:":"Hissiy ortiqcha yuk:","Чувство вины или страх одиночества при выстраивании границ — нормально. Не форсируйте. Дышите, заземляйтесь, повторяйте формулы мягко.":"Chegaralarni qurishda aybdorlik hissi yoki yolg'izlik qo'rquvi — normal. Shoshmang. Nafas oling, yerga ulaning, formulalarni yumshoq takrorlang.",
+      "Нормальные реакции:":"Normal reaksiyalar:","Лёгкость после завершения контакта, ясность границ, снижение эмоционального «резонанса», естественное появление благодарности, улучшение сна.":"Aloqa tugagach yengillik, chegaralar tiniqligi, hissiy «rezonans»ning kamayishi, shukronalikning tabiiy paydo bo'lishi, uyqu yaxshilanishi.",
+      "Стоп-кран:":"To'xtatish signali:","Истощение, паника при мысли о контакте, «эмоциональный вакуум». Остановитесь, душ, вода, 5 мин тихого дыхания, при необходимости — к специалисту.":"Holdan toyish, aloqa haqida o'ylaganda vahima, «hissiy vakuum». To'xtang, dush, suv, 5 daqiqa tinch nafas, zarur bo'lsa — mutaxassisga.",
+      "Подготовка:":"Tayyorgarlik:","Тихое пространство для уединения (10 мин ×2/день). Вода. Тёплый душ после вечерней сессии. Дневник духовной гигиены.":"Xilvat uchun tinch makon (10 daqiqa ×2/kun). Suv. Kechki seansdan keyin iliq dush. Ma'naviy gigiyena kundaligi.",
+      // Steps
+      "🤲 Практика":"🤲 Amaliyot",
+      "Пошаговая инструкция":"Bosqichma-bosqich qo'llanma",
+      "1. Утренняя настройка и «Дыхание ясности»":"1. Ertalabki sozlash va «Tiniqlik nafasi»",
+      "Проснувшись, лягте/сядьте ровно. 5 циклов: вдох (4) → задержка (2) → выдох (6). Мысленно:":"Uyg'ongach, tekis yoting/o'tiring. 5 tsikl: nafas (4) → ushlab turish (2) → chiqarish (6). Aqlan:",
+      "«Вдыхаю ясность»":"«Tiniqlikni nafasga olaman»",
+      "«Выдыхаю благодарность»":"«Shukronalikni nafas bilan chiqaraman»",
+      ". Быстрое сканирование тела. Лёгкое протирание при тяжести. Формула защиты дня 3 раза. Утро начинается с «Альхамдулиллях».":". Tananing tezkor skani. Og'irlikda yengil ishqalash. Kun himoyasi formulasi 3 marta. Tong «Alhamdulillah» bilan boshlanadi.",
+      "2. Дневное сканирование границ и «чужих теней»":"2. Chegaralar va «o'zga soyalari»ning kunduzgi skani",
+      "После значимых контактов найдите 2–3 мин. Сядьте спокойно и отследите своё состояние. Спросите себя:":"Muhim suhbatlardan keyin 2–3 daqiqa toping. Xotirjam o'tiring va holatingizni kuzating. O'zingizdan so'rang:",
+      "«Что из этого разговора действительно моё, а что я принял на свой счёт напрасно?»":"«Bu suhbatdan nimasi haqiqatan ham meniki, nimasini esa o'zimga bekorga oldim?»",
+      ". При напряжении — 3 глубоких медленных выдоха. Разомните плечи и руки, чтобы снять мышечное напряжение.":". Taranglikda — 3 ta chuqur sekin nafas chiqarish. Mushak taranglikni yozish uchun yelka va qo'llarni mashq qiling.",
+      "Защита от заражения:":"Yuqishdan himoya:","твоя душа и тело — чистый сосуд. Не позволяй негативному окружению, токсичным разговорам или тяжёлым новостям заразить тебя своей «грязью».":"qalbing va taning — pok idish. Salbiy muhit, zaharli suhbatlar yoki og'ir yangiliklar seni o'z «kiri» bilan yuqtirishiga yo'l qo'yma.",
+      "Информационная гигиена:":"Axborot gigiyenasi:","дозируй входящий поток — экраны, чаты, ленты. После каждого тяжёлого контакта делай обязательный 1-минутный дыхательный сброс.":"kiruvchi oqimni me'yorla — ekranlar, chatlar, lentalar. Har bir og'ir aloqadan keyin majburiy 1 daqiqalik nafas bilan tiklanish qil.",
+      "3. Активное выстраивание границ":"3. Chegaralarni faol qurish",
+      "Определите, какие контакты регулярно вас истощают. Выберите один. Сформулируйте для себя ясную границу:":"Qaysi muloqotlar sizni muntazam holdan toydirishini aniqlang. Bittasini tanlang. O'zingiz uchun aniq chegara belgilang:",
+      "«Я могу выслушать и посочувствовать, но не обязан решать чужие проблемы и нести чужие эмоции»":"«Men tinglashim va hamdard bo'lishim mumkin, ammo o'zganing muammolarini hal qilishga va his-tuyg'ularini ko'tarishga majbur emasman»",
+      ". При необходимости измените формат общения: сократите время, обозначьте чёткое «нет», возьмите паузу. Сделайте 3 спокойных выдоха.":". Zarur bo'lsa muloqot formatini o'zgartiring: vaqtni qisqartiring, aniq «yo'q» ayting, tanaffus oling. 3 ta xotirjam nafas chiqaring.",
+      "Протокол «Это не моё»:":"«Bu meniki emas» protokoli:","при контакте с тяжёлой энергией мысленно скажи: «Я вижу, понимаю, но не забираю. Возвращаю владельцу». Сопроводи это лёгким физическим стряхиванием кистей рук, отделяя чужое состояние от своего.":"og'ir energiya bilan to'qnashganda aqlan ayt: «Ko'raman, tushunaman, lekin o'zimga olmayman. Egasiga qaytaraman». Buni qo'l kaftlarini yengil silkitish bilan kuzating, o'zga holatni o'zingnikidan ajratib.",
+      "4. Наполнение позитивом и благодарностью":"4. Ijobiylik va shukronalik bilan to'ldirish",
+      "Пустое пространство нужно заполнить. Минимум 3 раза в день: «Альхамдулиллях» за конкретное событие. Практика «Открытой радости»: разрешите себе улыбку/радость без оглядки. При сопротивлении — отсеките формулой и продолжите.":"Bo'sh makonni to'ldirish kerak. Kuniga kamida 3 marta: aniq voqea uchun «Alhamdulillah». «Ochiq quvonch» amaliyoti: o'zingizga ortga qaramay tabassum/quvonchga ruxsat bering. Qarshilikda — formula bilan uzing va davom eting.",
+      "Благодарность как заполнитель:":"Shukronalik to'ldiruvchi sifatida:","пустое пространство после очищения нельзя оставлять пустым. Заполняй его искренним «Альхамдулиллях» за 3 конкретных момента дня и открытой, ничем не оправданной радостью.":"tozalashdan keyingi bo'sh makonni bo'sh qoldirib bo'lmaydi. Uni kunning 3 ta aniq lahzasi uchun samimiy «Alhamdulillah» va ochiq, hech narsa bilan oqlanmaydigan quvonch bilan to'ldir.",
+      "5. Проверка устойчивости и возврат к практике":"5. Barqarorlikni tekshirish va amaliyotga qaytish",
+      "Раз в 3–4 дня мысленно вызовите старое состояние. Если нет сжатия — чистота держится. При сопротивлении — вернитесь к М1/М2 именно в зоне отклика, затем продолжите М4. Рецидив — точка калибровки, не провал.":"Har 3–4 kunda eski holatni aqlan chaqiring. Qisilish bo'lmasa — poklik saqlanmoqda. Qarshilikda — aynan javob zonasida M1/M2 ga qayting, so'ng M4 ni davom ettiring. Retsidiv — kalibrlash nuqtasi, mag'lubiyat emas.",
+      "6. Вечернее завершение и защита сна":"6. Kechki yakunlash va uyqu himoyasi",
+      "Тёплый душ. 5 спокойных циклов дыхания. Отметьте 1–2 хороших момента дня. Положите ладонь на грудь и спокойно скажите себе:":"Iliq dush. 5 ta xotirjam nafas tsikli. Kunning 1–2 ta yaxshi lahzasini eslang. Kaftingizni ko'kragingizga qo'ying va o'zingizga xotirjam ayting:",
+      "«Я завершаю этот день. То, что не в моих силах, я отпускаю до завтра. Альхамдулиллях»":"«Men bu kunni yakunlayman. Qo'limdan kelmaydigan narsani ertaga qadar qo'yib yuboraman. Alhamdulillah»",
+      ". Засыпайте с этим ощущением завершённости.":". Shu tugallanganlik hissi bilan uxlang.",
+      // Map (4 cols)
+      "🗺️ Карта":"🗺️ Xarita",
+      "Зоны поддержания чистоты и защиты":"Poklik va himoyani saqlash zonalari",
+      "В М4 работа смещается на поддержание границ. Зоны первыми реагируют на нарушение границ или поглощение чужих состояний.":"M4 da ish chegaralarni saqlashga ko'chadi. Zonalar chegaralar buzilishi yoki o'zga holatlarni yutishga birinchi bo'lib javob beradi.",
+      "Зона":"Zona","Роль":"Roli","Как проявляется нарушение":"Buzilish qanday namoyon bo'ladi","Практика поддержки":"Qo'llab-quvvatlash amaliyoti",
+      "Кожа / Поле":"Teri / Maydon","Первичный фильтр":"Birlamchi filtr","«Липкость», холод, желание сжаться":"«Yopishqoqlik», sovuqlik, qisilish istagi","Протирание, контрастное умывание":"Ishqalash, kontrast yuvinish",
+      "Солнечное сплетение":"Quyosh chigali","Воля, границы":"Iroda, chegaralar","Тяжесть, невозможность сказать «нет»":"Og'irlik, «yo'q» deya olmaslik","Дыхание 4-2-8, формула защиты":"4-2-8 nafas, himoya formulasi",
+      "Грудь / Сердце":"Ko'krak / Yurak","Эмпатия, резонанс":"Empatiya, rezonans","«Резонанс» с чужой болью, сжатие":"O'zganing og'rig'i bilan «rezonans», qisilish","Ладонь на сердце, 3 «Альхамдулиллях»":"Kaft yurakda, 3 «Alhamdulillah»",
+      "Горло":"Tomoq","Голос, отказ":"Ovoz, rad etish","Ком, проглоченные слова, страх речи":"Tugun, yutilgan so'zlar, nutq qo'rquvi","Звуки «м-м-м», тёплая вода":"«M-m-m» tovushlari, iliq suv",
+      "Плечи / Ключицы":"Yelkalar / O'mrov suyaklari","Ответственность":"Mas'uliyat","«Плита на плечах», взятие чужих задач":"«Yelkadagi plita», o'zganing vazifalarini olish","Стряхивание, хлопки по ключицам":"Silkitish, o'mrov suyaklariga shapatilash",
+      "Живот":"Qorin","Переваривание":"Hazm qilish","Тошнота, ком, невозможность расслабиться":"Ko'ngil aynishi, tugun, bo'shasholmaslik","Круговые поглаживания, дыхание в живот":"Doiraviy silashlar, qoringa nafas",
+      "Таз / Корень":"Tos / Ildiz","Заземление, безопасность":"Yerga ulanish, xavfsizlik","«Парение», страх будущего, потеря опоры":"«Suzish», kelajak qo'rquvi, tayanchni yo'qotish","Стопы на пол, покачивание":"Tovonlar polda, chayqalish",
+      "Кисти / Ладони":"Kaftlar / Qo'llar","Контакт, приём":"Aloqa, qabul","Дрожь, желание стереть, онемение":"Titroq, o'chirish istagi, uvishish","Потирание до тепла, прикладывание к груди":"Iliqgacha ishqalash, ko'krakka qo'yish",
+      // Duas section + кнопки + переводы формул
+      "📖 Формулы":"📖 Formulalar",
+      "Духовные формулы (Модуль 4)":"Ma'naviy formulalar (4-modul)",
+      "Нажмите на нужное состояние — соответствующая духовная формула откроется в окне. Структура:":"Kerakli holatni bosing — tegishli ma'naviy formula oynada ochiladi. Tuzilishi:",
+      "«Бисмиллях аркий мин [влияние]»":"«Bismillah arkiy min [ta'sir]»",
+      "Старые паттерны":"Eski patternlar","Чужие тяжести":"O'zga yuklari","Границы":"Chegaralar","Ночные тревоги":"Tungi xavotirlar","Страх · Обида · Гнев":"Qo'rquv · Xafagarchilik · G'azab","Уныние · Грусть":"Tushkunlik · Mahzunlik","Тревога · Смятение":"Xavotir · Sarosima","Зависть · Сравнение":"Hasad · Taqqoslash","Позор · Унижение":"Sharmandalik · Xo'rlanish","Изоляция · Замкнутость":"Izolyatsiya · Tortinchoqlik","Истощение · Выгорание":"Holdan toyish · Charchash","Скрытность · Зажатость":"Yashirinlik · Qisilish","Переполнение":"To'lib-toshish","Недовольство · Критика":"Norozilik · Tanqid","Блок радости":"Quvonch bloki",
+      "С именем Аллаха заклинаю от возврата старых паттернов":"Alloh nomi bilan eski patternlarning qaytishidan panoh tilayman",
+      "С именем Аллаха заклинаю от поглощения чужих тяжестей":"Alloh nomi bilan o'zganing yuklarini o'ziga yutishdan panoh tilayman",
+      "С именем Аллаха заклинаю от нарушения личных границ":"Alloh nomi bilan shaxsiy chegaralarning buzilishidan panoh tilayman",
+      "С именем Аллаха заклинаю от ночных тревог и возвратов":"Alloh nomi bilan tungi xavotirlar va qaytishlardan panoh tilayman",
+      "С именем Аллаха заклинаю от страха, обиды и гнева":"Alloh nomi bilan qo'rquv, xafagarchilik va g'azabdan panoh tilayman",
+      "С именем Аллаха заклинаю от уныния, грусти и апатии":"Alloh nomi bilan tushkunlik, mahzunlik va loqaydlikdan panoh tilayman",
+      "С именем Аллаха заклинаю от тревоги, заботы и смятения":"Alloh nomi bilan xavotir, tashvish va sarosimadan panoh tilayman",
+      "С именем Аллаха заклинаю от зависти, ревности и сравнения":"Alloh nomi bilan hasad, rashk va taqqoslashdan panoh tilayman",
+      "С именем Аллаха заклинаю от позора, унижения и зависимости от мнения":"Alloh nomi bilan sharmandalik, xo'rlanish va fikrga qaramlikdan panoh tilayman",
+      "С именем Аллаха заклинаю от изоляции, замкнутости и отчуждения":"Alloh nomi bilan izolyatsiya, tortinchoqlik va begonalashishdan panoh tilayman",
+      "С именем Аллаха заклинаю от истощения, усталости и выгорания":"Alloh nomi bilan holdan toyish, charchoq va kuyib bitishdan panoh tilayman",
+      "С именем Аллаха заклинаю от скрытности, подавления и зажатости":"Alloh nomi bilan yashirinlik, bostirish va qisilishdan panoh tilayman",
+      "С именем Аллаха заклинаю от переполнения, сбоя границ и тяжести":"Alloh nomi bilan to'lib-toshish, chegaralar buzilishi va og'irlikdan panoh tilayman",
+      "С именем Аллаха заклинаю от недовольства, раздражения и критики":"Alloh nomi bilan norozilik, asabiylik va tanqiddan panoh tilayman",
+      "С именем Аллаха заклинаю от блокировки радости и запрета на свет":"Alloh nomi bilan quvonchning bloklanishi va nurga taqiqdan panoh tilayman",
+      // Criteria
+      "🛡️ Критерии":"🛡️ Mezonlar",
+      "Частота выполнения и переход к постоянной практике":"Bajarish chastotasi va doimiy amaliyotga o'tish",
+      "Частота:":"Chastota:","2–3 раза в день (утро, день, вечер). В сложные дни добавляйте «точки возврата» по 2–3 мин.":"Kuniga 2–3 marta (ertalab, kunduzi, kechqurun). Og'ir kunlarda 2–3 daqiqalik «qaytish nuqtalari»ni qo'shing.",
+      "Последовательность:":"Izchillik:","Начинайте с одной зоны, доведите до устойчивости, расширяйте. Gratitude — ежедневный фон.":"Bitta zonadan boshlang, barqarorlikka yetkazing, kengaytiring. Shukronalik — kundalik fon.",
+      "Готовность к интеграции (✅)":"Integratsiyaga tayyorlik (✅)",
+      "После контактов нет фоновой тяжести или эмоционального «осадка».":"Aloqalardan keyin fon og'irligi yoki hissiy «cho'kindi» yo'q.",
+      "«Нет» и дистанция возникают естественно, без чувства вины.":"«Yo'q» va masofa aybdorlik hissisiz, tabiiy paydo bo'ladi.",
+      "Вызов старых состояний не вызывает сжатия, дыхание ровное.":"Eski holatlarni chaqirish qisilish chaqirmaydi, nafas tekis.",
+      "Благодарность и радость проявляются спонтанно.":"Shukronalik va quvonch o'z-o'zidan namoyon bo'ladi.",
+      "Сон стабилен, пробуждение лёгкое, сканирование не выявляет блоков.":"Uyqu barqaror, uyg'onish yengil, skanerlash bloklarni aniqlamaydi.",
+      "Когда критерии совпадают, курс завершается. М4 переходит в формат ежедневной духовной экологии. Свет, который берегут, не гаснет.":"Mezonlar mos kelganda, kurs yakunlanadi. M4 kundalik ma'naviy ekologiya formatiga o'tadi. Asralgan nur so'nmaydi.",
+      // Conclusion
+      "🌿 Итог":"🌿 Xulosa",
+      "Заключение четвёртого модуля":"To'rtinchi modul yakuni",
+      "Модуль 4 — это мост между очищением и жизнью. Он учит не бояться мира, а встречать его с ясными границами и открытым сердцем. Духовная гигиена здесь превращается в искусство дыхания: вдох ясности, выдох признательности.":"4-modul — tozalanish va hayot o'rtasidagi ko'prik. U dunyodan qo'rqmaslikni, balki uni tiniq chegaralar va ochiq yurak bilan kutib olishni o'rgatadi. Ma'naviy gigiyena bu yerda nafas san'atiga aylanadi: tiniqlik nafasi, minnatdorchilik nafasi.",
+      "Чистота — не крепость, а прозрачность. Не стена, а свет.":"Poklik — qal'a emas, balki tiniqlik. Devor emas, balki nur.",
+      "Практикуйте регулярно. Будьте бережны. Возвращайтесь к формулам, когда границы размываются. Позволяйте благодарности звучать без страха, а радости — расцветать без оглядки. Когда тело перестанет быть ареной борьбы, а душа станет пространством естественной чистоты, курс «Особенный» выполнит своё предназначение.":"Muntazam shug'ullaning. Ehtiyot bo'ling. Chegaralar xiralashganda formulalarga qayting. Shukronalik qo'rquvsiz yangrashiga, quvonch ortga qaramay gullashiga ruxsat bering. Tana kurash maydoni bo'lishdan to'xtab, qalb tabiiy poklik makoniga aylanganda, «Особенный» kursi o'z maqsadini bajaradi.",
+      "Да дарует Аллах устойчивость, лёгкость и глубокую внутреннюю свободу каждому, кто проходит этот путь с искренностью и постоянным упованием на Всевышнего. Альхамдулиллях.":"Alloh bu yo'ldan samimiyat va Allohga doimiy tavakkul bilan o'tayotgan har bir kishiga barqarorlik, yengillik va chuqur ichki erkinlik ato etsin. Alhamdulillah.",
+      // Footer
+      "🌙 Курс «Особенный»":"🌙 «Особенный» kursi",
+      "v1.0 • Интегративная психосоматическая методика":"v1.0 • Integrativ psixosomatik metodika"
+    };
+    const RU = {};
+    Object.keys(UZ).forEach(k => { RU[UZ[k]] = k; });
+
+    function translateTree(root, lang) {
+      const tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode(n) {
+          const p = n.parentNode;
+          if (p && (p.nodeName === 'SCRIPT' || p.nodeName === 'STYLE')) return NodeFilter.FILTER_REJECT;
+          return n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      let n;
+      while ((n = tw.nextNode())) {
+        const t = n.nodeValue.trim();
+        if (lang === 'uz' && UZ[t] !== undefined) n.nodeValue = n.nodeValue.replace(t, UZ[t]);
+        else if (lang === 'ru' && RU[t] !== undefined) n.nodeValue = n.nodeValue.replace(t, RU[t]);
+      }
+    }
+
+    function setLang(lang) {
+      translateTree(document.body, lang);
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      langBtn.textContent = lang.toUpperCase();
+      langBtn.dataset.lang = lang;
+      try { localStorage.setItem('osobenniy-lang', lang); } catch (e) {}
+    }
+
+    langBtn.addEventListener('click', () => setLang(currentLang === 'ru' ? 'uz' : 'ru'));
+
+    // === ACCORDION ===
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const item = header.parentElement;
+        const isActive = item.classList.contains('active');
+        item.parentElement.querySelectorAll('.accordion-item').forEach(i => {
+          i.classList.remove('active');
+          i.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+        });
+        if (!isActive) {
+          item.classList.add('active');
+          header.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // === SCROLL REVEAL (IntersectionObserver) ===
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.card-reveal').forEach(card => observer.observe(card));
+
+    // === ACTIVE NAV STATE (throttled via rAF) ===
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-item');
+    let navTicking = false;
+    function updateActiveNav() {
+      let current = '';
+      sections.forEach(section => {
+        if (window.scrollY >= section.offsetTop - 120) current = section.getAttribute('id');
+      });
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('data-section') === current);
+      });
+      navTicking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!navTicking) { navTicking = true; requestAnimationFrame(updateActiveNav); }
+    }, { passive: true });
+
+    // === DUA FORMULAS → MODAL ===
+    const duaLabels = ['Старые паттерны','Чужие тяжести','Границы','Ночные тревоги','Страх · Обида · Гнев','Уныние · Грусть','Тревога · Смятение','Зависть · Сравнение','Позор · Унижение','Изоляция · Замкнутость','Истощение · Выгорание','Скрытность · Зажатость','Переполнение','Недовольство · Критика','Блок радости'];
+    const duaCards = Array.from(document.querySelectorAll('#duaStore .dua-card'));
+    const duaGrid = document.getElementById('duaGrid');
+    const duaModal = document.getElementById('duaModal');
+    const duaModalBody = document.getElementById('duaModalBody');
+    const duaModalTitle = document.getElementById('duaModalTitle');
+    const duaModalClose = document.getElementById('duaModalClose');
+    let duaLastFocus = null;
+    let duaHideTimer = null;
+
+    duaCards.forEach((card, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'dua-btn';
+      btn.textContent = duaLabels[i] || ('Формула ' + (i + 1));
+      btn.addEventListener('click', () => openDua(i));
+      duaGrid.appendChild(btn);
+    });
+
+    function openDua(i) {
+      if (duaHideTimer) { clearTimeout(duaHideTimer); duaHideTimer = null; }
+      duaLastFocus = document.activeElement;
+      duaModalTitle.textContent = duaLabels[i] || ('Формула ' + (i + 1));
+      duaModalBody.innerHTML = '';
+      duaModalBody.appendChild(duaCards[i].cloneNode(true));
+      translateTree(duaModal, currentLang);
+      duaModal.hidden = false;
+      requestAnimationFrame(() => duaModal.classList.add('open'));
+      document.body.style.overflow = 'hidden';
+      duaModalClose.focus();
+    }
+    function closeDua() {
+      duaModal.classList.remove('open');
+      document.body.style.overflow = '';
+      duaHideTimer = setTimeout(() => { duaModal.hidden = true; duaHideTimer = null; }, 300);
+      if (duaLastFocus) duaLastFocus.focus();
+    }
+    duaModalClose.addEventListener('click', closeDua);
+    duaModal.addEventListener('click', e => { if (e.target === duaModal) closeDua(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !duaModal.hidden) closeDua(); });
+
+    // Восстановление выбранного языка (после генерации кнопок)
+    const savedLang = localStorage.getItem('osobenniy-lang');
+    if (savedLang === 'uz') setLang('uz');
+
+    // Load saved preferences
+    const savedTheme = localStorage.getItem('osobenniy-theme');
+    if (savedTheme) {
+      document.documentElement.dataset.theme = savedTheme;
+      themeDots.forEach(d => d.classList.toggle('active', d.dataset.theme === savedTheme));
+    }
+  </script>
+</body>
+</html>

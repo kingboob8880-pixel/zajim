@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark" data-fontsize="1">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Особенный — Курс трансформации личности</title>
+<style>
+/* ===================== RESET & BASE ===================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --transition:0.4s cubic-bezier(.4,0,.2,1);
+  --radius:16px;
+  --shadow:0 8px 32px rgba(0,0,0,0.3);
+  --glass:rgba(255,255,255,0.06);
+  --glass-border:rgba(255,255,255,0.1);
+  --fs:1rem;
+  /* Исправлено: убран рекурсивный calc (был calc(1.8rem * var(--fs)) где --fs=1rem → бесконечная рекурсия в старых движках) */
+  --fs-h1:1.8rem;
+  --fs-h2:1.5rem;
+  --fs-h3:1.25rem;
+  --fs-body:1rem;
+  --fs-small:0.875rem;
+  --fs-micro:0.75rem;
+}
+
+/* ===================== THEMES ===================== */
+[data-theme="dark"]{
+  --bg1:#0a0a1a;--bg2:#12122a;--bg3:#1a1a3a;
+  --text1:#f0f0ff;--text2:#b0b0cc;--text3:#8888aa;
+  --accent1:#6c5ce7;--accent2:#a29bfe;--accent3:#fd79a8;
+  --gradient:linear-gradient(135deg,#6c5ce7,#a29bfe,#fd79a8,#6c5ce7);
+  --card-bg:rgba(255,255,255,0.04);
+  --modal-bg:rgba(15,15,35,0.97);
+  --success:#00b894;--warning:#fdcb6e;--danger:#e17055;
+}
+[data-theme="ocean"]{
+  --bg1:#0a192f;--bg2:#112240;--bg3:#1d3557;
+  --text1:#ccd6f6;--text2:#8892b0;--text3:#5a6a8a;
+  --accent1:#64ffda;--accent2:#00b4d8;--accent3:#48bfe3;
+  --gradient:linear-gradient(135deg,#64ffda,#00b4d8,#48bfe3,#64ffda);
+  --card-bg:rgba(255,255,255,0.04);
+  --modal-bg:rgba(10,25,47,0.97);
+  --success:#64ffda;--warning:#ffd166;--danger:#ef476f;
+}
+[data-theme="ember"]{
+  --bg1:#1a0a0a;--bg2:#2d1b1b;--bg3:#4a2c2c;
+  --text1:#ffede0;--text2:#d4a59c;--text3:#a07068;
+  --accent1:#ff6b35;--accent2:#f7c59f;--accent3:#e07a5f;
+  --gradient:linear-gradient(135deg,#ff6b35,#f7c59f,#e07a5f,#ff6b35);
+  --card-bg:rgba(255,255,255,0.04);
+  --modal-bg:rgba(26,10,10,0.97);
+  --success:#2ecc71;--warning:#f1c40f;--danger:#e74c3c;
+}
+[data-theme="forest"]{
+  --bg1:#0a1a0a;--bg2:#1a2e1a;--bg3:#2d4a2d;
+  --text1:#e8f5e9;--text2:#a5d6a7;--text3:#66bb6a;
+  --accent1:#00e676;--accent2:#69f0ae;--accent3:#b9f6ca;
+  --gradient:linear-gradient(135deg,#00e676,#69f0ae,#b9f6ca,#00e676);
+  --card-bg:rgba(255,255,255,0.04);
+  --modal-bg:rgba(10,26,10,0.97);
+  --success:#00e676;--warning:#ffee58;--danger:#ff5252;
+}
+[data-theme="royal"]{
+  --bg1:#1a0a2e;--bg2:#2d1b4e;--bg3:#4a2d7a;
+  --text1:#f3e8ff;--text2:#c9a0dc;--text3:#9a6bb0;
+  --accent1:#b388ff;--accent2:#ea80fc;--accent3:#e040fb;
+  --gradient:linear-gradient(135deg,#b388ff,#ea80fc,#e040fb,#b388ff);
+  --card-bg:rgba(255,255,255,0.04);
+  --modal-bg:rgba(26,10,46,0.97);
+  --success:#69f0ae;--warning:#ffd740;--danger:#ff5252;
+}
+
+/* ===================== ANIMATED GRADIENT BG ===================== */
+body{
+  font-size:var(--fs-body);
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:var(--bg1);
+  color:var(--text1);
+  line-height:1.7;
+  overflow-x:hidden;
+  min-height:100vh;
+  transition:background var(--transition),color var(--transition);
+}
+/* Исправлено: will-change для GPU-слоя анимированного фона */
+.animated-bg{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;
+  background:linear-gradient(-45deg,var(--bg1),var(--bg2),var(--bg3),var(--bg1));
+  background-size:400% 400%;
+  animation:gradientShift 15s ease infinite;
+  pointer-events:none;
+  will-change:background-position;
+}
+@keyframes gradientShift{
+  0%{background-position:0% 50%}
+  25%{background-position:100% 50%}
+  50%{background-position:100% 0%}
+  75%{background-position:0% 100%}
+  100%{background-position:0% 50%}
+}
+/* Floating orbs */
+.orb{
+  position:fixed;border-radius:50%;filter:blur(80px);opacity:0.15;
+  pointer-events:none;z-index:0;
+  animation:orbFloat 20s ease-in-out infinite;
+  will-change:transform;
+}
+.orb-1{width:300px;height:300px;background:var(--accent1);top:-100px;left:-100px;animation-delay:0s}
+.orb-2{width:250px;height:250px;background:var(--accent3);bottom:-50px;right:-50px;animation-delay:-5s}
+.orb-3{width:200px;height:200px;background:var(--accent2);top:50%;left:50%;animation-delay:-10s}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  25%{transform:translate(30px,-40px) scale(1.1)}
+  50%{transform:translate(-20px,60px) scale(0.9)}
+  75%{transform:translate(40px,30px) scale(1.05)}
+}
+
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:var(--accent1);border-radius:3px}
+
+/* ===================== MAIN CONTAINER ===================== */
+.container{
+  position:relative;z-index:1;
+  max-width:480px;margin:0 auto;padding:20px 16px 100px;
+}
+
+/* ===================== HEADER ===================== */
+.header{
+  text-align:center;
+  padding:40px 0 30px;
+  position:relative;
+}
+.logo-text{
+  display:inline-block;margin:0 auto 20px;
+  padding:8px 20px;
+  border-radius:999px;
+  font-size:var(--fs-small);font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;
+  color:#fff;
+  background:var(--gradient);
+  background-size:200% 200%;
+  animation:gradientShift 4s ease infinite;
+  box-shadow:0 0 30px rgba(108,92,231,0.3);
+}
+.header h1{
+  font-size:var(--fs-h1);
+  background:var(--gradient);
+  background-size:200% 200%;
+  animation:gradientShift 4s ease infinite;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;
+}
+.header .subtitle{
+  font-size:var(--fs-small);color:var(--text2);
+  max-width:300px;margin:0 auto;
+}
+.badge{
+  display:inline-block;
+  padding:4px 14px;border-radius:20px;
+  font-size:var(--fs-micro);font-weight:600;
+  background:var(--card-bg);border:1px solid var(--glass-border);
+  color:var(--accent2);margin-top:12px;
+  backdrop-filter:blur(10px);
+}
+
+/* ===================== CONTROLS BAR ===================== */
+.controls{
+  position:fixed;top:0;right:0;left:auto;
+  display:flex;align-items:center;justify-content:flex-end;gap:6px;
+  padding:7px 10px;
+  background:rgba(10,10,26,0.85);
+  backdrop-filter:blur(20px);
+  z-index:1000;
+  border-left:1px solid var(--glass-border);
+  border-bottom:1px solid var(--glass-border);
+  border-bottom-left-radius:14px;
+  flex-wrap:wrap;
+  max-width:calc(100% - 140px);
+}
+.brand{
+  position:fixed;top:0;left:0;
+  display:flex;align-items:center;gap:6px;
+  padding:10px 16px;
+  font-weight:700;font-size:var(--fs-body);
+  letter-spacing:0.5px;
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  pointer-events:none;z-index:1001;
+}
+@media(max-width:640px){.brand{font-size:var(--fs-small)}}
+[data-theme="ocean"] .controls{background:rgba(10,25,47,0.85)}
+[data-theme="ember"] .controls{background:rgba(26,10,10,0.85)}
+[data-theme="forest"] .controls{background:rgba(10,26,10,0.85)}
+[data-theme="royal"] .controls{background:rgba(26,10,46,0.85)}
+.ctrl-btn{
+  width:32px;height:32px;border-radius:10px;border:1px solid var(--glass-border);
+  background:var(--card-bg);color:var(--text1);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1rem;
+  transition:all 0.3s ease;backdrop-filter:blur(10px);
+}
+.ctrl-btn:hover{background:var(--accent1);color:#fff;transform:scale(1.1)}
+.ctrl-btn.active{background:var(--accent1);color:#fff}
+/* Исправлено: добавлен :focus-visible для доступности */
+.ctrl-btn:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+.font-size-label{display:none}
+.lang-switch{
+  display:flex;align-items:center;
+  border:1px solid var(--glass-border);border-radius:10px;
+  overflow:hidden;background:var(--card-bg);
+}
+.lang-btn{
+  border:none;background:transparent;color:var(--text2);
+  font-size:var(--fs-micro);font-weight:700;letter-spacing:0.5px;
+  padding:6px 9px;cursor:pointer;transition:all 0.3s ease;
+}
+.lang-btn:hover{color:var(--text1)}
+.lang-btn.active{background:var(--accent1);color:#fff}
+.lang-btn:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+.theme-selector{
+  display:flex;gap:6px;align-items:center;
+}
+.theme-dot{
+  width:20px;height:20px;border-radius:50%;
+  border:2px solid var(--glass-border);cursor:pointer;
+  transition:all 0.3s ease;
+}
+.theme-dot:hover,.theme-dot.active{transform:scale(1.2);border-color:var(--text1)}
+.theme-dot:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+.theme-dot.t-dark{background:linear-gradient(135deg,#6c5ce7,#a29bfe)}
+.theme-dot.t-ocean{background:linear-gradient(135deg,#64ffda,#00b4d8)}
+.theme-dot.t-ember{background:linear-gradient(135deg,#ff6b35,#e07a5f)}
+.theme-dot.t-forest{background:linear-gradient(135deg,#00e676,#69f0ae)}
+.theme-dot.t-royal{background:linear-gradient(135deg,#b388ff,#e040fb)}
+
+/* ===================== CARDS ===================== */
+.card{
+  background:var(--card-bg);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:24px 20px;
+  margin-bottom:20px;
+  backdrop-filter:blur(15px);
+  box-shadow:var(--shadow);
+  transition:transform var(--transition),box-shadow var(--transition);
+  position:relative;overflow:hidden;
+  animation:cardIn 0.6s ease both;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--gradient);background-size:200% 200%;
+  animation:gradientShift 4s ease infinite;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+/* Исправлено: animation-delay через CSS переменную вместо nth-child дублирования */
+.card:nth-child(2){animation-delay:.1s}
+.card:nth-child(3){animation-delay:.2s}
+.card:nth-child(4){animation-delay:.3s}
+.card:nth-child(5){animation-delay:.4s}
+.card:nth-child(6){animation-delay:.5s}
+.card:nth-child(7){animation-delay:.6s}
+.card:nth-child(8){animation-delay:.7s}
+
+.card-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:var(--gradient);background-size:200% 200%;
+  animation:gradientShift 5s ease infinite;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;margin-bottom:16px;
+}
+.card h2{font-size:var(--fs-h2);font-weight:700;margin-bottom:12px;color:var(--text1)}
+.card h3{font-size:var(--fs-h3);font-weight:600;margin:16px 0 8px;color:var(--accent2)}
+.card p{color:var(--text2);margin-bottom:12px}
+.card ul{list-style:none;padding:0}
+.card li{
+  padding:8px 0 8px 24px;position:relative;
+  color:var(--text2);font-size:var(--fs-small);
+  border-bottom:1px solid rgba(255,255,255,0.03);
+}
+.card li:last-child{border-bottom:none}
+.card li::before{
+  content:'◆';position:absolute;left:0;top:8px;
+  color:var(--accent1);font-size:0.6rem;
+}
+
+/* ===================== MODULE CARDS ===================== */
+.module-card{cursor:pointer;padding:12px 44px 12px 0;position:relative}
+.module-card .arrow{
+  position:absolute;right:4px;top:50%;transform:translateY(-50%);
+  font-size:1.2rem;color:var(--accent1);transition:transform 0.3s ease;
+}
+.module-card:hover .arrow{transform:translateY(-50%) translateX(4px)}
+.module-number{
+  font-size:var(--fs-micro);color:var(--accent1);
+  font-weight:700;letter-spacing:2px;margin-bottom:8px;
+  text-transform:uppercase;
+}
+
+/* ===================== ACCORDION ===================== */
+.accordion-item{
+  border:1px solid var(--glass-border);
+  border-radius:12px;margin-bottom:8px;
+  overflow:hidden;
+  background:var(--card-bg);
+  backdrop-filter:blur(10px);
+}
+.accordion-header{
+  padding:14px 16px;display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;font-weight:600;font-size:var(--fs-small);
+  color:var(--text1);transition:background 0.3s;
+  user-select:none;
+}
+.accordion-header:hover{background:rgba(255,255,255,0.03)}
+.accordion-header .icon{transition:transform 0.3s ease;font-size:0.8rem;color:var(--accent1)}
+.accordion-item.open .accordion-header .icon{transform:rotate(180deg)}
+.accordion-body{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.4s ease,padding 0.4s ease;
+  padding:0 16px;
+}
+.accordion-item.open .accordion-body{
+  max-height:800px;padding:0 16px 16px;
+}
+.accordion-body p{color:var(--text2);font-size:var(--fs-small);margin-bottom:8px}
+
+/* ===================== TABLE ===================== */
+.table-wrap{overflow-x:auto;margin:16px 0;border-radius:12px;border:1px solid var(--glass-border)}
+table{width:100%;border-collapse:collapse;font-size:var(--fs-micro)}
+th{
+  background:rgba(108,92,231,0.15);color:var(--accent2);
+  padding:10px 8px;text-align:left;font-weight:600;
+  position:sticky;top:0;
+}
+td{padding:8px;color:var(--text2);border-top:1px solid rgba(255,255,255,0.03)}
+tr:hover td{background:rgba(255,255,255,0.02)}
+
+/* ===================== BUTTONS ===================== */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:12px;border:none;
+  background:var(--gradient);background-size:200% 200%;
+  animation:gradientShift 4s ease infinite;
+  color:#fff;font-weight:600;font-size:var(--fs-small);
+  cursor:pointer;transition:transform 0.3s ease,box-shadow 0.3s ease;
+  box-shadow:0 4px 15px rgba(108,92,231,0.3);
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(108,92,231,0.4)}
+.btn:focus-visible{outline:2px solid var(--accent2);outline-offset:3px}
+.btn-outline{
+  background:transparent;border:1px solid var(--accent1);
+  color:var(--accent1);animation:none;box-shadow:none;
+}
+.btn-outline:hover{background:var(--accent1);color:#fff}
+.btn-block{width:100%;justify-content:center}
+
+/* ===================== MODAL ===================== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(10px);z-index:2000;
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity 0.3s ease;
+}
+.modal-overlay.active{opacity:1;pointer-events:auto}
+.modal{
+  background:var(--modal-bg);
+  border-radius:24px 24px 0 0;
+  width:100%;max-width:480px;
+  max-height:90vh;overflow-y:auto;
+  padding:32px 24px 40px;
+  transform:translateY(100%);transition:transform 0.4s cubic-bezier(.4,0,.2,1);
+  border:1px solid var(--glass-border);
+  border-bottom:none;
+  position:relative;
+}
+.modal-overlay.active .modal{transform:translateY(0)}
+.modal-handle{
+  width:40px;height:4px;background:var(--text3);
+  border-radius:2px;margin:0 auto 24px;
+}
+.modal-close{
+  position:absolute;top:24px;right:24px;
+  width:32px;height:32px;border-radius:8px;
+  border:1px solid var(--glass-border);background:var(--card-bg);
+  color:var(--text2);cursor:pointer;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.3s;
+}
+.modal-close:hover{background:var(--danger);color:#fff}
+.modal-close:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+.modal h2{font-size:var(--fs-h2);margin-bottom:16px;padding-right:40px}
+.modal h3{font-size:var(--fs-h3);margin:20px 0 10px;color:var(--accent2)}
+.modal p,.modal li{color:var(--text2);font-size:var(--fs-small);margin-bottom:10px}
+.modal ul{padding-left:20px}
+.modal li{margin-bottom:6px}
+
+/* ===================== IMAGE PLACEHOLDERS ===================== */
+.img-placeholder{
+  width:100%;height:200px;border-radius:16px;
+  margin:16px 0;overflow:hidden;position:relative;
+  background:var(--gradient);background-size:200% 200%;
+  animation:gradientShift 6s ease infinite;
+}
+.img-placeholder .inner{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:4rem;
+  background:rgba(0,0,0,0.3);backdrop-filter:blur(2px);
+}
+
+/* ===================== PROGRESS ===================== */
+.progress-bar{
+  height:8px;border-radius:4px;
+  background:rgba(255,255,255,0.1);margin:16px 0;overflow:hidden;
+}
+.progress-fill{
+  height:100%;border-radius:4px;
+  background:var(--gradient);background-size:200% 200%;
+  animation:gradientShift 3s ease infinite;
+  transition:width 0.5s ease;
+}
+
+/* ===================== BADGES & TAGS ===================== */
+.tag{
+  display:inline-block;padding:3px 10px;border-radius:6px;
+  font-size:var(--fs-micro);font-weight:600;margin:2px;
+  background:rgba(108,92,231,0.15);color:var(--accent2);
+  border:1px solid rgba(108,92,231,0.2);
+}
+.tag.green{background:rgba(0,184,148,0.15);color:var(--success)}
+.tag.red{background:rgba(225,112,85,0.15);color:var(--danger)}
+.tag.yellow{background:rgba(253,203,110,0.15);color:var(--warning)}
+
+/* ===================== DUA CARDS ===================== */
+.dua-card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--glass-border);
+  border-radius:12px;padding:16px;margin:12px 0;
+  text-align:center;
+}
+.dua-card .arabic{
+  font-size:1.4rem;line-height:2;
+  color:var(--accent2);margin-bottom:10px;
+  direction:rtl;
+  /* Исправлено: явный шрифт для арабского текста */
+  font-family:'Amiri','Traditional Arabic','Segoe UI',sans-serif;
+}
+.dua-card .translit{font-size:var(--fs-micro);color:var(--text3);font-style:italic}
+.dua-card .translation{font-size:var(--fs-small);color:var(--text1);margin-top:8px;font-weight:600}
+.dua-card .color-dot{
+  display:inline-block;width:14px;height:14px;
+  border-radius:50%;margin-right:8px;vertical-align:middle;
+  border:2px solid var(--glass-border);
+  flex-shrink:0;
+}
+
+/* ===================== WARNING BOX ===================== */
+.warning-box{
+  border-radius:12px;padding:16px;margin:16px 0;
+  border-left:4px solid var(--warning);
+  background:rgba(253,203,110,0.08);
+}
+.warning-box.danger{border-left-color:var(--danger);background:rgba(225,112,85,0.08)}
+.warning-box.success{border-left-color:var(--success);background:rgba(0,184,148,0.08)}
+.warning-box h4{font-size:var(--fs-small);color:var(--text1);margin-bottom:6px}
+.warning-box p{font-size:var(--fs-micro);color:var(--text2);margin:0}
+
+/* ===================== FOOTER ===================== */
+.footer{
+  text-align:center;padding:40px 16px 80px;
+  color:var(--text3);font-size:var(--fs-micro);
+}
+.footer .divider{
+  width:60px;height:2px;margin:0 auto 16px;
+  background:var(--gradient);border-radius:1px;
+}
+
+/* ===================== BOTTOM NAV ===================== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  display:flex;justify-content:center;
+  padding:8px 16px 12px;
+  background:rgba(10,10,26,0.9);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--glass-border);
+  z-index:999;gap:4px;
+}
+[data-theme="ocean"] .bottom-nav{background:rgba(10,25,47,0.9)}
+[data-theme="ember"] .bottom-nav{background:rgba(26,10,10,0.9)}
+[data-theme="forest"] .bottom-nav{background:rgba(10,26,10,0.9)}
+[data-theme="royal"] .bottom-nav{background:rgba(26,10,46,0.9)}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;gap:2px;padding:8px 4px;
+  border-radius:12px;cursor:pointer;
+  color:var(--text3);font-size:var(--fs-micro);
+  transition:color 0.3s ease,background 0.3s ease;
+  text-decoration:none;
+}
+.nav-item.active,.nav-item:hover{color:var(--accent1);background:var(--card-bg)}
+.nav-item .nav-icon{font-size:1.2rem}
+
+/* ===================== ANIMATIONS ===================== */
+.fade-in{animation:fadeIn 0.6s ease both}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.slide-up{animation:slideUp 0.5s ease both}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+/* Исправлено: prefers-reduced-motion — отключаем анимации для пользователей с вестибулярными нарушениями */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:0.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:0.01ms!important;
+  }
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media(min-width:768px){
+  .container{max-width:540px;padding:30px 24px 100px}
+  .modal-overlay{align-items:center}
+  .modal{
+    border-radius:24px;
+    max-height:80vh;
+    /* Исправлено: убрано противоречие transform:translateY(0) scale(0.9) в одном правиле */
+    transform:scale(0.9);
+  }
+  .modal-overlay.active .modal{transform:scale(1)}
+}
+@media(min-width:1024px){
+  .container{max-width:640px}
+}
+
+/* ===================== PRINT HIDE ===================== */
+@media print{
+  .controls,.bottom-nav,.modal-overlay,.orb,.animated-bg{display:none!important}
+  body{background:#fff;color:#000}
+  .card{border:1px solid #ccc;box-shadow:none}
+}
+
+/* ===================== SPECIAL ELEMENTS ===================== */
+.highlight{
+  background:var(--gradient);background-size:200% 200%;
+  animation:gradientShift 4s ease infinite;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;font-weight:700;
+}
+.separator{
+  height:1px;background:linear-gradient(90deg,transparent,var(--accent1),transparent);
+  margin:24px 0;
+}
+.quote{
+  border-left:3px solid var(--accent1);padding:12px 16px;margin:16px 0;
+  background:rgba(108,92,231,0.05);border-radius:0 12px 12px 0;
+  font-style:italic;color:var(--text2);font-size:var(--fs-small);
+}
+.step-number{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:8px;
+  background:var(--gradient);background-size:200% 200%;
+  animation:gradientShift 4s ease infinite;
+  color:#fff;font-size:var(--fs-micro);font-weight:700;
+  margin-right:10px;flex-shrink:0;
+}
+.step{display:flex;align-items:flex-start;margin:12px 0;gap:0}
+.step p{flex:1;margin:0}
+
+/* Tooltip */
+.tooltip{position:relative;cursor:help}
+.tooltip::after{
+  content:attr(data-tip);position:absolute;bottom:100%;left:50%;
+  transform:translateX(-50%);padding:6px 12px;border-radius:8px;
+  background:var(--bg3);color:var(--text1);font-size:var(--fs-micro);
+  white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity 0.3s;z-index:100;
+  border:1px solid var(--glass-border);
+}
+.tooltip:hover::after{opacity:1}
+
+/* Loading shimmer */
+.shimmer{
+  background:linear-gradient(90deg,var(--card-bg) 25%,rgba(255,255,255,0.08) 50%,var(--card-bg) 75%);
+  background-size:200% 100%;animation:shimmer 1.5s infinite;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+</head>
+<body>
+
+<!-- ANIMATED BACKGROUND -->
+<div class="animated-bg" aria-hidden="true"></div>
+<div class="orb orb-1" aria-hidden="true"></div>
+<div class="orb orb-2" aria-hidden="true"></div>
+<div class="orb orb-3" aria-hidden="true"></div>
+
+<!-- CONTROLS BAR -->
+<div class="brand" aria-label="Название курса">🌙 Особенный</div>
+<div class="controls" role="toolbar" aria-label="Настройки отображения">
+  <button class="ctrl-btn" id="btnFontMinus" aria-label="Уменьшить шрифт" title="Уменьшить шрифт">A-</button>
+  <button class="ctrl-btn" id="btnFontPlus" aria-label="Увеличить шрифт" title="Увеличить шрифт">A+</button>
+  <span class="font-size-label" aria-hidden="true">Размер</span>
+  <div class="theme-selector" role="group" aria-label="Тема оформления">
+    <span class="theme-dot t-dark active" role="button" tabindex="0" data-theme-set="dark" title="Тёмная"></span>
+    <span class="theme-dot t-ocean" role="button" tabindex="0" data-theme-set="ocean" title="Океан"></span>
+    <span class="theme-dot t-ember" role="button" tabindex="0" data-theme-set="ember" title="Пламя"></span>
+    <span class="theme-dot t-forest" role="button" tabindex="0" data-theme-set="forest" title="Лес"></span>
+    <span class="theme-dot t-royal" role="button" tabindex="0" data-theme-set="royal" title="Королевская"></span>
+  </div>
+  <div class="lang-switch" role="group" aria-label="Язык / Til">
+    <button class="lang-btn active" data-lang="ru" type="button">RU</button>
+    <button class="lang-btn" data-lang="uz" type="button">UZ</button>
+  </div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container" id="main-content">
+
+  <!-- HEADER -->
+  <header class="header fade-in" style="margin-top:60px">
+    <div class="logo-text">Трансформация личности</div>
+    <h1>Особенный</h1>
+    <p class="subtitle">Курс трансформации личности по методу Абу Мухаммада</p>
+    <span class="badge">✦ Высвобождение застрявших импульсов</span>
+  </header>
+
+  <!-- INTRO CARD -->
+  <div class="card slide-up">
+    <div class="img-placeholder" style="height:180px;margin-bottom:16px" aria-hidden="true">
+      <div class="inner">🌿</div>
+    </div>
+    <h2>Добро пожаловать</h2>
+    <p>Этот курс — <strong>особенный путь</strong> к освобождению от тех застрявших импульсов, которые были испытаны душой, но не проявлены в теле и остались зафиксированными в фасциальных тканях, мышцах и нервных путях.</p>
+    <div class="quote">
+      «Нервная система — это главный интерфейс между телом, энергией и духом. Когда в этом интерфейсе есть сбой, орган или часть тела теряют связь с сознанием.»
+    </div>
+    <p>Метод последовательно работает на трёх уровнях: <span class="highlight">телесном</span>, <span class="highlight">эмоциональном</span> и <span class="highlight">духовном</span>, возвращая вам полноту ощущения жизни в собственном теле.</p>
+    <button class="btn btn-block" data-modal-open="modal-start">
+      ▶ Начать ознакомление
+    </button>
+  </div>
+
+  <!-- WHAT IS THIS COURSE -->
+  <div class="card slide-up">
+    <div class="card-icon" aria-hidden="true">📋</div>
+    <h2>Что это за метод?</h2>
+    <p>Это не массаж и не релаксация. Это <strong>целенаправленная работа</strong> с невыраженными душевными импульсами, пробуждение «немых зон» и восстановление связи «мозг–тело».</p>
+    <div class="separator"></div>
+    <h3>Ключевые принципы</h3>
+    <ul>
+      <li>Непроявленные эмоции фиксируются в фасциях и мышцах</li>
+      <li>Физическое воздействие пробуждает нервные окончания</li>
+      <li>Каждое надавливание синхронизируется с вербализацией недуга</li>
+      <li>Сакральные формулы и дуа усиливают процесс очищения</li>
+      <li>Дыхание — проводник, выводящий освобождённую энергию</li>
+    </ul>
+    <div class="separator"></div>
+    <div class="warning-box success">
+      <h4>✅ Единственное противопоказание</h4>
+      <p>Беременность. Во всех остальных случаях метод доступен при соблюдении протокола интенсивности и самонаблюдения.</p>
+    </div>
+  </div>
+
+  <!-- 4 MODULES OVERVIEW -->
+  <div class="card slide-up">
+    <div class="card-icon" aria-hidden="true">🗺️</div>
+    <h2>Структура курса</h2>
+    <p>Курс выстроен как последовательная спираль трансформации: от тела к духу, от высвобождения к устойчивой чистоте.</p>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+    <div class="module-card" data-modal-open="modal-m1" role="button" tabindex="0" aria-label="Модуль 01 — Физическое пробуждение">
+      <div class="module-number">Модуль 01</div>
+      <h3 style="margin:4px 0">Физическое пробуждение</h3>
+      <p style="color:var(--text3);font-size:var(--fs-micro)">Телесная диагностика, протирание, похлопывание, надавливание, выщипывание + вербализация</p>
+      <span class="arrow" aria-hidden="true">→</span>
+    </div>
+    <div class="separator"></div>
+    <div class="module-card" data-modal-open="modal-m2" role="button" tabindex="0" aria-label="Модуль 02 — Психосоматическая трансформация">
+      <div class="module-number">Модуль 02</div>
+      <h3 style="margin:4px 0">Психосоматическая трансформация</h3>
+      <p style="color:var(--text3);font-size:var(--fs-micro)">Проживание эмоций, замещение паттернов, 30 пар «недуг → качество»</p>
+      <span class="arrow" aria-hidden="true">→</span>
+    </div>
+    <div class="separator"></div>
+    <div class="module-card" data-modal-open="modal-m3" role="button" tabindex="0" aria-label="Модуль 03 — Духовно-визуальное очищение">
+      <div class="module-number">Модуль 03</div>
+      <h3 style="margin:4px 0">Духовно-визуальное очищение</h3>
+      <p style="color:var(--text3);font-size:var(--fs-micro)">Периферическое зрение, цветные маркеры, дуа-заклинания</p>
+      <span class="arrow" aria-hidden="true">→</span>
+    </div>
+    <div class="separator"></div>
+    <div class="module-card" data-modal-open="modal-m4" role="button" tabindex="0" aria-label="Модуль 04 — Духовная гигиена">
+      <div class="module-number">Модуль 04</div>
+      <h3 style="margin:4px 0">Духовная гигиена</h3>
+      <p style="color:var(--text3);font-size:var(--fs-micro)">Границы, невпитывание, ежедневная благодарность и устойчивость</p>
+      <span class="arrow" aria-hidden="true">→</span>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="card slide-up">
+    <div class="card-icon" aria-hidden="true">🔄</div>
+    <h2>Как это работает?</h2>
+    <div class="img-placeholder" style="height:160px" aria-hidden="true">
+      <div class="inner">⚡</div>
+    </div>
+    <p>Цикл трансформации в каждом модуле:</p>
+    <div class="step">
+      <span class="step-number" aria-hidden="true">1</span>
+      <p><strong>Диагностика</strong> — поиск «немых зон» через напряжение, протирание, похлопывание и боди-скан</p>
+    </div>
+    <div class="step">
+      <span class="step-number" aria-hidden="true">2</span>
+      <p><strong>Активация</strong> — физическое воздействие (надавливание, выщипывание, вытягивание) для пробуждения импульсов</p>
+    </div>
+    <div class="step">
+      <span class="step-number" aria-hidden="true">3</span>
+      <p><strong>Вербализация</strong> — проговаривание конкретного недуга синхронно с воздействием</p>
+    </div>
+    <div class="step">
+      <span class="step-number" aria-hidden="true">4</span>
+      <p><strong>Духовное очищение</strong> — дуа, суры, молитвенные формулы для выведения застрявшей энергии</p>
+    </div>
+    <div class="step">
+      <span class="step-number" aria-hidden="true">5</span>
+      <p><strong>Интеграция</strong> — глубокое дыхание, душ, заземление, наблюдение за изменениями</p>
+    </div>
+  </div>
+
+  <!-- BODY MAP -->
+  <div class="card slide-up">
+    <div class="card-icon" aria-hidden="true">🗺️</div>
+    <h2>Карта психосоматических зон</h2>
+    <p>Какая часть тела откликается на напряжение — там скрыт застрявший импульс.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Зона тела</th><th>Возможный недуг</th></tr></thead>
+        <tbody>
+          <tr><td>🦶 Стопы</td><td>Страх отпустить, недоверие миру</td></tr>
+          <tr><td>🦵 Колени</td><td>Упрямство, негибкость</td></tr>
+          <tr><td>🫁 Таз</td><td>Подавленная сексуальность, творческие блоки</td></tr>
+          <tr><td>🫀 Живот</td><td>Непринятие себя, непереваренные эмоции</td></tr>
+          <tr><td>💨 Диафрагма</td><td>Подавленный страх, запрет на эмоции</td></tr>
+          <tr><td>🫁 Грудная клетка</td><td>Невыраженная грусть, непрожитое горе</td></tr>
+          <tr><td>💪 Плечи</td><td>Чрезмерная ответственность, бремя</td></tr>
+          <tr><td>🗣️ Шея</td><td>Страх выразить истинные чувства</td></tr>
+          <tr><td>😬 Челюсть</td><td>Подавленный гнев, невысказанные слова</td></tr>
+          <tr><td>🧠 Лоб и виски</td><td>Чрезмерный анализ, страх отпустить контроль</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <button class="btn btn-outline btn-block" data-modal-open="modal-fullmap">
+      📋 Полная таблица (30 зон)
+    </button>
+  </div>
+
+  <!-- DU'A PREVIEW -->
+  <div class="card slide-up">
+    <div class="card-icon" aria-hidden="true">🤲</div>
+    <h2>Духовные формулы</h2>
+    <p>В курсе используются специальные дуа-заклинания, привязанные к цветовым маркерам в периферическом зрении (Модуль 3).</p>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْخَوْفِ فِي قَلْبِي</div>
+      <div class="translit">Бисмилляхи арки мина-ль-хауфи фи кальби</div>
+      <div class="translation">«С именем Аллаха, заклинаю от страха в моём сердце»</div>
+      <div style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#4a4a5a"></span>
+        <span style="font-size:var(--fs-micro);color:var(--text3)">Серо-тёмный → Страх</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْحِقْدِ فِي صَدْرِي</div>
+      <div class="translit">Бисмилляхи арки мина-ль-хикди фи садри</div>
+      <div class="translation">«С именем Аллаха, заклинаю от обиды в моей груди»</div>
+      <div style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#aaff00"></span>
+        <span style="font-size:var(--fs-micro);color:var(--text3)">Кислотно-зелёный → Обида</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْغَضَبِ فِي نَفْسِي</div>
+      <div class="translit">Бисмилляхи арки мина-ль-гадаби фи нафси</div>
+      <div class="translation">«С именем Аллаха, заклинаю от гнева в моей душе»</div>
+      <div style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#ff0000"></span>
+        <span style="font-size:var(--fs-micro);color:var(--text3)">Ярко-красный → Гнев</span>
+      </div>
+    </div>
+    <button class="btn btn-block" data-modal-open="modal-alldua" style="margin-top:12px">
+      📖 Все 10 дуа с переводом
+    </button>
+  </div>
+
+  <!-- 30 PAIRS PREVIEW -->
+  <div class="card slide-up">
+    <div class="card-icon" aria-hidden="true">🔄</div>
+    <h2>Трансформация качеств</h2>
+    <p>Каждому негативному состоянию соответствует целительное качество, которое активируется во 2-м модуле.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Недуг</th><th>Целительное качество</th></tr></thead>
+        <tbody>
+          <tr><td>😨 Страх</td><td>Бесстрашие, Доверие к Аллаху</td></tr>
+          <tr><td>💔 Разочарование</td><td>Принятие, Гибкость</td></tr>
+          <tr><td>😡 Гнев</td><td>Спокойствие, Терпение</td></tr>
+          <tr><td>👁️ Зависть</td><td>Радость за других, Щедрость</td></tr>
+          <tr><td>😢 Уныние</td><td>Радость, Вдохновение</td></tr>
+          <tr><td>😰 Тревога</td><td>Умиротворение, Вера</td></tr>
+          <tr><td>😞 Печаль</td><td>Принятие утраты, Благодарность</td></tr>
+          <tr><td>😤 Раздражение</td><td>Терпимость, Понимание</td></tr>
+          <tr><td>😔 Отчаяние</td><td>Надежда, Стойкость</td></tr>
+          <tr><td>🚶 Одиночество</td><td>Гармония с собой, Наполненность</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="text-align:center;margin:8px 0">
+      <span class="tag">+ ещё 20 пар</span>
+    </div>
+    <button class="btn btn-block" data-modal-open="modal-30pairs">
+      📋 Полная таблица 30 пар
+    </button>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="card slide-up">
+    <div class="card-icon" aria-hidden="true">✨</div>
+    <h2>Ожидаемые результаты</h2>
+    <div class="img-placeholder" style="height:140px" aria-hidden="true">
+      <div class="inner">🌟</div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" role="button" tabindex="0" aria-expanded="false">
+        После Модуля 1
+        <span class="icon" aria-hidden="true">▼</span>
+      </div>
+      <div class="accordion-body">
+        <p>Пробуждение «немых зон», выход первичных телесных зажимов, восстановление чувствительности и импульсной проводимости, ощущение лёгкости в теле, улучшение осанки.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" role="button" tabindex="0" aria-expanded="false">
+        После Модуля 2
+        <span class="icon" aria-hidden="true">▼</span>
+      </div>
+      <div class="accordion-body">
+        <p>Исчезновение остаточного сопротивления, изменение мимики и поведенческих паттернов, устойчивое замещение разрушительных эмоций целительными качествами, глубокое эмоциональное облегчение.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" role="button" tabindex="0" aria-expanded="false">
+        После Модуля 3
+        <span class="icon" aria-hidden="true">▼</span>
+      </div>
+      <div class="accordion-body">
+        <p>Очищение тонких фасциально-энергетических слоёв, исчезновение «фоновых» тяжестей, восстановление внутренней тишины, лёгкости дыхания, естественная эластичность тканей.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" role="button" tabindex="0" aria-expanded="false">
+        После Модуля 4
+        <span class="icon" aria-hidden="true">▼</span>
+      </div>
+      <div class="accordion-body">
+        <p>Устойчивое внутреннее равновесие, защита от эмоционального поглощения, естественное поддержание чистоты, трансформация поведения и социального взаимодействия, открытое выражение радости.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAFETY -->
+  <div class="card slide-up">
+    <div class="card-icon" aria-hidden="true">🛡️</div>
+    <h2>Безопасность</h2>
+    <div class="warning-box danger">
+      <h4>⚠️ Противопоказание</h4>
+      <p>Беременность — абсолютное противопоказание для прохождения курса.</p>
+    </div>
+    <div class="warning-box">
+      <h4>📊 Болевой порог</h4>
+      <p>Допустимый уровень боли: до 7–8 баллов по субъективной шкале. Боль воспринимается как маркер выхода импульса, а не как повод для остановки.</p>
+    </div>
+    <div class="warning-box danger">
+      <h4>🛑 Немедленная остановка при:</h4>
+      <p>Стреляющей или пульсирующей боли, головокружении, распространяющемся онемении, нарушении дыхания, панической реакции.</p>
+    </div>
+    <div class="warning-box success">
+      <h4>✅ Нормальные реакции</h4>
+      <p>Покраснение, временные синяки, мышечная усталость, эмоциональный всплеск. Проходят за 2–5 дней. После сессии рекомендуется тёплый душ и глубокое дыхание.</p>
+    </div>
+    <div class="separator"></div>
+    <p style="font-size:var(--fs-small);color:var(--text3)">
+      Метод является духовно-телесной практикой и не заменяет медицинскую диагностику. При наличии диагностированных заболеваний обязательна консультация врача.
+    </p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="divider"></div>
+    <p>Курс «Особенный» по методу Абу Мухаммада</p>
+    <p style="margin-top:4px">Высвобождение застрявших импульсов · Психосоматическая перезагрузка · Духовная гигиена</p>
+    <p style="margin-top:12px;opacity:0.5">© 2025 Все права защищены</p>
+  </footer>
+</div>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav" aria-label="Основная навигация">
+  <a class="nav-item active" href="#main-content" id="navHome">
+    <span class="nav-icon" aria-hidden="true">🏠</span>
+    <span>Главная</span>
+  </a>
+  <a class="nav-item" href="#" data-modal-open="modal-m1">
+    <span class="nav-icon" aria-hidden="true">📖</span>
+    <span>Модули</span>
+  </a>
+  <a class="nav-item" href="#" data-modal-open="modal-alldua">
+    <span class="nav-icon" aria-hidden="true">🤲</span>
+    <span>Дуа</span>
+  </a>
+  <a class="nav-item" href="#" data-modal-open="modal-30pairs">
+    <span class="nav-icon" aria-hidden="true">🔄</span>
+    <span>Таблицы</span>
+  </a>
+  <a class="nav-item" href="#" data-modal-open="modal-safety">
+    <span class="nav-icon" aria-hidden="true">🛡️</span>
+    <span>Безопасность</span>
+  </a>
+</nav>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- MODAL: START -->
+<div class="modal-overlay" id="modal-start" role="dialog" aria-modal="true" aria-labelledby="modal-start-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" data-modal-close="modal-start" aria-label="Закрыть">✕</button>
+    <h2 id="modal-start-title">О методе</h2>
+    <p>Курс «Особенный» — это уникальная методика, разработанная Абу Мухаммадом на основе глубокого наблюдения за связью тела, нервной системы и духа.</p>
+    <h3>Основная идея</h3>
+    <p>Наша нервная система — главный «интерфейс» между телом, энергией и духом. Когда пережитые душой эмоции не находят телесного выражения, они «застревают» в фасциальных тканях, мышечных зажимах и энергетических каналах, создавая невидимую, но ощутимую плотность.</p>
+    <h3>Как работает метод</h3>
+    <p>Метод последовательно пробуждает «немые зоны» через физическое воздействие (протирание, похлопывание, надавливание, выщипывание), синхронизирует каждое действие с вербализацией конкретного недуга и усиливает процесс сакральными формулами.</p>
+    <div class="quote">
+      «Слово работает как свет, рассеивающий тень, а дыхание становится проводником, выводящим освобождённую энергию за пределы тела.»
+    </div>
+    <h3>Три уровня работы</h3>
+    <ul>
+      <li><strong>Телесный</strong> — пробуждение нервной системы, разрушение фасциальных блоков</li>
+      <li><strong>Эмоциональный</strong> — проживание и трансформация чувств, замещение паттернов</li>
+      <li><strong>Духовный</strong> — очищение через дуа, суры и периферическое зрение</li>
+    </ul>
+  </div>
+</div>
+
+<!-- MODAL: MODULE 1 -->
+<div class="modal-overlay" id="modal-m1" role="dialog" aria-modal="true" aria-labelledby="modal-m1-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" data-modal-close="modal-m1" aria-label="Закрыть">✕</button>
+    <div class="module-number">Модуль 01</div>
+    <h2 id="modal-m1-title">Физическое пробуждение</h2>
+    <p>Первый модуль — это не массаж. Это осознанное высвобождение невыраженных душевных импульсов, зафиксированных в фасциальной ткани.</p>
+    <h3>Пошаговый протокол</h3>
+    <div class="step"><span class="step-number" aria-hidden="true">1</span><p><strong>Стартовое прочувствование:</strong> Интенсивно протирайте и похлопывайте всё тело ладонями/кулаками, глубоко и ритмично дыша. Движение от стоп к голове.</p></div>
+    <div class="step"><span class="step-number" aria-hidden="true">2</span><p><strong>Выбор состояния:</strong> Определите одно негативное душевное качество (страх, обида, гнев и т.д.)</p></div>
+    <div class="step"><span class="step-number" aria-hidden="true">3</span><p><strong>Поиск в теле:</strong> Продолжая протирать/похлопывать, проговаривайте название состояния. Ищите зоны отклика: напряжение, тяжесть, жар/холод, «пустота».</p></div>
+    <div class="step"><span class="step-number" aria-hidden="true">4</span><p><strong>Активное высвобождение:</strong> В зоне сопротивления — надавливание (твёрдым предметом или пальцами), выщипывание кожи (захват→натяжение→отпуск), вытягивание (удержание 10 сек + дыхание). Возврат к протиранию для интеграции.</p></div>
+    <div class="step"><span class="step-number" aria-hidden="true">5</span><p><strong>Синхронизация:</strong> Во время воздействия проговаривайте: «Разрушается [недуг]», «Да выведет Аллах [недуг] из моего тела». Сочетайте мышечное напряжение с дуа.</p></div>
+    <div class="step"><span class="step-number" aria-hidden="true">6</span><p><strong>Завершение:</strong> Глубокий вдох-выдох для заземления. Рекомендуется тёплый душ.</p></div>
+    <div class="separator"></div>
+    <h3>Диагностические методы</h3>
+    <ul>
+      <li>Прямое надавливание — поиск боли, напряжения, холода/онемения</li>
+      <li>Мысленный боди-скан — выявление «слепых пятен»</li>
+      <li>Карта психосоматической проекции — связь зон с эмоциями</li>
+      <li>Метод спонтанного движения — наблюдение привычных поз</li>
+      <li>Дыхательная диагностика — выявление зон ограничения дыхания</li>
+    </ul>
+    <div class="warning-box">
+      <h4>💡 Важно</h4>
+      <p>Агрессия в данном контексте — это осознанная решимость и намеренная интенсивность, направленная на преодоление сопротивления, а не разрушение. Боль — сигнал к действию, а не повод для остановки.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: MODULE 2 -->
+<div class="modal-overlay" id="modal-m2" role="dialog" aria-modal="true" aria-labelledby="modal-m2-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" data-modal-close="modal-m2" aria-label="Закрыть">✕</button>
+    <div class="module-number">Модуль 02</div>
+    <h2 id="modal-m2-title">Психосоматическая трансформация</h2>
+    <p>Переход от физической разблокировки к осознанному проживанию и трансформации эмоциональных состояний. Работа строится на телесном прочувствовании, а не на интеллектуальном анализе.</p>
+    <h3>Алгоритм работы</h3>
+    <div class="step"><span class="step-number" aria-hidden="true">1</span><p><strong>Проявление:</strong> Впустите эмоцию, отследите откликающиеся органы</p></div>
+    <div class="step"><span class="step-number" aria-hidden="true">2</span><p><strong>Вербализация:</strong> Проговорите чувство, свяжите с событием</p></div>
+    <div class="step"><span class="step-number" aria-hidden="true">3</span><p><strong>Разрушение:</strong> «Разрушается [чувство]» + «Да выведет Аллах [чувство]»</p></div>
+    <div class="step"><span class="step-number" aria-hidden="true">4</span><p><strong>Возврат к физике:</strong> Если блок не поддаётся — используйте техники М1</p></div>
+    <div class="step"><span class="step-number" aria-hidden="true">5</span><p><strong>Активация противоположности:</strong> Проговаривайте позитивное качество до исчезновения сопротивления</p></div>
+    <div class="separator"></div>
+    <h3>Пример: работа со страхом</h3>
+    <p>При проявлении страха активируются горло, грудь, сердце и часть живота. Проговаривайте ощущения, фокусируясь на чувствах. Затем: «Разрушается страх» → «Да выведет Аллах все мои страхи». После — проявите бесстрашие: «Я не боюсь людей».</p>
+    <div class="quote">
+      «Не пытайтесь умом понять чувства. Чувства нужно ощущать и проживать в теле.»
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: MODULE 3 -->
+<div class="modal-overlay" id="modal-m3" role="dialog" aria-modal="true" aria-labelledby="modal-m3-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" data-modal-close="modal-m3" aria-label="Закрыть">✕</button>
+    <div class="module-number">Модуль 03</div>
+    <h2 id="modal-m3-title">Духовно-визуальное очищение</h2>
+    <p>Утончённая практика, где периферическое зрение становится мостом между невидимым миром души и плотной тканью тела.</p>
+    <h3>Как выполнять</h3>
+    <p>Направьте внимание в зону периферического зрения, мысленно произнесите название недуга. Если проступает цвет — это маркер укоренившегося состояния. Прочитайте соответствующее дуа на выдохе, пока оттенок не растворится.</p>
+    <div class="separator"></div>
+    <h3>10 пар «Цвет → Состояние → Дуа»</h3>
+    <p>Полная таблица доступна по кнопке ниже.</p>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْيَأْسِ</div>
+      <div class="translit">Бисмилляхи арки мина-ль-я'си</div>
+      <div class="translation">«С именем Аллаха, заклинаю от уныния»</div>
+      <div style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#2c3e6b"></span>
+        <span style="font-size:var(--fs-micro);color:var(--text3)">Грязно-синий → Уныние</span>
+      </div>
+    </div>
+    <button class="btn btn-block" data-modal-chain="modal-m3,modal-alldua" style="margin-top:16px">
+      📖 Все 10 дуа с цветами
+    </button>
+  </div>
+</div>
+
+<!-- MODAL: MODULE 4 -->
+<div class="modal-overlay" id="modal-m4" role="dialog" aria-modal="true" aria-labelledby="modal-m4-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" data-modal-close="modal-m4" aria-label="Закрыть">✕</button>
+    <div class="module-number">Модуль 04</div>
+    <h2 id="modal-m4-title">Духовная гигиена</h2>
+    <p>Искусство сохранять внутреннюю чистоту не как разовое достижение, а как живое, дышащее состояние.</p>
+    <h3>Ключевые принципы</h3>
+    <ul>
+      <li><strong>Невпитывание:</strong> Чистая душа видит, понимает, сочувствует — но не поглощает чужую тяжесть</li>
+      <li><strong>Границы:</strong> Мягкий уход, твёрдое «нет», изменение формата общения — защита своего пространства</li>
+      <li><strong>Наполнение:</strong> Ежедневное «Альхамдулиллях» как выдох благодарности, открытое выражение радости</li>
+      <li><strong>Ритм:</strong> Вдох ясности → выдох признательности. Чистота поддерживается регулярностью</li>
+    </ul>
+    <!-- Исправлено: опечатка «гигиана» → «гигиена» -->
+    <div class="quote">
+      «Духовная гигиена превращается в искусство дыхания: вдох ясности, выдох признательности. И в этом дыхании рождается устойчивость, которая не ломается от встреч с чужой тяжестью.»
+    </div>
+    <div class="warning-box success">
+      <h4>💡 Практика на каждый день</h4>
+      <p>Утром: 3 минуты глубокого дыхания + проговаривание позитивных качеств. Вечером: краткий боди-скан + благодарность. При контакте с тяжёлыми людьми: осознанное дыхание + возврат к практике при необходимости.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ALL DU'A -->
+<div class="modal-overlay" id="modal-alldua" role="dialog" aria-modal="true" aria-labelledby="modal-alldua-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" data-modal-close="modal-alldua" aria-label="Закрыть">✕</button>
+    <h2 id="modal-alldua-title">10 дуа-заклинаний</h2>
+    <p>Каждая формула привязана к цветовому маркеру в периферическом зрении. Произносите на выдохе.</p>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْخَوْفِ فِي قَلْبِي</div>
+      <div class="translit">Бисмилляхи арки мина-ль-хауфи фи кальби</div>
+      <div class="translation">«С именем Аллаха, заклинаю от страха в моём сердце»</div>
+      <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#4a4a5a"></span><span style="font-size:var(--fs-micro);color:var(--text3)">Серо-тёмный</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْحِقْدِ فِي صَدْرِي</div>
+      <div class="translit">Бисмилляхи арки мина-ль-хикди фи садри</div>
+      <div class="translation">«С именем Аллаха, заклинаю от обиды в моей груди»</div>
+      <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#aaff00"></span><span style="font-size:var(--fs-micro);color:var(--text3)">Кислотно-зелёный</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْغَضَبِ فِي نَفْسِي</div>
+      <div class="translit">Бисмилляхи арки мина-ль-гадаби фи нафси</div>
+      <div class="translation">«С именем Аллаха, заклинаю от гнева в моей душе»</div>
+      <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#ff0000"></span><span style="font-size:var(--fs-micro);color:var(--text3)">Ярко-красный</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْحَسَدِ</div>
+      <div class="translit">Бисмилляхи арки мина-ль-хасади</div>
+      <div class="translation">«С именем Аллаха, заклинаю от зависти»</div>
+      <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#c8ff00"></span><span style="font-size:var(--fs-micro);color:var(--text3)">Ядовито-жёлтый</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْيَأْسِ</div>
+      <div class="translit">Бисмилляхи арки мина-ль-я'си</div>
+      <div class="translation">«С именем Аллаха, заклинаю от уныния»</div>
+      <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#2c3e6b"></span><span style="font-size:var(--fs-micro);color:var(--text3)">Грязно-синий</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْقَلَقِ</div>
+      <div class="translit">Бисмилляхи арки мина-ль-каляки</div>
+      <div class="translation">«С именем Аллаха, заклинаю от тревоги»</div>
+      <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#ff9900"></span><span style="font-size:var(--fs-micro);color:var(--text3)">Оранжевый</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْكِبْرِيَاءِ</div>
+      <div class="translit">Бисмилляхи арки мина-ль-кибрияъ</div>
+      <div class="translation">«С именем Аллаха, заклинаю от гордыни»</div>
+      <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#daa520"></span><span style="font-size:var(--fs-micro);color:var(--text3)">Металлический золотой</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْكَسَلِ</div>
+      <div class="translit">Бисмилляхи арки мина-ль-касали</div>
+      <div class="translation">«С именем Аллаха, заклинаю от лени»</div>
+      <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#6b4423"></span><span style="font-size:var(--fs-micro);color:var(--text3)">Мутно-коричневый</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ الْبُخْلِ</div>
+      <div class="translit">Бисмилляхи арки мина-ль-бухли</div>
+      <div class="translation">«С именем Аллаха, заклинаю от жадности»</div>
+      <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:#ffd700"></span><span style="font-size:var(--fs-micro);color:var(--text3)">Блестящий жёлтый</span>
+      </div>
+    </div>
+    <div class="dua-card">
+      <div class="arabic">بِسْمِ اللَّهِ أَرْقِي مِنَ النِّفَاقِ</div>
+      <div class="translit">Бисмилляхи арки мина-н-нифаки</div>
+      <div class="translation">«С именем Аллаха, заклинаю от лицемерия»</div>
+      <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <span class="color-dot" style="background:conic-gradient(red,orange,yellow,green,blue,violet,red)"></span><span style="font-size:var(--fs-micro);color:var(--text3)">Радужный переливающийся</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 30 PAIRS -->
+<div class="modal-overlay" id="modal-30pairs" role="dialog" aria-modal="true" aria-labelledby="modal-30pairs-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" data-modal-close="modal-30pairs" aria-label="Закрыть">✕</button>
+    <h2 id="modal-30pairs-title">30 пар трансформации</h2>
+    <p>Каждому негативному состоянию соответствует целительное качество. Активируйте противоположность для проверки остаточного сопротивления.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>№</th><th>Недуг</th><th>Целительное качество</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Страх</td><td>Бесстрашие, Доверие к Аллаху</td></tr>
+          <tr><td>2</td><td>Разочарование</td><td>Принятие, Гибкость</td></tr>
+          <tr><td>3</td><td>Гнев, злость</td><td>Спокойствие, Терпение, Прощение</td></tr>
+          <tr><td>4</td><td>Зависть, ревность</td><td>Радость за других, Щедрость</td></tr>
+          <tr><td>5</td><td>Уныние, тоска</td><td>Радость, Вдохновение</td></tr>
+          <tr><td>6</td><td>Тревожность</td><td>Умиротворение, Вера</td></tr>
+          <tr><td>7</td><td>Печаль, скорбь</td><td>Принятие утраты, Благодарность</td></tr>
+          <tr><td>8</td><td>Томление, беспокойство</td><td>Уверенность, Внутренний покой</td></tr>
+          <tr><td>9</td><td>Одиночество (покинутость)</td><td>Чувство близости Аллаха</td></tr>
+          <tr><td>10</td><td>Позор, бесчестие</td><td>Самоуважение, Честь</td></tr>
+          <tr><td>11</td><td>Унижение</td><td>Самоценность, Внутренняя сила</td></tr>
+          <tr><td>12</td><td>Неудача, провал</td><td>Упорство, Принятие урока</td></tr>
+          <tr><td>13</td><td>Крушение надежд</td><td>Открытость, Вера без привязки</td></tr>
+          <tr><td>14</td><td>Раздражение</td><td>Терпимость, Понимание</td></tr>
+          <tr><td>15</td><td>Отчаяние</td><td>Надежда, Стойкость</td></tr>
+          <tr><td>16</td><td>Одиночество (состояние)</td><td>Гармония с собой, Наполненность</td></tr>
+          <tr><td>17</td><td>Грусть</td><td>Благодарность, Принятие</td></tr>
+          <tr><td>18</td><td>Обман</td><td>Честность, Прощение</td></tr>
+          <tr><td>19</td><td>Отвращение</td><td>Принятие, Терпимость</td></tr>
+          <tr><td>20</td><td>Скрытность</td><td>Искренность, Экспрессивность</td></tr>
+          <tr><td>21</td><td>Смятение</td><td>Ясность, Внутренний порядок</td></tr>
+          <tr><td>22</td><td>Истощение</td><td>Жизненная сила, Энергичность</td></tr>
+          <tr><td>23</td><td>Переполнение</td><td>Уравновешенность, Умение отпускать</td></tr>
+          <tr><td>24</td><td>Отчуждённость</td><td>Сопричастность, Эмпатия</td></tr>
+          <tr><td>25</td><td>Подавленность</td><td>Целостность, Стойкость</td></tr>
+          <tr><td>26</td><td>Недовольство</td><td>Принятие, Благодарность</td></tr>
+          <tr><td>27</td><td>Изнеможение, усталость</td><td>Бодрость, Радость движения</td></tr>
+          <tr><td>28</td><td>Изоляция</td><td>Открытость, Выход из зоны комфорта</td></tr>
+          <tr><td>29</td><td>Замкнутость</td><td>Открытость, Доверие</td></tr>
+          <tr><td>30</td><td>Задержка, блокировка</td><td>Свобода выражения, Поток</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: FULL MAP -->
+<div class="modal-overlay" id="modal-fullmap" role="dialog" aria-modal="true" aria-labelledby="modal-fullmap-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" data-modal-close="modal-fullmap" aria-label="Закрыть">✕</button>
+    <h2 id="modal-fullmap-title">Полная психосоматическая карта</h2>
+    <p>Связь эмоциональных загрязнений с зонами тела, фигурой и здоровьем.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Недуг</th><th>Зона в теле</th><th>Влияние</th></tr></thead>
+        <tbody>
+          <tr><td>Страх</td><td>Почки, поясница</td><td>«Спасательный круг», хронический стресс</td></tr>
+          <tr><td>Разочарование</td><td>Желудок, поджелудочная</td><td>Нестабильный вес, «расплывшаяся» талия</td></tr>
+          <tr><td>Гнев</td><td>Печень, виски, челюсти</td><td>Жёсткая фигура, гипертония</td></tr>
+          <tr><td>Зависть</td><td>Жёлчный, кишечник</td><td>Бёдра и ягодицы, вздутие</td></tr>
+          <tr><td>Уныние</td><td>Лёгкие, кожа</td><td>Сутулость, дряблость</td></tr>
+          <tr><td>Тревога</td><td>Сердце, грудная клетка</td><td>Худоба, учащённое сердцебиение</td></tr>
+          <tr><td>Печаль</td><td>Лёгкие, плечи</td><td>Опущенные плечи, астма</td></tr>
+          <tr><td>Томление</td><td>Селезёнка, лимфа</td><td>Отёчность, целлюлит</td></tr>
+          <tr><td>Одиночество</td><td>Сердце, диафрагма</td><td>Боли в груди, ВСД</td></tr>
+          <tr><td>Позор</td><td>Лицо, кожа</td><td>Псориаз, экзема, покраснения</td></tr>
+          <tr><td>Унижение</td><td>Горло, щитовидка</td><td>Проблемы с метаболизмом и весом</td></tr>
+          <tr><td>Неудача</td><td>Надпочечники, позвоночник</td><td>Сутулость, хроническая усталость</td></tr>
+          <tr><td>Крушение надежд</td><td>Диафрагма</td><td>Резкие колебания веса, спазмы</td></tr>
+          <tr><td>Раздражение</td><td>Нервная система, кожа</td><td>Крапивница, нервный тик</td></tr>
+          <tr><td>Отчаяние</td><td>Сердце, грудная клетка</td><td>Тяжёлое тело, боли в сердце</td></tr>
+          <tr><td>Одиночество</td><td>Тазобедренные суставы</td><td>Холодность, артриты</td></tr>
+          <tr><td>Грусть</td><td>Грудная клетка, лёгкие</td><td>Слабое дыхание, респираторные</td></tr>
+          <tr><td>Обман</td><td>Тонкий кишечник</td><td>Вздутие, напряжение в центре</td></tr>
+          <tr><td>Отвращение</td><td>Желудок, горло</td><td>Тошнота, нарушения аппетита</td></tr>
+          <tr><td>Скрытность</td><td>Горло, челюсть, таз</td><td>Хронические боли, фибромиалгия</td></tr>
+          <tr><td>Смятение</td><td>Нервная система, мозг</td><td>Бессонница, панические атаки</td></tr>
+          <tr><td>Истощение</td><td>Надпочечники, эндокринная</td><td>Выгорание, потеря/набор веса</td></tr>
+          <tr><td>Переполнение</td><td>Селезёнка, лимфа</td><td>Отёки, пастозность</td></tr>
+          <tr><td>Отчуждённость</td><td>Кожа, периферическая НС</td><td>Холодная кожа, онемения</td></tr>
+          <tr><td>Подавленность</td><td>Позвоночник, колени</td><td>Искривление осанки, остеохондроз</td></tr>
+          <tr><td>Недовольство</td><td>Желудок, пищевод, зубы</td><td>Бруксизм, напряжение</td></tr>
+          <tr><td>Изнеможение</td><td>Сердце, мышцы</td><td>Дряблость, отсутствие тонуса</td></tr>
+          <tr><td>Изоляция</td><td>Тазобедренные суставы</td><td>«Галифе», холод в ногах</td></tr>
+          <tr><td>Замкнутость</td><td>Плечевой пояс, грудь</td><td>Сутулость, впалая грудь</td></tr>
+          <tr><td>Задержка</td><td>Таз, низ живота</td><td>Холодность, нарушения цикла</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warning-box success">
+      <h4>💡 Запомните</h4>
+      <p>Тело и душа неразрывно связаны. Работая с осознанием и высвобождением «душевных загрязнений», вы оказываете глубокое оздоравливающее воздействие на физическое тело.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SAFETY -->
+<div class="modal-overlay" id="modal-safety" role="dialog" aria-modal="true" aria-labelledby="modal-safety-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" data-modal-close="modal-safety" aria-label="Закрыть">✕</button>
+    <h2 id="modal-safety-title">Безопасность</h2>
+    <div class="warning-box danger">
+      <h4>⚠️ Противопоказание</h4>
+      <p>Беременность — единственное абсолютное противопоказание для прохождения курса.</p>
+    </div>
+    <h3>Болевой порог</h3>
+    <p>Допустимый уровень боли: <strong>до 7–8 баллов</strong> по субъективной шкале. Боль воспринимается как маркер выхода застрявшего импульса.</p>
+    <h3>Немедленная остановка при:</h3>
+    <ul>
+      <li>Стреляющей или пульсирующей боли</li>
+      <li>Головокружении</li>
+      <li>Распространяющемся онемении</li>
+      <li>Нарушении дыхания</li>
+      <li>Панической реакции</li>
+    </ul>
+    <h3>Нормальные реакции</h3>
+    <p>Покраснение, временные синяки, мышечная усталость, эмоциональный всплеск. Проходят за 2–5 дней. После сессии рекомендуется тёплый душ.</p>
+    <div class="separator"></div>
+    <h3>Заземление после сессии</h3>
+    <p>Глубокий вдох и выдох. Можно повторить 3–5 раз. Это нормализует состояние нервной системы и завершает цикл высвобождения.</p>
+    <div class="warning-box success">
+      <h4>🏥 Медицинская интеграция</h4>
+      <p>Метод является духовно-телесной практикой и не заменяет медицинскую диагностику. При наличии диагностированных заболеваний, приёме препаратов или стойких физических симптомах обязательна консультация лечащего врача.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+(function () {
+  'use strict';
+
+  // === FONT SIZE ===
+  const FS_STEP = 0.1, FS_MIN = 0.8, FS_MAX = 1.4;
+  let currentFs = 1;
+
+  function setFontSize(val) {
+    currentFs = Math.max(FS_MIN, Math.min(FS_MAX, val));
+    document.documentElement.style.setProperty('--fs-h1', (1.8 * currentFs) + 'rem');
+    document.documentElement.style.setProperty('--fs-h2', (1.5 * currentFs) + 'rem');
+    document.documentElement.style.setProperty('--fs-h3', (1.25 * currentFs) + 'rem');
+    document.documentElement.style.setProperty('--fs-body', currentFs + 'rem');
+    document.documentElement.style.setProperty('--fs-small', (0.875 * currentFs) + 'rem');
+    document.documentElement.style.setProperty('--fs-micro', (0.75 * currentFs) + 'rem');
+    document.getElementById('btnFontMinus').classList.toggle('active', currentFs < 1);
+    document.getElementById('btnFontPlus').classList.toggle('active', currentFs > 1);
+  }
+
+  document.getElementById('btnFontMinus').addEventListener('click', () => setFontSize(currentFs - FS_STEP));
+  document.getElementById('btnFontPlus').addEventListener('click', () => setFontSize(currentFs + FS_STEP));
+
+  // === THEMES ===
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.themeSet === theme));
+  }
+
+  document.querySelectorAll('.theme-dot').forEach(dot => {
+    dot.addEventListener('click', () => setTheme(dot.dataset.themeSet));
+    dot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTheme(dot.dataset.themeSet); } });
+  });
+
+  // === MODALS ===
+  // Исправлено: убраны inline-onclick в HTML, единый обработчик через делегирование
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    // Фокус для скринридеров
+    const firstFocusable = modal.querySelector('button, [tabindex]:not([tabindex="-1"])');
+    if (firstFocusable) setTimeout(() => firstFocusable.focus(), 50);
+  }
+
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.classList.remove('active');
+    // Сбрасываем overflow только если нет других открытых модалей
+    if (!document.querySelector('.modal-overlay.active')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Делегирование: data-modal-open, data-modal-close, data-modal-chain
+  document.addEventListener('click', e => {
+    const opener = e.target.closest('[data-modal-open]');
+    if (opener) {
+      e.preventDefault();
+      openModal(opener.dataset.modalOpen);
+      return;
+    }
+    const closer = e.target.closest('[data-modal-close]');
+    if (closer) {
+      e.preventDefault();
+      closeModal(closer.dataset.modalClose);
+      return;
+    }
+    const chainer = e.target.closest('[data-modal-chain]');
+    if (chainer) {
+      e.preventDefault();
+      const [closeId, openId] = chainer.dataset.modalChain.split(',');
+      closeModal(closeId.trim());
+      setTimeout(() => openModal(openId.trim()), 350);
+      return;
+    }
+  });
+
+  // Закрытие по клику на overlay
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeModal(overlay.id);
+    });
+  });
+
+  // Закрытие по Escape
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const active = document.querySelector('.modal-overlay.active');
+    if (active) closeModal(active.id);
+  });
+
+  // === ACCORDION ===
+  // Исправлено: убраны inline-onclick, делегирование + управление aria-expanded
+  document.querySelectorAll('.accordion-header').forEach(header => {
+    const toggle = () => {
+      const item = header.parentElement;
+      const wasOpen = item.classList.contains('open');
+      item.parentElement.querySelectorAll('.accordion-item.open').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+      });
+      if (!wasOpen) {
+        item.classList.add('open');
+        header.setAttribute('aria-expanded', 'true');
+      }
+    };
+    header.addEventListener('click', toggle);
+    header.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+  });
+
+  // === SCROLL TO TOP ===
+  const navHome = document.getElementById('navHome');
+  if (navHome) {
+    navHome.addEventListener('click', e => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // === MODULE CARDS: keyboard nav ===
+  document.querySelectorAll('.module-card[tabindex="0"]').forEach(card => {
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal(card.dataset.modalOpen);
+      }
+    });
+  });
+
+  // === INTERSECTION OBSERVER FOR ANIMATIONS ===
+  // Исправлено: не ставим paused/running вручную — это ломает анимацию в Firefox
+  // Используем opacity:0 + класс is-visible вместо animationPlayState
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.slide-up').forEach(el => observer.observe(el));
+
+  // === ЯЗЫК: RU / UZ ===
+  // Перевод по текстовым узлам: ключ — точный (trim) русский текст, значение — узбекский (латиница).
+  // Арабские дуа и транслитерация не переводятся.
+  const UZ = {
+    // — Шапка / навигация —
+    "Размер":"Hajmi",
+    "Трансформация личности":"Shaxs transformatsiyasi",
+    "Курс трансформации личности по методу Абу Мухаммада":"Abu Muhammad metodi bo'yicha shaxs transformatsiyasi kursi",
+    "✦ Высвобождение застрявших импульсов":"✦ Qotib qolgan impulslarni ozod qilish",
+    "Главная":"Bosh sahifa","Модули":"Modullar","Дуа":"Duolar","Таблицы":"Jadvallar",
+    // — Интро —
+    "Добро пожаловать":"Xush kelibsiz",
+    "Этот курс —":"Bu kurs —",
+    "особенный путь":"alohida yo'l",
+    "к освобождению от тех застрявших импульсов, которые были испытаны душой, но не проявлены в теле и остались зафиксированными в фасциальных тканях, мышцах и нервных путях.":"qalb his etgan, biroq tanada namoyon bo'lmay, fastsial to'qimalar, mushaklar va asab yo'llarida qotib qolgan impulslardan ozod bo'lish sari.",
+    "«Нервная система — это главный интерфейс между телом, энергией и духом. Когда в этом интерфейсе есть сбой, орган или часть тела теряют связь с сознанием.»":"«Asab tizimi — bu tana, energiya va ruh o'rtasidagi asosiy interfeys. Bu interfeysda nosozlik bo'lsa, a'zo yoki tana qismi ong bilan aloqasini yo'qotadi.»",
+    "Метод последовательно работает на трёх уровнях:":"Metod izchil ravishda uch darajada ishlaydi:",
+    "телесном":"jismoniy","эмоциональном":"hissiy","и":"va","духовном":"ma'naviy",
+    ", возвращая вам полноту ощущения жизни в собственном теле.":", sizga o'z tanangizda hayotni his etishning to'liqligini qaytaradi.",
+    "▶ Начать ознакомление":"▶ Tanishuvni boshlash",
+    // — Что за метод —
+    "Что это за метод?":"Bu qanday metod?",
+    "Это не массаж и не релаксация. Это":"Bu massaj ham, relaksatsiya ham emas. Bu —",
+    "целенаправленная работа":"maqsadli ish",
+    "с невыраженными душевными импульсами, пробуждение «немых зон» и восстановление связи «мозг–тело».":"ifoda etilmagan ruhiy impulslar bilan, «soqov zonalar»ni uyg'otish va «miya–tana» aloqasini tiklash.",
+    "Ключевые принципы":"Asosiy tamoyillar",
+    "Непроявленные эмоции фиксируются в фасциях и мышцах":"Namoyon bo'lmagan hissiyotlar fastsiya va mushaklarda qotib qoladi",
+    "Физическое воздействие пробуждает нервные окончания":"Jismoniy ta'sir asab uchlarini uyg'otadi",
+    "Каждое надавливание синхронизируется с вербализацией недуга":"Har bir bosish dardni so'z bilan ifodalash bilan sinxronlanadi",
+    "Сакральные формулы и дуа усиливают процесс очищения":"Muqaddas formulalar va duolar tozalanish jarayonini kuchaytiradi",
+    "Дыхание — проводник, выводящий освобождённую энергию":"Nafas — ozod bo'lgan energiyani chiqaruvchi o'tkazgich",
+    "✅ Единственное противопоказание":"✅ Yagona qarshi ko'rsatma",
+    "Беременность. Во всех остальных случаях метод доступен при соблюдении протокола интенсивности и самонаблюдения.":"Homiladorlik. Boshqa barcha hollarda metod intensivlik protokoli va o'z-o'zini kuzatishga rioya qilingan holda qo'llaniladi.",
+    // — Структура —
+    "Структура курса":"Kurs tuzilishi",
+    "Курс выстроен как последовательная спираль трансформации: от тела к духу, от высвобождения к устойчивой чистоте.":"Kurs izchil transformatsiya spirali sifatida qurilgan: tanadan ruhga, ozod bo'lishdan barqaror poklikka.",
+    "Модуль 01":"01-modul","Модуль 02":"02-modul","Модуль 03":"03-modul","Модуль 04":"04-modul",
+    "Физическое пробуждение":"Jismoniy uyg'onish",
+    "Телесная диагностика, протирание, похлопывание, надавливание, выщипывание + вербализация":"Tana diagnostikasi, ishqalash, shapatilash, bosish, chimchilash + so'z bilan ifodalash",
+    "Психосоматическая трансформация":"Psixosomatik transformatsiya",
+    "Проживание эмоций, замещение паттернов, 30 пар «недуг → качество»":"Hissiyotlarni yashash, patternlarni almashtirish, 30 juft «dard → fazilat»",
+    "Духовно-визуальное очищение":"Ma'naviy-vizual tozalanish",
+    "Периферическое зрение, цветные маркеры, дуа-заклинания":"Periferik ko'rish, rangli markerlar, duo-raqyalar",
+    "Духовная гигиена":"Ma'naviy gigiyena",
+    "Границы, невпитывание, ежедневная благодарность и устойчивость":"Chegaralar, o'ziga singdirmaslik, kundalik shukronalik va barqarorlik",
+    // — Как работает —
+    "Как это работает?":"Bu qanday ishlaydi?",
+    "Цикл трансформации в каждом модуле:":"Har bir moduldagi transformatsiya tsikli:",
+    "Диагностика":"Diagnostika",
+    "— поиск «немых зон» через напряжение, протирание, похлопывание и боди-скан":"— taranglik, ishqalash, shapatilash va body-skan orqali «soqov zonalar»ni izlash",
+    "Активация":"Faollashtirish",
+    "— физическое воздействие (надавливание, выщипывание, вытягивание) для пробуждения импульсов":"— impulslarni uyg'otish uchun jismoniy ta'sir (bosish, chimchilash, cho'zish)",
+    "Вербализация":"So'z bilan ifodalash",
+    "— проговаривание конкретного недуга синхронно с воздействием":"— ta'sir bilan bir vaqtda aniq dardni ovoz chiqarib aytish",
+    "Духовное очищение":"Ma'naviy tozalanish",
+    "— дуа, суры, молитвенные формулы для выведения застрявшей энергии":"— qotib qolgan energiyani chiqarish uchun duolar, suralar, ibodat formulalari",
+    "Интеграция":"Integratsiya",
+    "— глубокое дыхание, душ, заземление, наблюдение за изменениями":"— chuqur nafas, dush, yerga ulanish, o'zgarishlarni kuzatish",
+    // — Карта зон (превью) —
+    "Карта психосоматических зон":"Psixosomatik zonalar xaritasi",
+    "Какая часть тела откликается на напряжение — там скрыт застрявший импульс.":"Tananing qaysi qismi taranglikka javob bersa — o'sha yerda qotib qolgan impuls yashiringan.",
+    "Зона тела":"Tana zonasi","Возможный недуг":"Ehtimoliy dard",
+    "🦶 Стопы":"🦶 Tovonlar","Страх отпустить, недоверие миру":"Qo'yib yuborishdan qo'rquv, dunyoga ishonchsizlik",
+    "🦵 Колени":"🦵 Tizzalar","Упрямство, негибкость":"O'jarlik, egiluvchanlik yo'qligi",
+    "🫁 Таз":"🫁 Tos","Подавленная сексуальность, творческие блоки":"Bostirilgan jinsiylik, ijodiy to'siqlar",
+    "🫀 Живот":"🫀 Qorin","Непринятие себя, непереваренные эмоции":"O'zini qabul qilmaslik, hazm bo'lmagan hissiyotlar",
+    "💨 Диафрагма":"💨 Diafragma","Подавленный страх, запрет на эмоции":"Bostirilgan qo'rquv, hissiyotlarga taqiq",
+    "🫁 Грудная клетка":"🫁 Ko'krak qafasi","Невыраженная грусть, непрожитое горе":"Ifoda etilmagan g'am, yashalmagan qayg'u",
+    "💪 Плечи":"💪 Yelkalar","Чрезмерная ответственность, бремя":"Haddan ortiq mas'uliyat, yuk",
+    "🗣️ Шея":"🗣️ Bo'yin","Страх выразить истинные чувства":"Chin tuyg'ularni ifodalashdan qo'rquv",
+    "😬 Челюсть":"😬 Jag'","Подавленный гнев, невысказанные слова":"Bostirilgan g'azab, aytilmagan so'zlar",
+    "🧠 Лоб и виски":"🧠 Peshona va chakkalar","Чрезмерный анализ, страх отпустить контроль":"Haddan ortiq tahlil, nazoratni qo'yib yuborishdan qo'rquv",
+    "📋 Полная таблица (30 зон)":"📋 To'liq jadval (30 zona)",
+    // — Дуа (превью) —
+    "Духовные формулы":"Ma'naviy formulalar",
+    "В курсе используются специальные дуа-заклинания, привязанные к цветовым маркерам в периферическом зрении (Модуль 3).":"Kursda periferik ko'rishdagi rang markerlariga bog'langan maxsus duo-raqyalar qo'llaniladi (3-modul).",
+    "«С именем Аллаха, заклинаю от страха в моём сердце»":"«Alloh nomi bilan, qalbimdagi qo'rquvdan panoh tilayman»",
+    "Серо-тёмный → Страх":"Kulrang-to'q → Qo'rquv",
+    "«С именем Аллаха, заклинаю от обиды в моей груди»":"«Alloh nomi bilan, ko'ksimdagi xafagarchilikdan panoh tilayman»",
+    "Кислотно-зелёный → Обида":"Kislota-yashil → Xafagarchilik",
+    "«С именем Аллаха, заклинаю от гнева в моей душе»":"«Alloh nomi bilan, nafsimdagi g'azabdan panoh tilayman»",
+    "Ярко-красный → Гнев":"Yorqin-qizil → G'azab",
+    "📖 Все 10 дуа с переводом":"📖 Barcha 10 duo tarjimasi bilan",
+    // — Трансформация качеств (превью) —
+    "Трансформация качеств":"Fazilatlar transformatsiyasi",
+    "Каждому негативному состоянию соответствует целительное качество, которое активируется во 2-м модуле.":"Har bir salbiy holatga 2-modulda faollashtiriladigan shifobaxsh fazilat mos keladi.",
+    "Недуг":"Dard","Целительное качество":"Shifobaxsh fazilat",
+    "😨 Страх":"😨 Qo'rquv","Бесстрашие, Доверие к Аллаху":"Qo'rqmaslik, Allohga tavakkul",
+    "💔 Разочарование":"💔 Hafsalasizlik","Принятие, Гибкость":"Qabul qilish, Egiluvchanlik",
+    "😡 Гнев":"😡 G'azab","Спокойствие, Терпение":"Xotirjamlik, Sabr",
+    "👁️ Зависть":"👁️ Hasad","Радость за других, Щедрость":"Boshqalar uchun quvonish, Saxiylik",
+    "😢 Уныние":"😢 Tushkunlik","Радость, Вдохновение":"Quvonch, Ilhom",
+    "😰 Тревога":"😰 Xavotir","Умиротворение, Вера":"Tinchlik, Iymon",
+    "😞 Печаль":"😞 G'amginlik","Принятие утраты, Благодарность":"Yo'qotishni qabul qilish, Shukronalik",
+    "😤 Раздражение":"😤 Asabiylik","Терпимость, Понимание":"Bag'rikenglik, Tushunish",
+    "😔 Отчаяние":"😔 Umidsizlik","Надежда, Стойкость":"Umid, Matonat",
+    "🚶 Одиночество":"🚶 Yolg'izlik","Гармония с собой, Наполненность":"O'zi bilan uyg'unlik, To'liqlik",
+    "+ ещё 20 пар":"+ yana 20 juft","📋 Полная таблица 30 пар":"📋 30 juftlik to'liq jadval",
+    // — Результаты —
+    "Ожидаемые результаты":"Kutilayotgan natijalar",
+    "После Модуля 1":"1-moduldan keyin","После Модуля 2":"2-moduldan keyin",
+    "После Модуля 3":"3-moduldan keyin","После Модуля 4":"4-moduldan keyin",
+    "Пробуждение «немых зон», выход первичных телесных зажимов, восстановление чувствительности и импульсной проводимости, ощущение лёгкости в теле, улучшение осанки.":"«Soqov zonalar»ning uyg'onishi, dastlabki tana qisilishlarining chiqishi, sezuvchanlik va impuls o'tkazuvchanligining tiklanishi, tanada yengillik hissi, qomatning yaxshilanishi.",
+    "Исчезновение остаточного сопротивления, изменение мимики и поведенческих паттернов, устойчивое замещение разрушительных эмоций целительными качествами, глубокое эмоциональное облегчение.":"Qoldiq qarshilikning yo'qolishi, mimika va xulq patternlarining o'zgarishi, buzg'unchi hissiyotlarning shifobaxsh fazilatlar bilan barqaror almashinishi, chuqur hissiy yengillik.",
+    "Очищение тонких фасциально-энергетических слоёв, исчезновение «фоновых» тяжестей, восстановление внутренней тишины, лёгкости дыхания, естественная эластичность тканей.":"Nozik fastsial-energetik qatlamlarning tozalanishi, «fon» og'irliklarning yo'qolishi, ichki sukunatning tiklanishi, nafasning yengilligi, to'qimalarning tabiiy elastikligi.",
+    "Устойчивое внутреннее равновесие, защита от эмоционального поглощения, естественное поддержание чистоты, трансформация поведения и социального взаимодействия, открытое выражение радости.":"Barqaror ichki muvozanat, hissiy yutilishdan himoya, poklikni tabiiy saqlash, xulq va ijtimoiy muloqotning transformatsiyasi, quvonchni ochiq ifodalash.",
+    // — Безопасность (карточка) —
+    "Безопасность":"Xavfsizlik",
+    "⚠️ Противопоказание":"⚠️ Qarshi ko'rsatma",
+    "Беременность — абсолютное противопоказание для прохождения курса.":"Homiladorlik — kursdan o'tish uchun mutlaq qarshi ko'rsatma.",
+    "📊 Болевой порог":"📊 Og'riq chegarasi",
+    "Допустимый уровень боли: до 7–8 баллов по субъективной шкале. Боль воспринимается как маркер выхода импульса, а не как повод для остановки.":"Ruxsat etilgan og'riq darajasi: sub'ektiv shkala bo'yicha 7–8 ballgacha. Og'riq to'xtash sababi emas, impuls chiqishining markeri sifatida qabul qilinadi.",
+    "🛑 Немедленная остановка при:":"🛑 Quyidagi hollarda darhol to'xtang:",
+    "Стреляющей или пульсирующей боли, головокружении, распространяющемся онемении, нарушении дыхания, панической реакции.":"Otib turuvchi yoki lo'qillovchi og'riq, bosh aylanishi, tarqaluvchi uvishish, nafas buzilishi, vahima reaksiyasida.",
+    "✅ Нормальные реакции":"✅ Normal reaksiyalar",
+    "Покраснение, временные синяки, мышечная усталость, эмоциональный всплеск. Проходят за 2–5 дней. После сессии рекомендуется тёплый душ и глубокое дыхание.":"Qizarish, vaqtinchalik ko'karishlar, mushak charchog'i, hissiy portlash. 2–5 kunda o'tib ketadi. Seansdan keyin iliq dush va chuqur nafas tavsiya etiladi.",
+    "Метод является духовно-телесной практикой и не заменяет медицинскую диагностику. При наличии диагностированных заболеваний обязательна консультация врача.":"Metod ma'naviy-jismoniy amaliyot bo'lib, tibbiy tashxisning o'rnini bosmaydi. Tashxis qo'yilgan kasalliklar mavjud bo'lganda shifokor bilan maslahatlashish shart.",
+    // — Футер —
+    "Курс «Особенный» по методу Абу Мухаммада":"Abu Muhammad metodi bo'yicha «Особенный» kursi",
+    "Высвобождение застрявших импульсов · Психосоматическая перезагрузка · Духовная гигиена":"Qotib qolgan impulslarni ozod qilish · Psixosomatik qayta yuklash · Ma'naviy gigiyena",
+    "© 2025 Все права защищены":"© 2025 Barcha huquqlar himoyalangan",
+    // — Модаль: О методе —
+    "О методе":"Metod haqida",
+    "Курс «Особенный» — это уникальная методика, разработанная Абу Мухаммадом на основе глубокого наблюдения за связью тела, нервной системы и духа.":"«Особенный» kursi — Abu Muhammad tomonidan tana, asab tizimi va ruh o'rtasidagi bog'liqlikni chuqur kuzatish asosida ishlab chiqilgan noyob metodika.",
+    "Основная идея":"Asosiy g'oya",
+    "Наша нервная система — главный «интерфейс» между телом, энергией и духом. Когда пережитые душой эмоции не находят телесного выражения, они «застревают» в фасциальных тканях, мышечных зажимах и энергетических каналах, создавая невидимую, но ощутимую плотность.":"Asab tizimimiz — tana, energiya va ruh o'rtasidagi asosiy «interfeys». Qalb kechirgan hissiyotlar tanada ifoda topmasa, ular fastsial to'qimalar, mushak qisilishlari va energetik kanallarda «qotib qoladi», ko'rinmas, ammo seziladigan zichlik hosil qiladi.",
+    "Как работает метод":"Metod qanday ishlaydi",
+    "Метод последовательно пробуждает «немые зоны» через физическое воздействие (протирание, похлопывание, надавливание, выщипывание), синхронизирует каждое действие с вербализацией конкретного недуга и усиливает процесс сакральными формулами.":"Metod jismoniy ta'sir (ishqalash, shapatilash, bosish, chimchilash) orqali «soqov zonalar»ni izchil uyg'otadi, har bir harakatni aniq dardni so'z bilan ifodalash bilan sinxronlaydi va jarayonni muqaddas formulalar bilan kuchaytiradi.",
+    "«Слово работает как свет, рассеивающий тень, а дыхание становится проводником, выводящим освобождённую энергию за пределы тела.»":"«So'z soyani tarqatuvchi nur kabi ishlaydi, nafas esa ozod bo'lgan energiyani tana tashqarisiga chiqaruvchi o'tkazgichga aylanadi.»",
+    "Три уровня работы":"Ishning uch darajasi",
+    "Телесный":"Jismoniy","— пробуждение нервной системы, разрушение фасциальных блоков":"— asab tizimini uyg'otish, fastsial bloklarni buzish",
+    "Эмоциональный":"Hissiy","— проживание и трансформация чувств, замещение паттернов":"— tuyg'ularni yashash va o'zgartirish, patternlarni almashtirish",
+    "Духовный":"Ma'naviy","— очищение через дуа, суры и периферическое зрение":"— duolar, suralar va periferik ko'rish orqali tozalanish",
+    // — Модаль: Модуль 1 —
+    "Первый модуль — это не массаж. Это осознанное высвобождение невыраженных душевных импульсов, зафиксированных в фасциальной ткани.":"Birinchi modul — bu massaj emas. Bu fastsial to'qimada qotib qolgan, ifoda etilmagan ruhiy impulslarni ongli ravishda ozod qilish.",
+    "Пошаговый протокол":"Bosqichma-bosqich protokol",
+    "Стартовое прочувствование:":"Boshlang'ich his etish:",
+    "Интенсивно протирайте и похлопывайте всё тело ладонями/кулаками, глубоко и ритмично дыша. Движение от стоп к голове.":"Butun tanani kaft/musht bilan jadal ishqalang va shapatilang, chuqur va ritmik nafas oling. Harakat tovondan boshga qarab.",
+    "Выбор состояния:":"Holatni tanlash:",
+    "Определите одно негативное душевное качество (страх, обида, гнев и т.д.)":"Bitta salbiy ruhiy fazilatni aniqlang (qo'rquv, xafagarchilik, g'azab va h.k.)",
+    "Поиск в теле:":"Tanada izlash:",
+    "Продолжая протирать/похлопывать, проговаривайте название состояния. Ищите зоны отклика: напряжение, тяжесть, жар/холод, «пустота».":"Ishqalash/shapatilashni davom ettirib, holat nomini ovoz chiqarib ayting. Javob zonalarini qidiring: taranglik, og'irlik, issiq/sovuq, «bo'shliq».",
+    "Активное высвобождение:":"Faol ozod qilish:",
+    "В зоне сопротивления — надавливание (твёрдым предметом или пальцами), выщипывание кожи (захват→натяжение→отпуск), вытягивание (удержание 10 сек + дыхание). Возврат к протиранию для интеграции.":"Qarshilik zonasida — bosish (qattiq buyum yoki barmoqlar bilan), terini chimchilash (ushlash→tortish→qo'yib yuborish), cho'zish (10 soniya ushlab turish + nafas). Integratsiya uchun ishqalashga qaytish.",
+    "Синхронизация:":"Sinxronlash:",
+    "Во время воздействия проговаривайте: «Разрушается [недуг]», «Да выведет Аллах [недуг] из моего тела». Сочетайте мышечное напряжение с дуа.":"Ta'sir vaqtida ayting: «[dard] yemirilmoqda», «Alloh [dard]ni tanamdan chiqarsin». Mushak taranglikni duo bilan birlashtiring.",
+    "Завершение:":"Yakunlash:",
+    "Глубокий вдох-выдох для заземления. Рекомендуется тёплый душ.":"Yerga ulanish uchun chuqur nafas olib-chiqarish. Iliq dush tavsiya etiladi.",
+    "Диагностические методы":"Diagnostika usullari",
+    "Прямое надавливание — поиск боли, напряжения, холода/онемения":"To'g'ridan-to'g'ri bosish — og'riq, taranglik, sovuq/uvishishni izlash",
+    "Мысленный боди-скан — выявление «слепых пятен»":"Aqliy body-skan — «ko'r nuqtalar»ni aniqlash",
+    "Карта психосоматической проекции — связь зон с эмоциями":"Psixosomatik proyeksiya xaritasi — zonalarning hissiyotlar bilan aloqasi",
+    "Метод спонтанного движения — наблюдение привычных поз":"Spontan harakat usuli — odatiy pozalarni kuzatish",
+    "Дыхательная диагностика — выявление зон ограничения дыхания":"Nafas diagnostikasi — nafas cheklangan zonalarni aniqlash",
+    "💡 Важно":"💡 Muhim",
+    "Агрессия в данном контексте — это осознанная решимость и намеренная интенсивность, направленная на преодоление сопротивления, а не разрушение. Боль — сигнал к действию, а не повод для остановки.":"Bu kontekstda agressiya — bu qarshilikni yengishga qaratilgan ongli qat'iyat va atayin intensivlik, buzg'unchilik emas. Og'riq — harakatga signal, to'xtash sababi emas.",
+    // — Модаль: Модуль 2 —
+    "Переход от физической разблокировки к осознанному проживанию и трансформации эмоциональных состояний. Работа строится на телесном прочувствовании, а не на интеллектуальном анализе.":"Jismoniy blokdan chiqishdan hissiy holatlarni ongli yashash va o'zgartirishga o'tish. Ish intellektual tahlilga emas, tana orqali his etishga quriladi.",
+    "Алгоритм работы":"Ish algoritmi",
+    "Проявление:":"Namoyon bo'lish:","Впустите эмоцию, отследите откликающиеся органы":"Hissiyotni ichingizga qo'ying, javob beruvchi a'zolarni kuzating",
+    "Вербализация:":"So'z bilan ifodalash:","Проговорите чувство, свяжите с событием":"Tuyg'uni ayting, voqea bilan bog'lang",
+    "Разрушение:":"Yemirish:","«Разрушается [чувство]» + «Да выведет Аллах [чувство]»":"«[tuyg'u] yemirilmoqda» + «Alloh [tuyg'u]ni chiqarsin»",
+    "Возврат к физике:":"Jismoniyga qaytish:","Если блок не поддаётся — используйте техники М1":"Blok bo'shamasa — M1 texnikalaridan foydalaning",
+    "Активация противоположности:":"Qarama-qarshilikni faollashtirish:","Проговаривайте позитивное качество до исчезновения сопротивления":"Qarshilik yo'qolguncha ijobiy fazilatni ovoz chiqarib ayting",
+    "Пример: работа со страхом":"Misol: qo'rquv bilan ishlash",
+    "При проявлении страха активируются горло, грудь, сердце и часть живота. Проговаривайте ощущения, фокусируясь на чувствах. Затем: «Разрушается страх» → «Да выведет Аллах все мои страхи». После — проявите бесстрашие: «Я не боюсь людей».":"Qo'rquv namoyon bo'lganda tomoq, ko'krak, yurak va qorinning bir qismi faollashadi. Tuyg'ularga e'tibor qaratib, his-tuyg'ularni ayting. So'ngra: «Qo'rquv yemirilmoqda» → «Alloh barcha qo'rquvlarimni chiqarsin». Keyin — qo'rqmaslikni namoyon eting: «Men odamlardan qo'rqmayman».",
+    "«Не пытайтесь умом понять чувства. Чувства нужно ощущать и проживать в теле.»":"«Tuyg'ularni aql bilan tushunishga urinmang. Tuyg'ularni tanada his etish va yashash kerak.»",
+    // — Модаль: Модуль 3 —
+    "Утончённая практика, где периферическое зрение становится мостом между невидимым миром души и плотной тканью тела.":"Periferik ko'rish qalbning ko'rinmas olami bilan tananing zich to'qimasi o'rtasida ko'prikka aylanadigan nozik amaliyot.",
+    "Как выполнять":"Qanday bajariladi",
+    "Направьте внимание в зону периферического зрения, мысленно произнесите название недуга. Если проступает цвет — это маркер укоренившегося состояния. Прочитайте соответствующее дуа на выдохе, пока оттенок не растворится.":"Diqqatni periferik ko'rish zonasiga qarating, dardning nomini ichingizda ayting. Agar rang ko'rinsa — bu ildiz otgan holatning markeri. Tus tarqab ketguncha nafas chiqarganda tegishli duoni o'qing.",
+    "10 пар «Цвет → Состояние → Дуа»":"10 juft «Rang → Holat → Duo»",
+    "Полная таблица доступна по кнопке ниже.":"To'liq jadval quyidagi tugma orqali mavjud.",
+    "«С именем Аллаха, заклинаю от уныния»":"«Alloh nomi bilan, tushkunlikdan panoh tilayman»",
+    "Грязно-синий → Уныние":"Iflos-ko'k → Tushkunlik",
+    "📖 Все 10 дуа с цветами":"📖 Barcha 10 duo ranglar bilan",
+    // — Модаль: Модуль 4 —
+    "Искусство сохранять внутреннюю чистоту не как разовое достижение, а как живое, дышащее состояние.":"Ichki poklikni bir martalik yutuq sifatida emas, balki tirik, nafas oluvchi holat sifatida saqlash san'ati.",
+    "Невпитывание:":"O'ziga singdirmaslik:","Чистая душа видит, понимает, сочувствует — но не поглощает чужую тяжесть":"Pok qalb ko'radi, tushunadi, hamdard bo'ladi — biroq o'zganing og'irligini o'ziga yutmaydi",
+    "Границы:":"Chegaralar:","Мягкий уход, твёрдое «нет», изменение формата общения — защита своего пространства":"Yumshoq chekinish, qat'iy «yo'q», muloqot formatini o'zgartirish — o'z makonini himoya qilish",
+    "Наполнение:":"To'ldirish:","Ежедневное «Альхамдулиллях» как выдох благодарности, открытое выражение радости":"Kundalik «Alhamdulillah» shukronalik nafasi sifatida, quvonchni ochiq ifodalash",
+    "Ритм:":"Ritm:","Вдох ясности → выдох признательности. Чистота поддерживается регулярностью":"Tiniqlik nafasi → minnatdorchilik nafasi. Poklik muntazamlik bilan saqlanadi",
+    "«Духовная гигиена превращается в искусство дыхания: вдох ясности, выдох признательности. И в этом дыхании рождается устойчивость, которая не ломается от встреч с чужой тяжестью.»":"«Ma'naviy gigiyena nafas san'atiga aylanadi: tiniqlik nafasi, minnatdorchilik nafasi. Va shu nafasda o'zganing og'irligi bilan uchrashuvdan sinmaydigan barqarorlik tug'iladi.»",
+    "💡 Практика на каждый день":"💡 Har kungi amaliyot",
+    "Утром: 3 минуты глубокого дыхания + проговаривание позитивных качеств. Вечером: краткий боди-скан + благодарность. При контакте с тяжёлыми людьми: осознанное дыхание + возврат к практике при необходимости.":"Ertalab: 3 daqiqa chuqur nafas + ijobiy fazilatlarni aytish. Kechqurun: qisqa body-skan + shukronalik. Og'ir odamlar bilan muloqotda: ongli nafas + zarur bo'lganda amaliyotga qaytish.",
+    // — Модаль: 10 дуа —
+    "10 дуа-заклинаний":"10 duo-raqya",
+    "Каждая формула привязана к цветовому маркеру в периферическом зрении. Произносите на выдохе.":"Har bir formula periferik ko'rishdagi rang markeriga bog'langan. Nafas chiqarganda ayting.",
+    "Серо-тёмный":"Kulrang-to'q","Кислотно-зелёный":"Kislota-yashil","Ярко-красный":"Yorqin-qizil",
+    "«С именем Аллаха, заклинаю от зависти»":"«Alloh nomi bilan, hasaddan panoh tilayman»","Ядовито-жёлтый":"Zaharli-sariq",
+    "Грязно-синий":"Iflos-ko'k",
+    "«С именем Аллаха, заклинаю от тревоги»":"«Alloh nomi bilan, xavotirdan panoh tilayman»","Оранжевый":"To'q sariq",
+    "«С именем Аллаха, заклинаю от гордыни»":"«Alloh nomi bilan, kibrdan panoh tilayman»","Металлический золотой":"Metall-oltin",
+    "«С именем Аллаха, заклинаю от лени»":"«Alloh nomi bilan, dangasalikdan panoh tilayman»","Мутно-коричневый":"Loyqa-jigarrang",
+    "«С именем Аллаха, заклинаю от жадности»":"«Alloh nomi bilan, ochko'zlikdan panoh tilayman»","Блестящий жёлтый":"Yaltiroq-sariq",
+    "«С именем Аллаха, заклинаю от лицемерия»":"«Alloh nomi bilan, ikkiyuzlamachilikdan panoh tilayman»","Радужный переливающийся":"Kamalak-tovlanuvchi",
+    // — Модаль: 30 пар —
+    "30 пар трансформации":"30 juftlik transformatsiya",
+    "Каждому негативному состоянию соответствует целительное качество. Активируйте противоположность для проверки остаточного сопротивления.":"Har bir salbiy holatga shifobaxsh fazilat mos keladi. Qoldiq qarshilikni tekshirish uchun qarama-qarshilikni faollashtiring.",
+    "Страх":"Qo'rquv","Разочарование":"Hafsalasizlik","Принятие, Гибкость":"Qabul qilish, Egiluvchanlik",
+    "Гнев, злость":"G'azab, jahl","Спокойствие, Терпение, Прощение":"Xotirjamlik, Sabr, Kechirim",
+    "Зависть, ревность":"Hasad, rashk","Уныние, тоска":"Tushkunlik, hasrat",
+    "Тревожность":"Xavotirlik","Печаль, скорбь":"G'amginlik, qayg'u",
+    "Томление, беспокойство":"Entikish, bezovtalik","Уверенность, Внутренний покой":"Ishonch, Ichki osoyishtalik",
+    "Одиночество (покинутость)":"Yolg'izlik (tashlab ketilganlik)","Чувство близости Аллаха":"Allohning yaqinligini his etish",
+    "Позор, бесчестие":"Sharmandalik, nomussizlik","Самоуважение, Честь":"O'zini hurmat qilish, Or-nomus",
+    "Унижение":"Xo'rlanish","Самоценность, Внутренняя сила":"O'z qadrini bilish, Ichki kuch",
+    "Неудача, провал":"Omadsizlik, mag'lubiyat","Упорство, Принятие урока":"Qat'iyat, Saboqni qabul qilish",
+    "Крушение надежд":"Umidlarning sinishi","Открытость, Вера без привязки":"Ochiqlik, Bog'lanishsiz iymon",
+    "Раздражение":"Asabiylik","Отчаяние":"Umidsizlik",
+    "Одиночество (состояние)":"Yolg'izlik (holat)",
+    "Грусть":"Mahzunlik","Благодарность, Принятие":"Shukronalik, Qabul qilish",
+    "Обман":"Aldov","Честность, Прощение":"Halollik, Kechirim",
+    "Отвращение":"Nafrat","Принятие, Терпимость":"Qabul qilish, Bag'rikenglik",
+    "Скрытность":"Yashirinlik","Искренность, Экспрессивность":"Samimiylik, Ekspressivlik",
+    "Смятение":"Sarosima","Ясность, Внутренний порядок":"Tiniqlik, Ichki tartib",
+    "Истощение":"Holdan toyish","Жизненная сила, Энергичность":"Hayotiy kuch, Quvvatlilik",
+    "Переполнение":"To'lib-toshish","Уравновешенность, Умение отпускать":"Muvozanat, Qo'yib yubora olish",
+    "Отчуждённость":"Begonalashish","Сопричастность, Эмпатия":"Hamdardlik, Empatiya",
+    "Подавленность":"Ezilganlik","Целостность, Стойкость":"Yaxlitlik, Matonat",
+    "Недовольство":"Norozilik","Принятие, Благодарность":"Qabul qilish, Shukronalik",
+    "Изнеможение, усталость":"Charchoq, holsizlik","Бодрость, Радость движения":"Tetiklik, Harakat quvonchi",
+    "Изоляция":"Izolyatsiya","Открытость, Выход из зоны комфорта":"Ochiqlik, Komfort zonasidan chiqish",
+    "Замкнутость":"Tortinchoqlik","Открытость, Доверие":"Ochiqlik, Ishonch",
+    "Задержка, блокировка":"Kechikish, bloklanish","Свобода выражения, Поток":"Ifoda erkinligi, Oqim",
+    // — Модаль: Полная карта —
+    "Полная психосоматическая карта":"To'liq psixosomatik xarita",
+    "Связь эмоциональных загрязнений с зонами тела, фигурой и здоровьем.":"Hissiy ifloslanishlarning tana zonalari, qomat va salomatlik bilan aloqasi.",
+    "Зона в теле":"Tanadagi zona","Влияние":"Ta'siri",
+    "Почки, поясница":"Buyraklar, bel","«Спасательный круг», хронический стресс":"«Qutqaruv halqasi», surunkali stress",
+    "Желудок, поджелудочная":"Oshqozon, oshqozon osti bezi","Нестабильный вес, «расплывшаяся» талия":"Beqaror vazn, «yoyilgan» bel",
+    "Гнев":"G'azab","Печень, виски, челюсти":"Jigar, chakkalar, jag'lar","Жёсткая фигура, гипертония":"Qattiq qomat, gipertoniya",
+    "Зависть":"Hasad","Жёлчный, кишечник":"O't pufagi, ichak","Бёдра и ягодицы, вздутие":"Sonlar va dumba, shishish",
+    "Уныние":"Tushkunlik","Лёгкие, кожа":"O'pka, teri","Сутулость, дряблость":"Bukchayganlik, bo'shashganlik",
+    "Тревога":"Xavotir","Сердце, грудная клетка":"Yurak, ko'krak qafasi","Худоба, учащённое сердцебиение":"Ozg'inlik, yurak urishining tezlashishi",
+    "Печаль":"G'amginlik","Лёгкие, плечи":"O'pka, yelkalar","Опущенные плечи, астма":"Tushgan yelkalar, astma",
+    "Томление":"Entikish","Селезёнка, лимфа":"Taloq, limfa","Отёчность, целлюлит":"Shishish, sellyulit",
+    "Одиночество":"Yolg'izlik","Сердце, диафрагма":"Yurak, diafragma","Боли в груди, ВСД":"Ko'krakdagi og'riq, VTD",
+    "Тазобедренные суставы":"Son-chanoq bo'g'imlari","Холодность, артриты":"Sovuqlik, artritlar",
+    "Позор":"Sharmandalik","Лицо, кожа":"Yuz, teri","Псориаз, экзема, покраснения":"Psoriaz, ekzema, qizarishlar",
+    "Горло, щитовидка":"Tomoq, qalqonsimon bez","Проблемы с метаболизмом и весом":"Metabolizm va vazn muammolari",
+    "Неудача":"Omadsizlik","Надпочечники, позвоночник":"Buyrak usti bezlari, umurtqa pog'onasi","Сутулость, хроническая усталость":"Bukchayganlik, surunkali charchoq",
+    "Диафрагма":"Diafragma","Резкие колебания веса, спазмы":"Vaznning keskin o'zgarishi, spazmlar",
+    "Нервная система, кожа":"Asab tizimi, teri","Крапивница, нервный тик":"Eshakyem, asabiy tik",
+    "Тяжёлое тело, боли в сердце":"Og'ir tana, yurak og'rig'i",
+    "Грудная клетка, лёгкие":"Ko'krak qafasi, o'pka","Слабое дыхание, респираторные":"Zaif nafas, respirator kasalliklar",
+    "Тонкий кишечник":"Ingichka ichak","Вздутие, напряжение в центре":"Shishish, markazdagi taranglik",
+    "Желудок, горло":"Oshqozon, tomoq","Тошнота, нарушения аппетита":"Ko'ngil aynishi, ishtaha buzilishi",
+    "Горло, челюсть, таз":"Tomoq, jag', tos","Хронические боли, фибромиалгия":"Surunkali og'riqlar, fibromialgiya",
+    "Нервная система, мозг":"Asab tizimi, miya","Бессонница, панические атаки":"Uyqusizlik, vahima xurujlari",
+    "Надпочечники, эндокринная":"Buyrak usti bezlari, endokrin tizim","Выгорание, потеря/набор веса":"Charchab-tolish, vazn yo'qotish/ortish",
+    "Селезёнка, лимфа":"Taloq, limfa","Отёки, пастозность":"Shishlar, pastozlik",
+    "Кожа, периферическая НС":"Teri, periferik asab tizimi","Холодная кожа, онемения":"Sovuq teri, uvishishlar",
+    "Позвоночник, колени":"Umurtqa pog'onasi, tizzalar","Искривление осанки, остеохондроз":"Qomatning egilishi, osteoxondroz",
+    "Желудок, пищевод, зубы":"Oshqozon, qizilo'ngach, tishlar","Бруксизм, напряжение":"Bruksizm, taranglik",
+    "Изнеможение":"Holsizlik","Сердце, мышцы":"Yurak, mushaklar","Дряблость, отсутствие тонуса":"Bo'shashganlik, tonus yo'qligi",
+    "«Галифе», холод в ногах":"«Galife», oyoqlardagi sovuqlik",
+    "Плечевой пояс, грудь":"Yelka kamari, ko'krak","Сутулость, впалая грудь":"Bukchayganlik, botiq ko'krak",
+    "Задержка":"Kechikish","Таз, низ живота":"Tos, qorinning pastki qismi","Холодность, нарушения цикла":"Sovuqlik, tsikl buzilishi",
+    "💡 Запомните":"💡 Yodda tuting",
+    "Тело и душа неразрывно связаны. Работая с осознанием и высвобождением «душевных загрязнений», вы оказываете глубокое оздоравливающее воздействие на физическое тело.":"Tana va ruh uzviy bog'liq. «Ruhiy ifloslanishlar»ni anglash va ozod qilish bilan ishlab, siz jismoniy tanaga chuqur sog'lomlashtiruvchi ta'sir ko'rsatasiz.",
+    // — Модаль: Безопасность —
+    "Беременность — единственное абсолютное противопоказание для прохождения курса.":"Homiladorlik — kursdan o'tish uchun yagona mutlaq qarshi ko'rsatma.",
+    "Болевой порог":"Og'riq chegarasi",
+    "Допустимый уровень боли:":"Ruxsat etilgan og'riq darajasi:","до 7–8 баллов":"7–8 ballgacha",
+    "по субъективной шкале. Боль воспринимается как маркер выхода застрявшего импульса.":"sub'ektiv shkala bo'yicha. Og'riq qotib qolgan impuls chiqishining markeri sifatida qabul qilinadi.",
+    "Немедленная остановка при:":"Quyidagi hollarda darhol to'xtang:",
+    "Стреляющей или пульсирующей боли":"Otib turuvchi yoki lo'qillovchi og'riq",
+    "Головокружении":"Bosh aylanishi","Распространяющемся онемении":"Tarqaluvchi uvishish",
+    "Нарушении дыхания":"Nafas buzilishi","Панической реакции":"Vahima reaksiyasi",
+    "Нормальные реакции":"Normal reaksiyalar",
+    "Покраснение, временные синяки, мышечная усталость, эмоциональный всплеск. Проходят за 2–5 дней. После сессии рекомендуется тёплый душ.":"Qizarish, vaqtinchalik ko'karishlar, mushak charchog'i, hissiy portlash. 2–5 kunda o'tib ketadi. Seansdan keyin iliq dush tavsiya etiladi.",
+    "Заземление после сессии":"Seansdan keyin yerga ulanish",
+    "Глубокий вдох и выдох. Можно повторить 3–5 раз. Это нормализует состояние нервной системы и завершает цикл высвобождения.":"Chuqur nafas olish va chiqarish. 3–5 marta takrorlash mumkin. Bu asab tizimi holatini me'yorlashtiradi va ozod bo'lish tsiklini yakunlaydi.",
+    "🏥 Медицинская интеграция":"🏥 Tibbiy integratsiya",
+    "Метод является духовно-телесной практикой и не заменяет медицинскую диагностику. При наличии диагностированных заболеваний, приёме препаратов или стойких физических симптомах обязательна консультация лечащего врача.":"Metod ma'naviy-jismoniy amaliyot bo'lib, tibbiy tashxisning o'rnini bosmaydi. Tashxis qo'yilgan kasalliklar, dori qabul qilish yoki turg'un jismoniy simptomlar mavjud bo'lganda davolovchi shifokor bilan maslahatlashish shart."
+  };
+
+  let langNodes = null;
+  function collectLangNodes() {
+    const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(n) {
+        const p = n.parentNode;
+        if (p && (p.nodeName === 'SCRIPT' || p.nodeName === 'STYLE')) return NodeFilter.FILTER_REJECT;
+        const t = n.nodeValue.trim();
+        return (t && Object.prototype.hasOwnProperty.call(UZ, t)) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    const arr = [];
+    let cur;
+    while ((cur = tw.nextNode())) arr.push({ node: cur, ru: cur.nodeValue });
+    return arr;
+  }
+
+  function setLang(lang) {
+    if (!langNodes) langNodes = collectLangNodes();
+    langNodes.forEach(({ node, ru }) => {
+      if (lang === 'uz') {
+        const key = ru.trim();
+        const uz = UZ[key];
+        node.nodeValue = (uz !== undefined) ? ru.replace(key, uz) : ru;
+      } else {
+        node.nodeValue = ru;
+      }
+    });
+    document.documentElement.setAttribute('lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => setLang(btn.dataset.lang));
+  });
+
+  // Восстановление выбранного языка
+  let savedLang = 'ru';
+  try { savedLang = localStorage.getItem('lang') || 'ru'; } catch (e) {}
+  if (savedLang === 'uz') setLang('uz');
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark" data-fontsize="1.0">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a1a">
+<title>Практика · Модуль 4: Духовная гигиена — Курс «Особенный»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    /* =========================================
+       DESIGN SYSTEM TOKENS & RESET
+       ========================================= */
+    :root {
+      --radius: 16px;
+      --transition: 0.4s cubic-bezier(.4,0,.2,1);
+      --shadow: 0 8px 32px rgba(0,0,0,0.3);
+      --glass-fill: rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.1);
+      --backdrop-blur: 16px;
+      --line-height: 1.7;
+      --font-ui: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --font-arabic: 'Amiri', 'Traditional Arabic', serif;
+      --font-scale: 1.0;
+      --header-height: 72px;
+      --accent-gradient: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-1));
+    }
+
+    /* THEMES */
+    [data-theme="dark"] {
+      --bg-1: #0a0a1a; --bg-2: #12122a; --bg-3: #1a1a3a;
+      --text-1: #f0f0ff; --text-2: #b0b0cc; --text-3: #8888aa;
+      --accent-1: #6c5ce7; --accent-2: #a29bfe; --accent-3: #fd79a8;
+      --success: #00b894; --warning: #fdcb6e; --danger: #e17055;
+    }
+    [data-theme="ocean"] {
+      --bg-1: #0a192f; --bg-2: #112240; --bg-3: #1d3557;
+      --text-1: #ccd6f6; --text-2: #8892b0; --text-3: #5a6a8a;
+      --accent-1: #64ffda; --accent-2: #00b4d8; --accent-3: #48bfe3;
+      --success: #00e676; --warning: #f1c40f; --danger: #e74c3c;
+    }
+    [data-theme="ember"] {
+      --bg-1: #1a0a0a; --bg-2: #2d1b1b; --bg-3: #4a2c2c;
+      --text-1: #ffede0; --text-2: #d4a59c; --text-3: #a07068;
+      --accent-1: #ff6b35; --accent-2: #f7c59f; --accent-3: #e07a5f;
+      --success: #2ecc71; --warning: #f39c12; --danger: #c0392b;
+    }
+    [data-theme="forest"] {
+      --bg-1: #0a1a0a; --bg-2: #1a2e1a; --bg-3: #2d4a2d;
+      --text-1: #e8f5e9; --text-2: #a5d6a7; --text-3: #66bb6a;
+      --accent-1: #00e676; --accent-2: #69f0ae; --accent-3: #b9f6ca;
+      --success: #4caf50; --warning: #ffca28; --danger: #f44336;
+    }
+    [data-theme="royal"] {
+      --bg-1: #1a0a2e; --bg-2: #2d1b4e; --bg-3: #4a2d7a;
+      --text-1: #f3e8ff; --text-2: #c9a0dc; --text-3: #9a6bb0;
+      --accent-1: #b388ff; --accent-2: #ea80fc; --accent-3: #e040fb;
+      --success: #00e676; --warning: #ffca28; --danger: #ff5252;
+    }
+
+    /* BASE & RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: calc(100% * var(--font-scale)); }
+    body {
+      font-family: var(--font-ui);
+      color: var(--text-1);
+      background-color: var(--bg-1);
+      line-height: var(--line-height);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      padding-top: var(--header-height);
+      scroll-padding-top: calc(var(--header-height) + 20px);
+      font-size: 1rem;
+    }
+    h1, h2, h3 { font-weight: 600; line-height: 1.3; margin-bottom: 0.6em; }
+    h1 { font-size: 1.8rem; } h2 { font-size: 1.5rem; } h3 { font-size: 1.25rem; }
+    p { margin-bottom: 1em; color: var(--text-2); }
+    ul, ol { padding-left: 1.4em; margin-bottom: 1em; } li { margin-bottom: 0.4em; color: var(--text-2); }
+    a { color: var(--accent-2); text-decoration: none; border-bottom: 1px dotted var(--accent-2); transition: var(--transition); }
+    a:hover { color: var(--text-1); border-bottom-style: solid; }
+    img, svg { max-width: 100%; height: auto; }
+
+    /* ACCESSIBILITY */
+    :focus-visible { outline: 2px dashed var(--accent-2); outline-offset: 2px; border-radius: 4px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    }
+
+    /* =========================================
+       LAYOUT & COMPONENTS
+       ========================================= */
+    .container { max-width: 480px; margin: 0 auto; padding: 20px 16px 48px; position: relative; z-index: 2; }
+    
+    .card {
+      background: var(--glass-fill); backdrop-filter: blur(var(--backdrop-blur)); -webkit-backdrop-filter: blur(var(--backdrop-blur));
+      border: 1px solid var(--glass-border); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 24px; margin-bottom: 20px; position: relative; overflow: hidden; transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 8s ease infinite;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+
+    /* STEP CARDS */
+    .step-card { cursor: pointer; position: relative; }
+    .step-card.locked { opacity: 0.4; pointer-events: none; filter: grayscale(0.8) blur(1px); }
+    .step-card.unlocked { opacity: 1; pointer-events: auto; filter: none; }
+    .step-card .lock-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; opacity: 0.6; }
+    .step-card.unlocked .lock-icon { display: none; }
+    .step-card .step-number {
+      position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%;
+      background: var(--accent-gradient); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem;
+    }
+    .step-card .status { font-size: 0.8rem; font-weight: 500; margin-top: 8px; display: block; }
+    .step-card.locked .status { color: var(--text-3); }
+    .step-card.unlocked .status { color: var(--accent-2); }
+
+    /* PROGRESS BAR */
+    .progress-track { display: flex; gap: 8px; margin: 20px 0; justify-content: center; }
+    .progress-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: var(--transition); }
+    .progress-dot.active { background: var(--accent-1); transform: scale(1.3); box-shadow: 0 0 8px var(--accent-1); }
+    .progress-dot.completed { background: var(--success); }
+
+    /* MODAL */
+    #modal-overlay {
+      position: fixed; inset: 0; z-index: 900; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      display: flex; align-items: flex-end; justify-content: center; opacity: 0; visibility: hidden; transition: var(--transition);
+    }
+    #modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal-sheet {
+      width: 100%; max-width: 480px; background: var(--bg-2); border-top-left-radius: 20px; border-top-right-radius: 20px;
+      padding: 24px; transform: translateY(100%); transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+      max-height: 85vh; overflow-y: auto; border: 1px solid var(--glass-border);
+    }
+    #modal-overlay.open .modal-sheet { transform: translateY(0); }
+    .modal-handle { width: 40px; height: 4px; background: rgba(255,255,255,0.3); border-radius: 4px; margin: 0 auto 16px; }
+    .close-modal { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-2); font-size: 1.5rem; cursor: pointer; }
+
+    /* DUA CARD (in modal) */
+    .dua-box {
+      background: rgba(0,0,0,0.25); border: 1px solid var(--glass-border); border-radius: 12px; padding: 16px; margin: 16px 0; text-align: center;
+    }
+    .dua-box .arabic { font-family: var(--font-arabic); font-size: 1.5rem; direction: rtl; color: var(--text-1); line-height: 1.4; }
+    .dua-box .translit { color: var(--accent-2); font-size: 0.9rem; margin: 6px 0; }
+    .dua-box .translation { color: var(--text-3); font-size: 0.85rem; font-style: italic; }
+
+    /* BUTTONS */
+    .btn { display: block; width: 100%; padding: 14px; border-radius: 12px; text-align: center; font-weight: 600; cursor: pointer; transition: var(--transition); border: none; margin-top: 12px; }
+    .btn-primary { background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 10s ease infinite; color: #fff; }
+    .btn-primary:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+    .btn-outline { background: transparent; border: 1px solid var(--accent-2); color: var(--accent-2); }
+    .btn-success { background: var(--success); color: #000; }
+
+    /* TOP BAR */
+    .top-bar {
+      position: fixed; top: 0; left: 0; right: 0; height: 64px; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
+      background: rgba(10,10,26,0.8); backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass-border);
+      padding-top: env(safe-area-inset-top);
+    }
+    .brand-pill { background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 8s ease infinite; padding: 6px 12px; border-radius: 99px; font-weight: 600; color: #fff; font-size: 0.85rem; }
+    .controls { display: flex; gap: 10px; align-items: center; }
+    .control-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-1); transition: 0.2s; font-size: 0.9rem; }
+    .control-btn:hover { background: rgba(255,255,255,0.2); }
+    .theme-dots { display: flex; gap: 6px; align-items: center; }
+    .dot { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+    .dot:hover, .dot.active { border-color: #fff; transform: scale(1.2); }
+    .lang-switch {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.03em;
+      padding: 6px 12px; border: none; border-radius: 8px; cursor: pointer;
+      background: rgba(255,255,255,0.92); color: #16162e; transition: 0.2s;
+    }
+    .lang-switch:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+
+    /* SPLASH */
+    #splash {
+      position: fixed; inset: 0; z-index: 9999; background: var(--bg-1);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+    #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .splash-logo { font-size: 2rem; font-weight: 700; color: var(--text-1); margin-bottom: 8px; text-align: center; }
+    .splash-sub { font-size: 1rem; color: var(--text-3); margin-bottom: 28px; }
+    .loader { width: 140px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 4px; overflow: hidden; }
+    .loader-bar { width: 30%; height: 100%; background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 2s ease infinite, loaderMove 1.5s ease infinite; border-radius: 4px; }
+
+    /* BACKGROUND & ORBS */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: -2;
+      background: linear-gradient(-45deg, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-1));
+      background-size: 400% 400%; animation: gradientShift 15s ease infinite;
+    }
+    .orb { position: fixed; border-radius: 50%; filter: blur(70px); z-index: -1; opacity: 0.35; pointer-events: none; }
+    .orb-1 { width: 320px; height: 320px; background: var(--accent-1); top: -15%; left: -10%; animation: orbFloat 20s ease-in-out infinite alternate; }
+    .orb-2 { width: 280px; height: 280px; background: var(--accent-2); bottom: 5%; right: -5%; animation: orbFloat 15s ease-in-out infinite alternate-reverse; }
+    .orb-3 { width: 220px; height: 220px; background: var(--accent-3); top: 45%; left: 35%; animation: orbFloat 18s ease-in-out infinite alternate; }
+
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes loaderMove { 0% { transform: translateX(-50%); } 100% { transform: translateX(300%); } }
+    @keyframes orbFloat { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(20px, 30px) scale(1.05); } }
+
+    .credits { text-align: center; padding: 32px 16px 48px; font-size: 0.9rem; color: var(--text-3); }
+    .credits strong { color: var(--accent-2); font-weight: 600; }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 1.6rem; } h2 { font-size: 1.35rem; }
+      .card, .modal-sheet { padding: 18px; }
+    }
+  
+  .progress-wrap{margin:18px 0;}
+  .progress-bar-wrap{height:8px;border-radius:99px;background:rgba(255,255,255,0.12);overflow:hidden;}
+  .progress-fill{height:100%;width:0%;border-radius:99px;background:var(--accent-gradient);background-size:200% 200%;animation:gradientShift 8s ease infinite;transition:width .4s cubic-bezier(.4,0,.2,1);}
+  .progress-count{margin-top:8px;text-align:center;font-size:0.82rem;color:var(--text-3);font-weight:600;}
+  .progress-count .pc-label{color:var(--text-2);}
+  .dua2-label{font-size:0.78rem;color:var(--accent-2);text-align:center;margin:10px 0 -6px;font-weight:600;letter-spacing:0.02em;}
+.method-list{margin:8px 0 0;padding-left:18px;}.method-list li{margin:6px 0;line-height:1.5;}.mini-steps{margin:10px 0 2px;padding:0;list-style:none;}.mini-steps li{font-size:0.82rem;color:var(--text-3);padding:3px 0 3px 12px;border-left:2px solid var(--accent-2);margin:4px 0;line-height:1.4;}
+  </style>
+</head>
+<body>
+
+  <div id="splash" role="dialog" aria-label="Загрузка">
+    <div class="splash-logo">🌿 Практика</div>
+    <div class="splash-sub">Модуль 4 · Духовная гигиена</div>
+    <div class="loader"><div class="loader-bar"></div></div>
+  </div>
+
+  <div class="bg-layer"></div>
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+
+  <header class="top-bar">
+    <div class="brand-pill">Лекарь Абу Мухаммад</div>
+    <div class="controls">
+      <div class="theme-dots">
+        <div class="dot active" style="background:#6c5ce7" data-theme="dark"></div>
+        <div class="dot" style="background:#64ffda" data-theme="ocean"></div>
+        <div class="dot" style="background:#ff6b35" data-theme="ember"></div>
+        <div class="dot" style="background:#00e676" data-theme="forest"></div>
+        <div class="dot" style="background:#b388ff" data-theme="royal"></div>
+      </div>
+      <button class="control-btn" id="fontDown" type="button" aria-label="Уменьшить шрифт">A-</button>
+      <button class="control-btn" id="fontUp" type="button" aria-label="Увеличить шрифт">A+</button>
+      <button class="lang-switch" id="langToggle" type="button" data-lang="ru" aria-label="Сменить язык / Tilni almashtirish">RU</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="intro" class="card">
+      <h1>Практика · Модуль 4: Духовная гигиена</h1>
+      <p>Это практика удержания чистоты и границ. Вы отслеживаете чужие тяжести и привычные паттерны в указанных зонах, обозначаете границы и наполняете пространство благодарностью.</p>
+      <p><strong>Правило практики:</strong> Удерживайте чистоту и границы каждый день. По одной теме. Следующий уровень — когда тема перестаёт «цеплять».</p>
+    </section>
+
+    <section id="method-block" class="card">
+      <span class="pill">🔄 Метод этого модуля</span>
+      <ul class="method-list">
+        <li>🛡️ Защита от заражения: твоя душа и тело — чистый сосуд. Не впускай чужую «грязь» — токсичные разговоры, тяжёлые новости.</li>
+        <li>🙌 Протокол «Это не моё»: при тяжёлом контакте скажи себе: «Я вижу и понимаю чужое состояние, но не беру его на себя». Стряхни кисти рук.</li>
+        <li>📵 Информационная гигиена: дозируй экраны и чаты. После тяжёлого контакта — 1 минута спокойного дыхания.</li>
+        <li>✨ Благодарность-заполнитель: заполни освободившееся пространство «Альхамдулиллях» за 3 момента дня и открытой радостью.</li>
+      </ul>
+    </section>
+
+    <div class="progress-wrap">
+      <div class="progress-bar-wrap"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-count"><span class="pc-label">Пройдено</span><span id="pc-num"> 0 / 15</span></div>
+    </div>
+
+    <div id="steps-container"></div>
+
+    <div id="final-cta" class="card" style="display:none; text-align:center; border:2px solid var(--success);">
+      <h2>Практика Модуля 4 пройдена!</h2>
+      <p>Вы прошли весь практический путь курса «Особенный». Поддерживайте чистоту и границы ежедневно.</p>
+      <a class="btn btn-primary" href="osobenniy.html" style="display:block;">🌙 К курсу «Особенный»</a>
+    </div>
+  </main>
+
+  <div id="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <button type="button" class="close-modal" onclick="closeModal()" aria-label="Закрыть">✕</button>
+      <div id="modal-content"></div>
+      <button type="button" id="complete-btn" class="btn btn-primary">✅ Завершить и открыть следующий уровень</button>
+    </div>
+  </div>
+
+  <footer class="credits">
+    <p>🌙 Курс «Особенный»</p>
+    <p><strong>Лекарь Абу Мухаммад</strong></p>
+  </footer>
+
+  <script>
+    const stepsData = [{"title":"Старые паттерны","where":"Всё тело, нервная система (привычное напряжение, «дежавю тела»)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنْ عَوْدَةِ الْأَنْمَاطِ الْقَدِيمَةِ","translit":"Бисмиллях аркий мин аўдат аль-анмат аль-кадимат","trans":"С именем Аллаха заклинаю от возврата старых паттернов","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ عَوْدَةِ أَنْمَاطٍ قَدِيمَةٍ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин аўдат анмат кадима маа ажиду","ru2":"«С именем Аллаха, заклинаю от возврата старых паттернов, который я чувствую»","method":"Заметьте привычную реакцию тела до того, как она развернётся. Скажите себе: «Это старый паттерн, я не обязан его повторять». Стряхните кисти рук, 3 цикла дыхания и выберите новый отклик.","niet":"О Аллах, освободи меня от старых автоматических реакций и дай силу выбирать заново."},{"title":"Чужие тяжести","where":"Кожа, поле вокруг тела («липкость», сжатие после контакта)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ الْاِمْتِصَاصِ لِأَثْقَالِ الْآخَرِينَ","translit":"Бисмиллях аркий мина-ль-имтисас ли-аскаль аль-ахарин","trans":"С именем Аллаха заклинаю от поглощения чужих тяжестей","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ اِمْتِصَاصِ أَثْقَالِ الْآخَرِينَ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин имтисас аскаль аль-ахарин маа ажиду","ru2":"«С именем Аллаха, заклинаю от поглощения чужих тяжестей, который я чувствую»","method":"Осознайте, что это ощущение пришло из контакта и не принадлежит вам. Произнесите: «Я вижу и понимаю чужое, но не беру это на себя». Стряхните кисти рук, 3 цикла дыхания, поблагодарите за урок.","niet":"О Аллах, сохрани мою душу чистой и научи держать границы с мудростью."},{"title":"Границы","where":"Солнечное сплетение, живот (невозможность сказать «нет»)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنِ اخْتِرَاقِ الْحُدُودِ الشَّخْصِيَّةِ","translit":"Бисмиллях аркий мин ихтирак аль-худуд аш-шахсийят","trans":"С именем Аллаха заклинаю от нарушения личных границ","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ اخْتِرَاقِ الْحُدُودِ الشَّخْصِيَّةِ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин ихтирак аль-худуд аш-шахсийя маа ажиду","ru2":"«С именем Аллаха, заклинаю от нарушения личных границ, который я чувствую»","method":"Найдите, где тело сжимается от чужого давления. Чётко обозначьте внутреннее «нет»: «Я могу выслушать, но не обязан нести чужое». Расправьте грудь и сделайте 3 спокойных выдоха.","niet":"О Аллах, укрепи мои границы и дай спокойствие отстаивать своё пространство."},{"title":"Ночные тревоги","where":"Сердце, грудь, голова (пульсация в груди и голове ночью)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنْ قَلَقِ اللَّيْلِ وَعَوْدَةِ الْأَثَرِ","translit":"Бисмиллях аркий мин каляк аль-ляйли ва авдат аль-асар","trans":"С именем Аллаха заклинаю от ночных тревог и возвратов","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ قَلَقِ اللَّيْلِ وَعَوْدَةِ الْأَثَرِ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин каляк аль-ляйль ва аўдат аль-асар маа ажиду","ru2":"«С именем Аллаха, заклинаю от ночных тревог и возвратов, которые я чувствую»","method":"Перед сном положите ладонь на грудь, дыхание 4-2-8. Отметьте: тревога — это лишь возбуждённые нервы. Отпустите то, что не в ваших силах, до завтра.","niet":"О Аллах, успокой моё сердце и подари мне спокойный, защищённый сон."},{"title":"Страх · Обида · Гнев","where":"Почки, грудь, печень (смешанное напряжение почек, груди, печени)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ الْخَوْفِ وَالْحِقْدِ وَالْغَضَبِ","translit":"Бисмиллях аркий мина-ль-хауфи валь-хикди валь-гадаби","trans":"С именем Аллаха заклинаю от страха, обиды и гнева","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ خَوْفٍ وَحِقْدٍ وَغَضَبٍ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин хауф ва хикд ва гадаб маа ажиду","ru2":"«С именем Аллаха, заклинаю от страха, обиды и гнева, которые я чувствую»","method":"Пройдите три зоны по очереди — почки, грудь, печень. В каждой обработайте чувство и прочтите дуа на выдохе, затем впустите доверие, прощение и спокойствие.","niet":"О Аллах, выведи страх, обиду и гнев и наполни меня доверием, прощением и спокойствием."},{"title":"Уныние · Грусть","where":"Лёгкие, грудь, плечи (серая тяжесть в груди и плечах)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ الْيَأْسِ وَالْكَآبَةِ وَالْخُمُولِ","translit":"Бисмиллях аркий мина-ль-я’си валь-ка’абати валь-хумули","trans":"С именем Аллаха заклинаю от уныния, грусти и апатии","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ يَأْسٍ وَكَآبَةٍ وَخُمُولٍ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин я'с ва ка'аба ва хумуль маа ажиду","ru2":"«С именем Аллаха, заклинаю от уныния, грусти и апатии, которые я чувствую»","method":"Энергично протрите грудь и плечи, поднимая «опущенные крылья». На выдохе читайте дуа, затем впустите вдохновение и благодарность.","niet":"О Аллах, развей серую тяжесть и верни мне вкус к жизни и благодарность."},{"title":"Тревога · Смятение","where":"Сердце, нервная система (дрожь и вихрь в нервах)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ الْقَلَقِ وَالْهَمِّ وَالِاضْطِرَابِ","translit":"Бисмиллях аркий мина-ль-каляки валь-хамми вад-тыраб","trans":"С именем Аллаха заклинаю от тревоги, заботы и смятения","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ قَلَقٍ وَهَمٍّ وَاضْطِرَابٍ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин каляк ва хамм ва идтираб маа ажиду","ru2":"«С именем Аллаха, заклинаю от тревоги, заботы и смятения, которые я чувствую»","method":"Дыхание 4-2-6 до замедления пульса. Разомните нервные зоны, на выдохе читайте дуа, затем впустите ясность и внутренний порядок.","niet":"О Аллах, утиши дрожь и вихрь в моих мыслях и подари мне ясность."},{"title":"Зависть · Сравнение","where":"Жёлчный пузырь, кишечник (кислое жжение, «весы» в животе)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ الْحَسَدِ وَالْغَيْرَةِ وَالْمُقَارَنَةِ","translit":"Бисмиллях аркий мина-ль-хасади валь-гирати валь-мукарнат","trans":"С именем Аллаха заклинаю от зависти, ревности и сравнения","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ حَسَدٍ وَغَيْرَةٍ وَمُقَارَنَةٍ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин хасад ва гайра ва мукарана маа ажиду","ru2":"«С именем Аллаха, заклинаю от зависти, ревности и сравнения, которые я чувствую»","method":"Положите руку на живот, признайте кислое жжение. Прочтите дуа, затем искренне порадуйтесь за другого и впустите щедрость.","niet":"О Аллах, очисти меня от зависти и сравнения и наполни радостью за других."},{"title":"Позор · Унижение","where":"Лицо, горло, кожа (жар по лицу, ком в горле)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ الْخِزْيِ وَالْمَهَانَةِ وَاعْتِمَادِ الرَّأْيِ","translit":"Бисмиллях аркий мина-ль-хизйи валь-маханати ва и’тимад ар-ра’й","trans":"С именем Аллаха заклинаю от позора, унижения и зависимости от мнения","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ خِزْيٍ وَمَهَانَةٍ وَاعْتِمَادٍ عَلَى الرَّأْيِ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин хизй ва махана ва и'тимад аля-р-ра'й маа ажиду","ru2":"«С именем Аллаха, заклинаю от позора, унижения и зависимости от мнения, которые я чувствую»","method":"Протрите лицо и горло, расправьте шею. На выдохе читайте дуа, затем верните себе достоинство и самоуважение.","niet":"О Аллах, сними жар позора и верни мне достоинство и честь."},{"title":"Изоляция · Замкнутость","where":"Таз, плечи, грудь («кольцо» и «капюшон» закрытости)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ الْعُزْلَةِ وَالْإِنْغِلَاقِ وَالِانْفِصَالِ","translit":"Бисмиллях аркий мина-ль-‘узлати валь-ингилякы валь-инфисал","trans":"С именем Аллаха заклинаю от изоляции, замкнутости и отчуждения","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ عُزْلَةٍ وَانْغِلَاقٍ وَانْفِصَالٍ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин узла ва ингиляк ва инфисаль маа ажиду","ru2":"«С именем Аллаха, заклинаю от изоляции, замкнутости и отчуждения, которые я чувствую»","method":"Раскройте грудь и плечи, разомкните «кольцо» и «капюшон». На выдохе читайте дуа, затем впустите открытость и готовность к контакту.","niet":"О Аллах, разомкни мою закрытость и открой сердце к людям."},{"title":"Истощение · Выгорание","where":"Надпочечники, сердце, мышцы (пустота, нет ресурса)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ الْإِنْهَاكِ وَالتَّعَبِ وَالِاسْتِنْفَادِ","translit":"Бисмиллях аркий мина-ль-инхаки ват-та’аби валь-истинфад","trans":"С именем Аллаха заклинаю от истощения, усталости и выгорания","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ إِنْهَاكٍ وَتَعَبٍ وَاسْتِنْفَادٍ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин инхак ва та’аб ва истинфад маа ажиду","ru2":"«С именем Аллаха, заклинаю от истощения, усталости и выгорания, которые я чувствую»","method":"Мягко похлопайте надпочечники и грудь, не форсируя. На выдохе читайте дуа, затем впустите тихое восстановление и жизненную силу.","niet":"О Аллах, восполни мои силы и верни мне жизненную энергию."},{"title":"Скрытность · Зажатость","where":"Горло, челюсть, таз («панцирь» вокруг горла и таза)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ الْكِتْمَانِ وَالْكَتْمِ وَالِانْقِبَاضِ","translit":"Бисмиллях аркий мина-ль-китмани валь-катми валь-инкибас","trans":"С именем Аллаха заклинаю от скрытности, подавления и зажатости","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ كِتْمَانٍ وَكَتْمٍ وَانْقِبَاضٍ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин китман ва катм ва инкибад маа ажиду","ru2":"«С именем Аллаха, заклинаю от скрытности, подавления и зажатости, которые я чувствую»","method":"Снимите «панцирь» с горла и таза мягким растиранием. На выдохе читайте дуа, затем позвольте себе искренность и свободное выражение.","niet":"О Аллах, освободи меня от зажатости и дай искренность выражения."},{"title":"Переполнение","where":"Селезёнка, лимфосистема (распирание, «вода в теле»)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ الْفَيْضِ وَفِقْدَانِ الْحَدِّ وَالثِّقْلِ","translit":"Бисмиллях аркий мина-ль-файди ва фикдан аль-хадди ват-сикль","trans":"С именем Аллаха заклинаю от переполнения, сбоя границ и тяжести","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ فَيْضٍ وَفِقْدَانِ حَدٍّ وَثِقْلٍ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин файд ва фикдан хадд ва сикль маа ажиду","ru2":"«С именем Аллаха, заклинаю от переполнения, сбоя границ и тяжести, которые я чувствую»","method":"Долгий выдох, мягкое поглаживание от центра к периферии. На выдохе читайте дуа, затем впустите умение отпускать и уравновешенность.","niet":"О Аллах, помоги мне отпустить лишнее и верни равновесие."},{"title":"Недовольство · Критика","where":"Желудок, зубы, челюсти (колючесть у рта и челюстей)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنَ السُّخْطِ وَالتَّهَيُّجِ وَالِانْتِقَادِ","translit":"Бисмиллях аркий мина-с-схути ват-тахаййуджи валь-интикад","trans":"С именем Аллаха заклинаю от недовольства, раздражения и критики","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ سُخْطٍ وَتَهَيُّجٍ وَانْتِقَادٍ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин сухт ва тахаййудж ва интикад маа ажиду","ru2":"«С именем Аллаха, заклинаю от недовольства, раздражения и критики, которые я чувствую»","method":"Расслабьте челюсти и рот, отпустите колючесть. На выдохе читайте дуа, затем впустите принятие и благодарность.","niet":"О Аллах, смягчи моё сердце и замени критику благодарностью."},{"title":"Блок радости","where":"Грудь, сердце (сжатие в груди, запрет улыбки)","extra":null,"arabic":"بِسْمِ اللَّهِ أَرْقِي مِنْ حَبْسِ الْفَرَحِ وَمَنْعِ النُّورِ","translit":"Бисмиллях аркий мин хабс аль-фарахи ва ман’ ан-нур","trans":"С именем Аллаха заклинаю от блокировки радости и запрета на свет","ar2":"بِسْمِ اللَّهِ أَرْقِي مِنْ حَبْسِ الْفَرَحِ وَمَنْعِ النُّورِ مَا أَجِدُ","tl2":"Бисмилляхи, арки мин хабс аль-фарах ва ман’ ан-нур маа ажиду","ru2":"«С именем Аллаха, заклинаю от блокировки радости и запрета на свет, которые я чувствую»","method":"Положите ладони на грудь, разрешите себе улыбку без причины. На выдохе читайте дуа, затем впустите открытую, ничем не оправданную радость.","niet":"О Аллах, сними запрет с моей радости и наполни сердце светлым ликованием."}];
+    const UZ = {"🛡️ Защита от заражения: твоя душа и тело — чистый сосуд. Не впускай чужую «грязь» — токсичные разговоры, тяжёлые новости.":"🛡️ Yuqishdan himoya: qalbing va taning — pok idish. O'zganing «kiri»ni — zaharli suhbatlar, og'ir yangiliklarni ichingga qo'yma.","🙌 Протокол «Это не моё»: при тяжёлом контакте скажи себе: «Я вижу и понимаю чужое состояние, но не беру его на себя». Стряхни кисти рук.":"🙌 «Bu meniki emas» protokoli: og'ir aloqada o'zingga ayt: «O'zga holatni ko'raman va tushunaman, lekin uni o'zimga olmayman». Qo'l kaftlarini silkit.","📵 Информационная гигиена: дозируй экраны и чаты. После тяжёлого контакта — 1 минута спокойного дыхания.":"📵 Axborot gigiyenasi: ekran va chatlarni me'yorla. Og'ir aloqadan so'ng — 1 daqiqa xotirjam nafas.","✨ Благодарность-заполнитель: заполни освободившееся пространство «Альхамдулиллях» за 3 момента дня и открытой радостью.":"✨ Shukronalik to'ldiruvchi: bo'shagan makonni kunning 3 lahzasi uchun «Alhamdulillah» va ochiq quvonch bilan to'ldir.","🔄 Метод этого модуля":"🔄 Ushbu modul metodi","🌿 Практика":"🌿 Amaliyot","Модуль 4 · Духовная гигиена":"4-modul · Ma'naviy gigiyena","Лекарь Абу Мухаммад":"Tabib Abu Muhammad","🌙 Курс «Особенный»":"🌙 «Особенный» kursi","Практика · Модуль 4: Духовная гигиена":"Amaliyot · 4-modul: Ma'naviy gigiyena","Это практика удержания чистоты и границ. Вы отслеживаете чужие тяжести и привычные паттерны в указанных зонах, обозначаете границы и наполняете пространство благодарностью.":"Bu poklik va chegaralarni saqlash amaliyoti. Siz o'zganing yuklari va odatiy patternlarni ko'rsatilgan zonalarda kuzatasiz, chegaralarni belgilaysiz va makonni shukronalik bilan to'ldirasiz.","Правило практики:":"Amaliyot qoidasi:","Удерживайте чистоту и границы каждый день. По одной теме. Следующий уровень — когда тема перестаёт «цеплять».":"Poklik va chegaralarni har kuni saqlang. Bittadan mavzu. Keyingi daraja — mavzu «ilashtirmay» qo'yganda.","Пройдено":"O'tildi","Нажмите, чтобы начать практику":"Amaliyotni boshlash uchun bosing","Сначала завершите предыдущий шаг":"Avval oldingi qadamni yakunlang","✅ Практика завершена":"✅ Amaliyot yakunlandi","📍 Где находится:":"📍 Qayerda joylashgan:","🤲 Что делать:":"🤲 Nima qilish kerak:","✦ Если чувствуешь это сейчас":"✦ Agar buni hozir his qilsang","Отследите в указанной зоне, не осталось ли чужой тяжести или старого паттерна. Обозначьте границу: что ваше, а что вы взяли зря. На выдохе произнесите формулу 3 раза, затем наполните пространство благодарностью — «Альхамдулиллях».":"Ko'rsatilgan zonada o'zganing yuki yoki eski pattern qolmaganini kuzating. Chegarani belgilang: nimasi sizniki, nimasini bekorga oldingiz. Nafas chiqarganda formulani 3 marta ayting, so'ng makonni shukronalik bilan to'ldiring — «Alhamdulillah».","💡 Намерение: «Йа Аллах, сохрани мою чистоту и границы». Формула 3 раза, затем «Альхамдулиллях» за защиту. Вечером — тёплый душ.":"💡 Niyat: «Yo Alloh, pokligim va chegaralarimni saqla». Formula 3 marta, so'ng himoya uchun «Alhamdulillah». Kechqurun — iliq dush.","✅ Завершить и открыть следующий уровень":"✅ Yakunlash va keyingi darajani ochish","Практика Модуля 4 пройдена!":"4-modul amaliyoti yakunlandi!","Вы прошли весь практический путь курса «Особенный». Поддерживайте чистоту и границы ежедневно.":"Siz «Особенный» kursining butun amaliy yo'lini o'tdingiz. Poklik va chegaralarni har kuni saqlang.","🌙 К курсу «Особенный»":"🌙 «Особенный» kursiga","Старые паттерны":"Eski patternlar","С именем Аллаха заклинаю от возврата старых паттернов":"Alloh nomi bilan eski patternlarning qaytishidan panoh tilayman","«С именем Аллаха, заклинаю от возврата старых паттернов, который я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan eski patternlarning qaytishidan panoh tilayman»","Чужие тяжести":"O'zga yuklari","С именем Аллаха заклинаю от поглощения чужих тяжестей":"Alloh nomi bilan o'zganing yuklarini o'ziga yutishdan panoh tilayman","«С именем Аллаха, заклинаю от поглощения чужих тяжестей, который я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan o'zganing yuklarini o'ziga yutishdan panoh tilayman»","Границы":"Chegaralar","С именем Аллаха заклинаю от нарушения личных границ":"Alloh nomi bilan shaxsiy chegaralarning buzilishidan panoh tilayman","«С именем Аллаха, заклинаю от нарушения личных границ, который я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan shaxsiy chegaralarning buzilishidan panoh tilayman»","Ночные тревоги":"Tungi xavotirlar","С именем Аллаха заклинаю от ночных тревог и возвратов":"Alloh nomi bilan tungi xavotirlar va qaytishlardan panoh tilayman","«С именем Аллаха, заклинаю от ночных тревог и возвратов, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan tungi xavotirlar va qaytishlardan panoh tilayman»","Страх · Обида · Гнев":"Qo'rquv · Xafagarchilik · G'azab","С именем Аллаха заклинаю от страха, обиды и гнева":"Alloh nomi bilan qo'rquv, xafagarchilik va g'azabdan panoh tilayman","«С именем Аллаха, заклинаю от страха, обиды и гнева, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan qo'rquv, xafagarchilik va g'azabdan panoh tilayman»","Уныние · Грусть":"Tushkunlik · Mahzunlik","С именем Аллаха заклинаю от уныния, грусти и апатии":"Alloh nomi bilan tushkunlik, mahzunlik va loqaydlikdan panoh tilayman","«С именем Аллаха, заклинаю от уныния, грусти и апатии, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan tushkunlik, mahzunlik va loqaydlikdan panoh tilayman»","Тревога · Смятение":"Xavotir · Sarosima","С именем Аллаха заклинаю от тревоги, заботы и смятения":"Alloh nomi bilan xavotir, tashvish va sarosimadan panoh tilayman","«С именем Аллаха, заклинаю от тревоги, заботы и смятения, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan xavotir, tashvish va sarosimadan panoh tilayman»","Зависть · Сравнение":"Hasad · Taqqoslash","С именем Аллаха заклинаю от зависти, ревности и сравнения":"Alloh nomi bilan hasad, rashk va taqqoslashdan panoh tilayman","«С именем Аллаха, заклинаю от зависти, ревности и сравнения, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan hasad, rashk va taqqoslashdan panoh tilayman»","Позор · Унижение":"Sharmandalik · Xo'rlanish","С именем Аллаха заклинаю от позора, унижения и зависимости от мнения":"Alloh nomi bilan sharmandalik, xo'rlanish va fikrga qaramlikdan panoh tilayman","«С именем Аллаха, заклинаю от позора, унижения и зависимости от мнения, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan sharmandalik, xo'rlanish va fikrga qaramlikdan panoh tilayman»","Изоляция · Замкнутость":"Izolyatsiya · Tortinchoqlik","С именем Аллаха заклинаю от изоляции, замкнутости и отчуждения":"Alloh nomi bilan izolyatsiya, tortinchoqlik va begonalashishdan panoh tilayman","«С именем Аллаха, заклинаю от изоляции, замкнутости и отчуждения, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan izolyatsiya, tortinchoqlik va begonalashishdan panoh tilayman»","Истощение · Выгорание":"Holdan toyish · Charchash","С именем Аллаха заклинаю от истощения, усталости и выгорания":"Alloh nomi bilan holdan toyish, charchoq va kuyib bitishdan panoh tilayman","«С именем Аллаха, заклинаю от истощения, усталости и выгорания, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan holdan toyish, charchoq va kuyib bitishdan panoh tilayman»","Скрытность · Зажатость":"Yashirinlik · Qisilish","С именем Аллаха заклинаю от скрытности, подавления и зажатости":"Alloh nomi bilan yashirinlik, bostirish va qisilishdan panoh tilayman","«С именем Аллаха, заклинаю от скрытности, подавления и зажатости, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan yashirinlik, bostirish va qisilishdan panoh tilayman»","Переполнение":"To'lib-toshish","С именем Аллаха заклинаю от переполнения, сбоя границ и тяжести":"Alloh nomi bilan to'lib-toshish, chegaralar buzilishi va og'irlikdan panoh tilayman","«С именем Аллаха, заклинаю от переполнения, сбоя границ и тяжести, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan to'lib-toshish, chegaralar buzilishi va og'irlikdan panoh tilayman»","Недовольство · Критика":"Norozilik · Tanqid","С именем Аллаха заклинаю от недовольства, раздражения и критики":"Alloh nomi bilan norozilik, asabiylik va tanqiddan panoh tilayman","«С именем Аллаха, заклинаю от недовольства, раздражения и критики, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan norozilik, asabiylik va tanqiddan panoh tilayman»","Блок радости":"Quvonch bloki","С именем Аллаха заклинаю от блокировки радости и запрета на свет":"Alloh nomi bilan quvonchning bloklanishi va nurga taqiqdan panoh tilayman","«С именем Аллаха, заклинаю от блокировки радости и запрета на свет, которые я чувствую»":"«Alloh nomi bilan, o'zimda his etayotgan quvonchning bloklanishi va nurga taqiqdan panoh tilayman»","Всё тело, нервная система (привычное напряжение, «дежавю тела»)":"Butun tana, asab tizimi (odatiy taranglik, «tana dejavyusi»)","Заметьте привычную реакцию тела до того, как она развернётся. Скажите себе: «Это старый паттерн, я не обязан его повторять». Стряхните кисти рук, 3 цикла дыхания и выберите новый отклик.":"Tananing odatiy reaksiyasini u yoyilmasdan oldin sezing. O'zingizga ayting: «Bu eski naqsh, men uni takrorlashga majbur emasman». Qo'l kaftlarini silkit, 3 ta nafas tsikli va yangi javobni tanlang.","О Аллах, освободи меня от старых автоматических реакций и дай силу выбирать заново.":"Yo Alloh, meni eski avtomatik reaksiyalardan ozod qil va qaytadan tanlash kuchini ber.","Кожа, поле вокруг тела («липкость», сжатие после контакта)":"Teri, tana atrofidagi maydon («yopishqoqlik», aloqadan keyin qisilish)","Осознайте, что это ощущение пришло из контакта и не принадлежит вам. Произнесите: «Я вижу и понимаю чужое, но не беру это на себя». Стряхните кисти рук, 3 цикла дыхания, поблагодарите за урок.":"Bu his aloqadan kelganini va sizga tegishli emasligini anglang. Ayting: «O'zganikini ko'raman va tushunaman, lekin uni o'zimga olmayman». Qo'l kaftlarini silkit, 3 ta nafas tsikli, saboq uchun shukr qiling.","О Аллах, сохрани мою душу чистой и научи держать границы с мудростью.":"Yo Alloh, qalbimni pok saqla va chegaralarni hikmat bilan saqlashni o'rgat.","Солнечное сплетение, живот (невозможность сказать «нет»)":"Quyosh chigali, qorin («yo'q» deya olmaslik)","Найдите, где тело сжимается от чужого давления. Чётко обозначьте внутреннее «нет»: «Я могу выслушать, но не обязан нести чужое». Расправьте грудь и сделайте 3 спокойных выдоха.":"Tana o'zganing bosimidan qayerda qisilishini toping. Ichki «yo'q»ni aniq belgilang: «Tinglashim mumkin, lekin o'zganikini ko'tarishga majbur emasman». Ko'krakni yozing va 3 ta xotirjam nafas chiqaring.","О Аллах, укрепи мои границы и дай спокойствие отстаивать своё пространство.":"Yo Alloh, chegaralarimni mustahkamla va o'z makonimni himoya qilishda xotirjamlik ber.","Сердце, грудь, голова (пульсация в груди и голове ночью)":"Yurak, ko'krak, bosh (kechasi ko'krak va boshdagi lo'qillash)","Перед сном положите ладонь на грудь, дыхание 4-2-8. Отметьте: тревога — это лишь возбуждённые нервы. Отпустите то, что не в ваших силах, до завтра.":"Uxlashdan oldin kaftni ko'krakka qo'ying, nafas 4-2-8. Eslang: xavotir — bu faqat qo'zg'algan asablar. Qo'lingizdan kelmaydigan narsani ertaga qadar qo'yib yuboring.","О Аллах, успокой моё сердце и подари мне спокойный, защищённый сон.":"Yo Alloh, yuragimni tinchlantir va menga xotirjam, himoyalangan uyqu ber.","Почки, грудь, печень (смешанное напряжение почек, груди, печени)":"Buyraklar, ko'krak, jigar (buyrak, ko'krak, jigarning aralash tarangligi)","Пройдите три зоны по очереди — почки, грудь, печень. В каждой обработайте чувство и прочтите дуа на выдохе, затем впустите доверие, прощение и спокойствие.":"Uchta zonani navbat bilan o'ting — buyraklar, ko'krak, jigar. Har birida tuyg'uni ishlang va nafas chiqarganda duoni o'qing, so'ng ishonch, kechirim va xotirjamlikni kiriting.","О Аллах, выведи страх, обиду и гнев и наполни меня доверием, прощением и спокойствием.":"Yo Alloh, qo'rquv, xafagarchilik va g'azabni chiqar va meni ishonch, kechirim va xotirjamlik bilan to'ldir.","Лёгкие, грудь, плечи (серая тяжесть в груди и плечах)":"O'pka, ko'krak, yelkalar (ko'krak va yelkadagi kulrang og'irlik)","Энергично протрите грудь и плечи, поднимая «опущенные крылья». На выдохе читайте дуа, затем впустите вдохновение и благодарность.":"Ko'krak va yelkalarni jadal ishqalang, «tushgan qanotlarni» ko'taring. Nafas chiqarganda duoni o'qing, so'ng ilhom va shukronalikni kiriting.","О Аллах, развей серую тяжесть и верни мне вкус к жизни и благодарность.":"Yo Alloh, kulrang og'irlikni tarqat va menga hayot lazzati va shukronalikni qaytar.","Сердце, нервная система (дрожь и вихрь в нервах)":"Yurak, asab tizimi (asablardagi titroq va girdob)","Дыхание 4-2-6 до замедления пульса. Разомните нервные зоны, на выдохе читайте дуа, затем впустите ясность и внутренний порядок.":"Puls sekinlashguncha nafas 4-2-6. Asab zonalarini mashq qiling, nafas chiqarganda duoni o'qing, so'ng tiniqlik va ichki tartibni kiriting.","О Аллах, утиши дрожь и вихрь в моих мыслях и подари мне ясность.":"Yo Alloh, fikrlarimdagi titroq va girdobni tinchlantir va menga tiniqlik ber.","Жёлчный пузырь, кишечник (кислое жжение, «весы» в животе)":"O't pufagi, ichak (nordon achishish, qorindagi «tarozi»)","Положите руку на живот, признайте кислое жжение. Прочтите дуа, затем искренне порадуйтесь за другого и впустите щедрость.":"Qo'lni qoringa qo'ying, nordon achishishni tan oling. Duoni o'qing, so'ng boshqa uchun chin dildan quvoning va saxovatni kiriting.","О Аллах, очисти меня от зависти и сравнения и наполни радостью за других.":"Yo Alloh, meni hasad va taqqoslashdan tozala va boshqalar uchun quvonch bilan to'ldir.","Лицо, горло, кожа (жар по лицу, ком в горле)":"Yuz, tomoq, teri (yuzdagi issiqlik, tomoqdagi tugun)","Протрите лицо и горло, расправьте шею. На выдохе читайте дуа, затем верните себе достоинство и самоуважение.":"Yuz va tomoqni ishqalang, bo'yinni yozing. Nafas chiqarganda duoni o'qing, so'ng o'zingizga qadr-qimmat va o'z-o'zini hurmatni qaytaring.","О Аллах, сними жар позора и верни мне достоинство и честь.":"Yo Alloh, sharmandalik issiqligini olib tashla va menga qadr-qimmat va sharafni qaytar.","Таз, плечи, грудь («кольцо» и «капюшон» закрытости)":"Tos, yelkalar, ko'krak (yopiqlikning «halqasi» va «kapyushoni»)","Раскройте грудь и плечи, разомкните «кольцо» и «капюшон». На выдохе читайте дуа, затем впустите открытость и готовность к контакту.":"Ko'krak va yelkalarni oching, «halqa» va «kapyushon»ni yeching. Nafas chiqarganda duoni o'qing, so'ng ochiqlik va aloqaga tayyorlikni kiriting.","О Аллах, разомкни мою закрытость и открой сердце к людям.":"Yo Alloh, yopiqligimni och va yuragimni odamlarga och.","Надпочечники, сердце, мышцы (пустота, нет ресурса)":"Buyrak usti bezlari, yurak, mushaklar (bo'shliq, resurs yo'q)","Мягко похлопайте надпочечники и грудь, не форсируя. На выдохе читайте дуа, затем впустите тихое восстановление и жизненную силу.":"Buyrak usti bezlari va ko'krakni yumshoq shapatilang, zo'riqtirmang. Nafas chiqarganda duoni o'qing, so'ng tinch tiklanish va hayot kuchini kiriting.","О Аллах, восполни мои силы и верни мне жизненную энергию.":"Yo Alloh, kuchlarimni to'ldir va menga hayotiy energiyani qaytar.","Горло, челюсть, таз («панцирь» вокруг горла и таза)":"Tomoq, jag', tos (tomoq va tos atrofidagi «qobiq»)","Снимите «панцирь» с горла и таза мягким растиранием. На выдохе читайте дуа, затем позвольте себе искренность и свободное выражение.":"Tomoq va tosdan «qobiq»ni yumshoq ishqalash bilan oling. Nafas chiqarganda duoni o'qing, so'ng o'zingizga samimiylik va erkin ifodaga ruxsat bering.","О Аллах, освободи меня от зажатости и дай искренность выражения.":"Yo Alloh, meni qisilishdan ozod qil va ifoda samimiyligini ber.","Селезёнка, лимфосистема (распирание, «вода в теле»)":"Taloq, limfa tizimi (kerilish, «tanada suv»)","Долгий выдох, мягкое поглаживание от центра к периферии. На выдохе читайте дуа, затем впустите умение отпускать и уравновешенность.":"Uzoq nafas chiqarish, markazdan chetga yumshoq silash. Nafas chiqarganda duoni o'qing, so'ng qo'yib yuborish mahorati va muvozanatni kiriting.","О Аллах, помоги мне отпустить лишнее и верни равновесие.":"Yo Alloh, ortiqchani qo'yib yuborishga yordam ber va muvozanatni qaytar.","Желудок, зубы, челюсти (колючесть у рта и челюстей)":"Oshqozon, tishlar, jag'lar (og'iz va jag'lardagi tikanlilik)","Расслабьте челюсти и рот, отпустите колючесть. На выдохе читайте дуа, затем впустите принятие и благодарность.":"Jag' va og'izni bo'shating, tikanlilikni qo'yib yuboring. Nafas chiqarganda duoni o'qing, so'ng qabul qilish va shukronalikni kiriting.","О Аллах, смягчи моё сердце и замени критику благодарностью.":"Yo Alloh, yuragimni yumshat va tanqidni shukronalik bilan almashtir.","Грудь, сердце (сжатие в груди, запрет улыбки)":"Ko'krak, yurak (ko'krakdagi qisilish, tabassum taqiqi)","Положите ладони на грудь, разрешите себе улыбку без причины. На выдохе читайте дуа, затем впустите открытую, ничем не оправданную радость.":"Kaftlarni ko'krakka qo'ying, o'zingizga sababsiz tabassumga ruxsat bering. Nafas chiqarganda duoni o'qing, so'ng ochiq, hech narsa bilan oqlanmaydigan quvonchni kiriting.","О Аллах, сними запрет с моей радости и наполни сердце светлым ликованием.":"Yo Alloh, quvonchimdan taqiqni olib tashla va yuragimni yorug' shodlik bilan to'ldir.","Скажи: «Я вижу это, но это не моё»":"Ayt: «Buni ko'raman, lekin bu meniki emas»","Стряхни кисти рук, отдели чужое":"Qo'l kaftlarini silkit, o'zganikini ajrat","«Альхамдулиллях» за 3 хорошие вещи сейчас":"Hozir 3 ta yaxshilik uchun «Alhamdulillah»"};
+    const METHOD = "Отследите в указанной зоне, не осталось ли чужой тяжести или старого паттерна. Обозначьте границу: что ваше, а что вы взяли зря. На выдохе произнесите формулу 3 раза, затем наполните пространство благодарностью — «Альхамдулиллях».";
+    const HELPER = "💡 Намерение: «Йа Аллах, сохрани мою чистоту и границы». Формула 3 раза, затем «Альхамдулиллях» за защиту. Вечером — тёплый душ.";
+    const EXTRA_LABEL = "";
+    const TECHNIQUE = "<ul class=\"mini-steps\"><li>Скажи: «Я вижу это, но это не моё»</li><li>Стряхни кисти рук, отдели чужое</li><li>«Альхамдулиллях» за 3 хорошие вещи сейчас</li></ul>";
+    let currentStepIndex = 0;
+    const totalSteps = stepsData.length;
+
+    const langBtn = document.getElementById('langToggle');
+    let currentLang = 'ru'; try { currentLang = localStorage.getItem('osobenniy-lang') || 'ru'; } catch (e) {}
+    const RU = {}; Object.keys(UZ).forEach(function(k){ RU[UZ[k]] = k; });
+    function translateTree(root, lang){
+      var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function(n){
+        var p = n.parentNode; if (p && (p.nodeName==='SCRIPT'||p.nodeName==='STYLE')) return NodeFilter.FILTER_REJECT;
+        return n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; } });
+      var n; while ((n = tw.nextNode())) { var t = n.nodeValue.trim();
+        if (lang==='uz' && UZ[t]!==undefined) n.nodeValue = n.nodeValue.replace(t, UZ[t]);
+        else if (lang==='ru' && RU[t]!==undefined) n.nodeValue = n.nodeValue.replace(t, RU[t]); } }
+    function applyLang(){ translateTree(document.body, currentLang); document.documentElement.lang = currentLang;
+      if (langBtn){ langBtn.textContent = currentLang.toUpperCase(); langBtn.dataset.lang = currentLang; } }
+    function setLang(l){ currentLang = l; try { localStorage.setItem('osobenniy-lang', l); } catch (e) {} applyLang(); }
+    if (langBtn) langBtn.addEventListener('click', function(){ setLang(currentLang==='ru'?'uz':'ru'); });
+
+    function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function updateProgress(){ var f=document.getElementById('progress-fill'), num=document.getElementById('pc-num');
+      if (f) f.style.width = Math.round(currentStepIndex/totalSteps*100)+'%';
+      if (num) num.textContent = ' '+currentStepIndex+' / '+totalSteps; }
+
+    function initSteps(){ var c=document.getElementById('steps-container'); c.innerHTML='';
+      stepsData.forEach(function(s,i){ var card=document.createElement('div');
+        card.className='step-card card '+(i===0?'unlocked':'locked'); card.id='step-'+i;
+        card.onclick=function(){ openStep(i); };
+        card.innerHTML='<div class="step-number">'+(i+1)+'</div>'+(i!==0?'<div class="lock-icon">🔒</div>':'')+
+          '<h3>'+esc(s.title)+'</h3>'+'<span class="status">'+(i===0?'Нажмите, чтобы начать практику':'Сначала завершите предыдущий шаг')+'</span>';
+        c.appendChild(card); });
+      updateProgress(); applyLang(); }
+
+    function openStep(i){ if (i!==currentStepIndex) return; var s=stepsData[i];
+      var extra = (s.extra && EXTRA_LABEL) ? ('<p><strong>'+EXTRA_LABEL+'</strong> '+esc(s.extra)+'</p>') : '';
+      document.getElementById('modal-content').innerHTML=
+        '<h2>'+esc(s.title)+'</h2>'+
+        '<p><strong>📍 Где находится:</strong> '+esc(s.where)+'</p>'+
+        extra+
+        '<p><strong>🤲 Что делать:</strong> '+esc(s.method||METHOD)+'</p>'+TECHNIQUE+
+        '<div class="dua-box"><div class="arabic" dir="rtl">'+s.arabic+'</div><div class="translit">'+esc(s.translit)+'</div><div class="translation">'+esc(s.trans)+'</div></div>'+
+        '<div class="dua2-label">✦ Если чувствуешь это сейчас</div>'+
+        '<div class="dua-box"><div class="arabic" dir="rtl">'+s.ar2+'</div><div class="translit">'+esc(s.tl2)+'</div><div class="translation">'+esc(s.ru2)+'</div></div>'+
+        '<p style="font-size:0.9rem;margin-top:12px;color:var(--text-3);">'+esc(s.niet||HELPER)+'</p>';
+      var cb=document.getElementById('complete-btn'); cb.textContent='✅ Завершить и открыть следующий уровень'; cb.onclick=completeStep;
+      applyLang();
+      document.getElementById('modal-overlay').classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; }
+
+    function completeStep(){ closeModal();
+      var cur=document.getElementById('step-'+currentStepIndex);
+      cur.classList.remove('unlocked'); cur.classList.add('completed'); cur.style.opacity='0.7'; cur.style.pointerEvents='none';
+      cur.querySelector('.status').textContent='✅ Практика завершена'; var li=cur.querySelector('.lock-icon'); if(li) li.remove();
+      currentStepIndex++; updateProgress();
+      if (currentStepIndex<totalSteps){ var nx=document.getElementById('step-'+currentStepIndex);
+        nx.classList.remove('locked'); nx.classList.add('unlocked'); var nl=nx.querySelector('.lock-icon'); if(nl) nl.remove();
+        nx.querySelector('.status').textContent='Нажмите, чтобы начать практику'; applyLang();
+        nx.scrollIntoView({behavior:'smooth',block:'center'}); }
+      else { document.getElementById('final-cta').style.display='block'; applyLang();
+        document.getElementById('final-cta').scrollIntoView({behavior:'smooth',block:'center'}); } }
+
+    document.querySelectorAll('.dot').forEach(function(dot){ dot.addEventListener('click', function(){
+      document.documentElement.dataset.theme=dot.dataset.theme;
+      document.querySelectorAll('.dot').forEach(function(d){ d.classList.remove('active'); }); dot.classList.add('active');
+      try { localStorage.setItem('osobenniy-theme', dot.dataset.theme); } catch(e){} }); });
+    var root=document.documentElement;
+    var curScale=parseFloat((function(){ try { return localStorage.getItem('osobenniy-font'); } catch(e){ return null; } })()||'1.0');
+    root.style.setProperty('--font-scale', curScale);
+    document.getElementById('fontDown').addEventListener('click', function(){ curScale=Math.max(0.8,curScale-0.1); root.style.setProperty('--font-scale',curScale); try{localStorage.setItem('osobenniy-font',curScale);}catch(e){} });
+    document.getElementById('fontUp').addEventListener('click', function(){ curScale=Math.min(1.4,curScale+0.1); root.style.setProperty('--font-scale',curScale); try{localStorage.setItem('osobenniy-font',curScale);}catch(e){} });
+    window.addEventListener('load', function(){ setTimeout(function(){ document.getElementById('splash').classList.add('hidden'); }, 1500); });
+    (function(){ var st; try { st=localStorage.getItem('osobenniy-theme'); } catch(e){}
+      if (st){ document.documentElement.dataset.theme=st; document.querySelectorAll('.dot').forEach(function(d){ d.classList.toggle('active', d.dataset.theme===st); }); } })();
+
+    initSteps();
+    if (currentLang==='uz') applyLang();
+  </script>
+</body>
+</html>

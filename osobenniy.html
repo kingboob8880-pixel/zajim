@@ -903,6 +903,19 @@ tr:hover td{background:rgba(255,255,255,0.02)}
     <div class="divider"></div>
     <p>Курс «Особенный» по методу Абу Мухаммада</p>
     <p style="margin-top:4px">Высвобождение застрявших импульсов · Психосоматическая перезагрузка · Духовная гигиена</p>
+    <nav class="footer-nav" aria-label="Навигация по курсу" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px">
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="index.html">🏠 Главная</a>
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="besplatno.html">🎁 Бесплатный марафон</a>
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="3d_platforma.html">🧭 3D-карта тела</a>
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="modul-1.html">📖 Модуль 1</a>
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="praktika-1.html">🌿 Практика 1</a>
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="modul-2.html">📖 Модуль 2</a>
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="praktika-2.html">🌿 Практика 2</a>
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="modul-3.html">📖 Модуль 3</a>
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="praktika-3.html">🌿 Практика 3</a>
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="modul-4.html">📖 Модуль 4</a>
+      <a class="btn btn-outline" style="width:auto;padding:8px 14px;margin-top:0" href="praktika-4.html">🌿 Практика 4</a>
+    </nav>
     <p style="margin-top:12px;opacity:0.5">© 2025 Все права защищены</p>
   </footer>
 </div>
@@ -1303,6 +1316,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
     document.documentElement.style.setProperty('--fs-micro', (0.75 * currentFs) + 'rem');
     document.getElementById('btnFontMinus').classList.toggle('active', currentFs < 1);
     document.getElementById('btnFontPlus').classList.toggle('active', currentFs > 1);
+    try { localStorage.setItem('osobenniy-font', currentFs); } catch (e) {}
   }
 
   document.getElementById('btnFontMinus').addEventListener('click', () => setFontSize(currentFs - FS_STEP));
@@ -1312,6 +1326,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.themeSet === theme));
+    try { localStorage.setItem('osobenniy-theme', theme); } catch (e) {}
   }
 
   document.querySelectorAll('.theme-dot').forEach(dot => {
@@ -1738,7 +1753,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
     });
     document.documentElement.setAttribute('lang', lang);
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
-    try { localStorage.setItem('lang', lang); } catch (e) {}
+    try { localStorage.setItem('osobenniy-lang', lang); } catch (e) {}
   }
 
   document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -1747,8 +1762,16 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 
   // Восстановление выбранного языка
   let savedLang = 'ru';
-  try { savedLang = localStorage.getItem('lang') || 'ru'; } catch (e) {}
+  try { savedLang = localStorage.getItem('osobenniy-lang') || 'ru'; } catch (e) {}
   if (savedLang === 'uz') setLang('uz');
+
+  // Восстановление темы и размера шрифта (единые ключи для всего курса)
+  try {
+    const savedTheme = localStorage.getItem('osobenniy-theme');
+    if (savedTheme && document.querySelector('.theme-dot[data-theme-set="' + savedTheme + '"]')) setTheme(savedTheme);
+    const savedFs = parseFloat(localStorage.getItem('osobenniy-font'));
+    if (savedFs && !isNaN(savedFs)) setFontSize(savedFs);
+  } catch (e) {}
 
 })();
 </script>

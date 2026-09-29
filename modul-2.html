@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-  <meta name="theme-color" content="#0a0a1a">
+  <meta name="theme-color" content="#0a1f1a">
   <title>Модуль 2 — Психосоматическая трансформация | Курс «Особенный»</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,10 +29,10 @@
 
     /* THEMES */
     [data-theme="dark"] {
-      --bg-1: #0a0a1a; --bg-2: #12122a; --bg-3: #1a1a3a;
-      --text-1: #f0f0ff; --text-2: #b0b0cc; --text-3: #8888aa;
-      --accent-1: #6c5ce7; --accent-2: #a29bfe; --accent-3: #fd79a8;
-      --success: #00b894; --warning: #fdcb6e; --danger: #e17055;
+      --bg-1: #0a1f1a; --bg-2: #0f2b23; --bg-3: #143028;
+      --text-1: #f5efe0; --text-2: #cfc6ad; --text-3: #938c74;
+      --accent-1: #c9a961; --accent-2: #e6c887; --accent-3: #9f7f3f;
+      --success: #1a7a5c; --warning: #d4942a; --danger: #b94a4a;
     }
     [data-theme="ocean"] {
       --bg-1: #0a192f; --bg-2: #112240; --bg-3: #1d3557;
@@ -94,10 +94,10 @@
     .practice-cta {
       display: flex; align-items: center; justify-content: center; gap: 8px;
       margin-top: 18px; padding: 14px; border-radius: 12px; text-align: center;
-      font-weight: 600; text-decoration: none; border-bottom: none; color: #fff;
+      font-weight: 600; text-decoration: none; border-bottom: none; color: var(--bg-1);
       background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 10s ease infinite;
     }
-    .practice-cta:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.3); color: #fff; border-bottom: none; }
+    .practice-cta:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.3); color: var(--bg-1); border-bottom: none; }
     .module-label {
       display: inline-block; font-size: 0.8rem; font-weight: 700;
       letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px;
@@ -165,7 +165,7 @@
     }
     .dua-btn:hover, .dua-btn:focus-visible {
       background: var(--accent-gradient); background-size: 200% 200%;
-      color: #fff; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.35); border-color: transparent;
+      color: var(--bg-1); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.35); border-color: transparent;
     }
 
     /* Modal */
@@ -215,7 +215,7 @@
     /* Table */
     .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--glass-border); margin-bottom: 20px; }
     table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    th { background: var(--accent-gradient); background-size: 200% 200%; color: #fff; padding: 12px 10px; text-align: left; font-weight: 500; position: sticky; top: 0; white-space: nowrap; }
+    th { background: var(--accent-gradient); background-size: 200% 200%; color: var(--bg-1); padding: 12px 10px; text-align: left; font-weight: 500; position: sticky; top: 0; white-space: nowrap; }
     td { padding: 12px 10px; border-bottom: 1px solid var(--glass-border); color: var(--text-2); vertical-align: top; }
     tr:nth-child(even) { background: rgba(255,255,255,0.03); }
     tr:last-child td { border-bottom: none; }
@@ -228,7 +228,7 @@
 
     /* Buttons */
     .btn { display: block; width: 100%; padding: 14px; border-radius: 12px; text-align: center; font-weight: 500; cursor: pointer; transition: var(--transition); border: none; margin-top: 12px; }
-    .btn-primary { background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 10s ease infinite; color: #fff; }
+    .btn-primary { background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 10s ease infinite; color: var(--bg-1); }
     .btn-primary:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
 
     /* Top Bar */
@@ -238,13 +238,13 @@
       background: rgba(10,10,26,0.75); backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass-border);
       padding-top: env(safe-area-inset-top);
     }
-    .brand-pill { background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 8s ease infinite; padding: 6px 12px; border-radius: 99px; font-weight: 600; color: #fff; font-size: 0.85rem; }
+    .brand-pill { background: var(--accent-gradient); background-size: 200% 200%; animation: gradientShift 8s ease infinite; padding: 6px 12px; border-radius: 99px; font-weight: 600; font-size: 0.85rem; }
     .controls { display: flex; gap: 10px; align-items: center; }
     .control-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-1); transition: 0.2s; font-size: 0.9rem; }
     .control-btn:hover { background: rgba(255,255,255,0.2); }
     .theme-dots { display: flex; gap: 6px; align-items: center; }
     .dot { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
-    .dot:hover, .dot.active { border-color: #fff; transform: scale(1.2); }
+    .dot:hover, .dot.active { border-color: var(--accent-2); transform: scale(1.2); }
     .lang-switch {
       font-size: 0.75rem; font-weight: 600; letter-spacing: 0.03em;
       padding: 6px 12px; border: none; border-radius: 8px; cursor: pointer;
@@ -339,14 +339,14 @@
 
   <!-- TOP BAR -->
   <header class="top-bar" role="banner">
-    <a class="brand-pill" href="index.html" style="text-decoration:none;color:#fff;cursor:pointer;">Лекарь Абу Мухаммад</a>
+    <a class="brand-pill" href="index.html" style="text-decoration:none;color:var(--bg-1);cursor:pointer;">Лекарь Абу Мухаммад</a>
     <div class="controls">
       <div class="theme-dots" role="group" aria-label="Выбор темы">
-        <div class="dot active" style="background:#6c5ce7" data-theme="dark" title="Dark"></div>
-        <div class="dot" style="background:#64ffda" data-theme="ocean" title="Ocean"></div>
-        <div class="dot" style="background:#ff6b35" data-theme="ember" title="Ember"></div>
-        <div class="dot" style="background:#00e676" data-theme="forest" title="Forest"></div>
-        <div class="dot" style="background:#b388ff" data-theme="royal" title="Royal"></div>
+        <div class="dot active" style="background:#c9a961" data-theme="dark" title="Dark"></div>
+        <div class="dot" style="background:#1a7a5c" data-theme="ocean" title="Ocean"></div>
+        <div class="dot" style="background:#d4942a" data-theme="ember" title="Ember"></div>
+        <div class="dot" style="background:#2e7d5b" data-theme="forest" title="Forest"></div>
+        <div class="dot" style="background:#e6c887" data-theme="royal" title="Royal"></div>
       </div>
       <button class="control-btn" id="fontDown" aria-label="Уменьшить шрифт">A-</button>
       <button class="control-btn" id="fontUp" aria-label="Увеличить шрифт">A+</button>

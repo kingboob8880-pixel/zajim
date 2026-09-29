@@ -122,14 +122,18 @@
     .path { list-style: none; padding: 0; margin: 0; counter-reset: step; }
     .path li { counter-increment: step; display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px dashed var(--glass-border); }
     .path li:last-child { border-bottom: none; }
-    .path li::before {
-      content: counter(step); flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-1), var(--accent-3)); color: #fff;
-      display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; margin-top: 2px;
-    }
-    .path a { color: var(--text-1); font-weight: 600; border-bottom: 1px dotted var(--accent-2); }
-    .path a:hover { color: var(--accent-2); }
+    .path .step { display: flex; gap: 12px; align-items: center; width: 100%; }
+    .path .step-main { flex: 1; min-width: 0; }
+    .path .step-title { display: block; color: var(--text-1); font-weight: 600; }
     .path .desc { display: block; font-size: 0.82rem; color: var(--text-3); font-weight: 400; }
+    .path .go-btn {
+      flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+      padding: 8px 14px; border-radius: 99px; font-size: 0.82rem; font-weight: 600; color: #fff; border: none;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-3)); background-size: 200% 200%;
+      animation: gradientShift 10s ease infinite; transition: var(--transition);
+    }
+    .path .go-btn:hover { transform: scale(1.06); box-shadow: 0 6px 16px rgba(0,0,0,0.35); color: #fff; }
+    .path li:hover .step-title { color: var(--accent-2); }
 
     .credits { text-align: center; padding: 24px 16px 40px; font-size: 0.9rem; color: var(--text-3); }
     .credits strong { color: var(--accent-2); font-weight: 600; }
@@ -183,14 +187,14 @@
       <span class="tag">Маршрут обучения</span>
       <h2>Путь по шагам</h2>
       <ol class="path">
-        <li><a href="modul-1.html">Модуль 1 — Физическое пробуждение<span class="desc">Телесная диагностика, протирание, похлопывание, надавливание + вербализация</span></a></li>
-        <li><a href="praktika-1.html">Практика модуля 1<span class="desc">28 состояний, снимаемых через тело</span></a></li>
-        <li><a href="modul-2.html">Модуль 2 — Психосоматическая трансформация<span class="desc">Проживание эмоций и замещение 30 состояний целительными качествами</span></a></li>
-        <li><a href="praktika-2.html">Практика модуля 2<span class="desc">30 пар «недуг → качество»</span></a></li>
-        <li><a href="modul-3.html">Модуль 3 — Духовно-визуальное очищение<span class="desc">Периферическое зрение, цветовые маркеры, дуа-заклинания</span></a></li>
-        <li><a href="praktika-3.html">Практика модуля 3<span class="desc">Работа с цветовыми маркерами состояний</span></a></li>
-        <li><a href="modul-4.html">Модуль 4 — Духовная гигиена<span class="desc">Границы, невпитывание, ежедневная благодарность и устойчивость</span></a></li>
-        <li><a href="praktika-4.html">Практика модуля 4<span class="desc">Ежедневная рутина чистоты и защиты</span></a></li>
+        <li><div class="step"><div class="step-main"><span class="step-title">Модуль 1 — Физическое пробуждение</span><span class="desc">Телесная диагностика, протирание, похлопывание, надавливание + вербализация</span></div><a class="go-btn" href="modul-1.html" aria-label="Перейти к Модулю 1">Открыть →</a></div></li>
+        <li><div class="step"><div class="step-main"><span class="step-title">Практика модуля 1</span><span class="desc">28 состояний, снимаемых через тело</span></div><a class="go-btn" href="praktika-1.html" aria-label="Перейти к Практике модуля 1">Открыть →</a></div></li>
+        <li><div class="step"><div class="step-main"><span class="step-title">Модуль 2 — Психосоматическая трансформация</span><span class="desc">Проживание эмоций и замещение 30 состояний целительными качествами</span></div><a class="go-btn" href="modul-2.html" aria-label="Перейти к Модулю 2">Открыть →</a></div></li>
+        <li><div class="step"><div class="step-main"><span class="step-title">Практика модуля 2</span><span class="desc">30 пар «недуг → качество»</span></div><a class="go-btn" href="praktika-2.html" aria-label="Перейти к Практике модуля 2">Открыть →</a></div></li>
+        <li><div class="step"><div class="step-main"><span class="step-title">Модуль 3 — Духовно-визуальное очищение</span><span class="desc">Периферическое зрение, цветовые маркеры, дуа-заклинания</span></div><a class="go-btn" href="modul-3.html" aria-label="Перейти к Модулю 3">Открыть →</a></div></li>
+        <li><div class="step"><div class="step-main"><span class="step-title">Практика модуля 3</span><span class="desc">Работа с цветовыми маркерами состояний</span></div><a class="go-btn" href="praktika-3.html" aria-label="Перейти к Практике модуля 3">Открыть →</a></div></li>
+        <li><div class="step"><div class="step-main"><span class="step-title">Модуль 4 — Духовная гигиена</span><span class="desc">Границы, невпитывание, ежедневная благодарность и устойчивость</span></div><a class="go-btn" href="modul-4.html" aria-label="Перейти к Модулю 4">Открыть →</a></div></li>
+        <li><div class="step"><div class="step-main"><span class="step-title">Практика модуля 4</span><span class="desc">Ежедневная рутина чистоты и защиты</span></div><a class="go-btn" href="praktika-4.html" aria-label="Перейти к Практике модуля 4">Открыть →</a></div></li>
       </ol>
     </section>
 
@@ -229,6 +233,7 @@
       "🌙 Открыть курс «Особенный»":"🌙 «Особенный» kursini ochish",
       "Маршрут обучения":"O'qish marshruti",
       "Путь по шагам":"Qadam-baqadam yo'l",
+      "Открыть":"Ochish",
       "Модуль 1 — Физическое пробуждение":"1-modul — Jismoniy uyg'onish",
       "Телесная диагностика, протирание, похлопывание, надавливание + вербализация":"Tana diagnostikasi, ishqalash, shapatilash, bosish + so'z bilan ifodalash",
       "Практика модуля 1":"1-modul amaliyoti",

@@ -127,7 +127,7 @@
     <div class="controls" id="controls">
       <button id="btn-filter" onclick="cycleFilter()" title="Фильтр: все / тело / душа">👁 Все</button>
       <button id="btn-view" onclick="cycleView()" title="Сменить цвет модели">🎨 Вид</button>
-      <label title="Свой цвет модели"><input type="color" id="color-input" value="#c9a961"></label>
+      <label title="Свой цвет модели"><input type="color" id="color-input" value="#e8504e"></label>
       <button id="btn-rotate" class="active" onclick="toggleRotate()" title="Автоповорот вкл/выкл">⏸ Авто</button>
       <button id="btn-reset" onclick="resetView()" title="Сбросить камеру">⟳ Камера</button>
     </div>
@@ -4172,14 +4172,14 @@ if(ptLabel){
 
 // ===== Вид / цвет =====
 const VIEWS=['red','blue','white','grey'];
-const VIEW_COLORS={red:'#c9a961', blue:'#6aa6ff', white:'#ffffff', grey:'#d8d4e0'};
+const VIEW_COLORS={red:'#e8504e', blue:'#6aa6ff', white:'#ffffff', grey:'#d8d4e0'};
 let viewIdx=0; let customColor=null;
 function buildMaterial(hex){
   const m=new THREE.MeshStandardMaterial({roughness:0.5, metalness:0.08});
   m.color=new THREE.Color(hex); m.emissive=new THREE.Color(hex); m.emissiveIntensity=0.16; m.side=THREE.DoubleSide;
   return m;
 }
-function currentColorHex(){ return customColor || VIEW_COLORS[VIEWS[viewIdx]] || '#c9a961'; }
+function currentColorHex(){ return customColor || VIEW_COLORS[VIEWS[viewIdx]] || '#e8504e'; }
 function applyView(){
   if(!model) return;
   const hex=currentColorHex();

@@ -2,7 +2,7 @@
 <html lang="ru" data-theme="dark" data-fontsize="1.0">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
 <meta name="theme-color" content="#0a1f1a">
 <title>Практика · Модуль 3: Духовно-визуальное очищение — Курс «Особенный»</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -207,6 +207,23 @@
     @media (max-width: 480px) {
       h1 { font-size: 1.6rem; } h2 { font-size: 1.35rem; }
       .card, .modal-sheet { padding: 18px; }
+    }
+    /* ── мобильная адаптация: крупные зоны нажатия и читаемость ── */
+    @media (max-width: 480px) {
+      .control-btn { width: 40px; height: 40px; font-size: 0.85rem; }
+      .lang-switch { padding: 8px 12px; min-height: 36px; font-size: 0.8rem; }
+      .theme-dots .dot { width: 20px; height: 20px; }
+      .close-modal { top: 10px; right: 10px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+      .step-card .status { font-size: 0.9rem; }
+      .dua-box .translit { font-size: 1rem; }
+      .dua-box .translation { font-size: 0.9rem; }
+    }
+    @media (max-width: 400px) {
+      .top-bar { padding: 0 8px; }
+      .controls { gap: 6px; }
+      .theme-dots { gap: 4px; }
+      .brand-pill { font-size: 0.75rem; padding: 5px 9px; }
+      .control-btn { width: 34px; height: 34px; }
     }
   
   .progress-wrap{margin:18px 0;}

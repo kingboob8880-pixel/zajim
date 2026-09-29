@@ -287,7 +287,7 @@
       background-size: 400% 400%; animation: gradientShift 15s ease infinite;
     }
     .orb {
-      position: fixed; border-radius: 50%; filter: blur(60px); z-index: -1; opacity: 0.4;
+      position: fixed; border-radius: 50%; filter: blur(60px); z-index: -1; opacity: 0.4; pointer-events: none;
     }
     .orb-1 { width: 300px; height: 300px; background: var(--accent-1); top: -10%; left: -10%; animation: orbFloat 20s ease-in-out infinite alternate; }
     .orb-2 { width: 250px; height: 250px; background: var(--accent-2); bottom: 10%; right: -5%; animation: orbFloat 15s ease-in-out infinite alternate-reverse; }
@@ -314,6 +314,24 @@
       h1 { font-size: 1.6rem; } h2 { font-size: 1.35rem; }
       .card { padding: 18px; }
       .top-bar, .bottom-nav { padding-bottom: env(safe-area-inset-bottom); }
+      /* мобильная адаптация: крупные зоны нажатия + читаемость таблиц */
+      .control-btn { width: 40px; height: 40px; font-size: 0.85rem; }
+      .lang-switch { padding: 8px 12px; min-height: 36px; font-size: 0.8rem; }
+      .theme-dots .dot { width: 20px; height: 20px; }
+      .modal-close { width: 40px; height: 40px; font-size: 1.1rem; }
+      .nav-item { min-width: 44px; }
+      .table-wrap { -webkit-overflow-scrolling: touch; }
+      table { font-size: 0.95rem; }
+      .dua-card .translit { font-size: 1rem; }
+      .dua-card .translation { font-size: 0.9rem; }
+    }
+    @media (max-width: 420px) {
+      .top-bar { padding: 0 8px; }
+      .controls { gap: 6px; }
+      .theme-dots { gap: 4px; }
+      .brand-pill { font-size: 0.75rem; padding: 5px 9px; }
+      .control-btn { width: 34px; height: 34px; }
+      .lang-switch { padding: 6px 9px; font-size: 0.7rem; }
     }
   </style>
 </head>

@@ -2,7 +2,7 @@
 <html lang="ru" data-theme="dark" data-fontsize="1">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0, user-scalable=yes">
 <title>Особенный — Курс трансформации личности</title>
 <style>
 /* ===================== RESET & BASE ===================== */
@@ -590,6 +590,30 @@ tr:hover td{background:rgba(255,255,255,0.02)}
   background-size:200% 100%;animation:shimmer 1.5s infinite;
 }
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ===================== MOBILE ADAPTATION ===================== */
+@media (max-width:600px){
+  .ctrl-btn{width:40px;height:40px;}
+  .lang-btn{padding:8px 12px;min-height:34px;font-size:0.8rem;}
+  .theme-dot{width:24px;height:24px;}
+  .modal-close{top:16px;right:16px;width:40px;height:40px;}
+  .nav-item{min-height:48px;padding:10px 4px;font-size:0.8rem;}
+  table{font-size:0.85rem;}
+  .table-wrap{-webkit-overflow-scrolling:touch;}
+  th{padding:10px 8px;}
+  td{padding:10px 8px;}
+  .dua-card .translit{font-size:0.95rem;}
+  .badge,.tag,.module-number,.step-number{font-size:0.8rem;}
+  .footer{font-size:0.82rem;}
+  .warning-box p{font-size:0.85rem;}
+  .accordion-header{padding:16px;}
+}
+@media (max-width:380px){
+  .controls{padding:6px 7px;gap:4px;max-width:calc(100% - 118px);}
+  .brand{padding:8px 10px;}
+  .ctrl-btn{width:34px;height:34px;}
+  .theme-dot{width:20px;height:20px;}
+}
 </style>
 </head>
 <body>

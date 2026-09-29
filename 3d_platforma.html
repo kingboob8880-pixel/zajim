@@ -22,10 +22,13 @@
   canvas{display:block;touch-action:none;}
 
   .scene-header{position:absolute;top:0;left:0;right:0;padding:0.9rem 1.2rem;pointer-events:none;
-    background:linear-gradient(180deg, rgba(26,24,34,0.9), transparent);z-index:5;}
+    background:linear-gradient(180deg, rgba(10,31,26,0.92), transparent);z-index:5;}
   .scene-header h1{margin:0;font-size:1.05rem;font-weight:700;}
   .scene-header .sub{margin:0.15rem 0 0;font-size:0.8rem;color:var(--accent);font-weight:600;}
   .scene-header .hint{margin:0.15rem 0 0;font-size:0.72rem;color:var(--muted);}
+  .scene-header .back-link{pointer-events:auto;display:inline-block;margin-bottom:0.45rem;padding:6px 13px;border-radius:999px;
+    background:rgba(10,31,26,0.6);color:var(--ink);text-decoration:none;border:1px solid var(--line);font-size:0.82rem;font-weight:600;backdrop-filter:blur(6px);transition:all .15s;}
+  .scene-header .back-link:hover{border-color:var(--accent);background:rgba(201,169,97,0.14);}
 
   #loader{position:absolute;inset:0;display:flex;flex-direction:column;gap:1rem;align-items:center;justify-content:center;color:var(--muted);z-index:6;}
   .spinner{width:38px;height:38px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .9s linear infinite;}
@@ -93,14 +96,14 @@
     .scene-header h1{font-size:0.92rem;}
     .scene-header .hint{display:none;}
     .legend{top:0.6rem;right:0.6rem;padding:0.4rem 0.55rem;font-size:0.72rem;}
-    .controls{bottom:0.6rem;gap:0.3rem;}
+    .controls{bottom:0.6rem;gap:0.3rem;flex-wrap:wrap;justify-content:center;border-radius:16px;max-width:96%;padding:0.35rem;}
     .controls button,.controls label{padding:0.55rem 0.8rem;font-size:0.9rem;}
     .side-body{padding:0.9rem 1rem;padding-bottom:calc(1rem + env(safe-area-inset-bottom));}
     .view-item{padding:0.75rem 0.7rem;font-size:0.95rem;}
     .detail h2{font-size:1.1rem;}
     #pt-label{font-size:0.9rem;padding:0.46rem 0.8rem;max-width:82vw;}
     #pt-label .ttl{max-width:64vw;}
-    .controls button,.controls label{padding:0.6rem 0.85rem;}
+    .controls button,.controls label{padding:0.5rem 0.72rem;font-size:0.85rem;}
   }
   @supports(padding:max(0px)){ .controls{padding-bottom:max(0.3rem,env(safe-area-inset-bottom));} }
 </style>
@@ -111,8 +114,8 @@
     <div id="canvas-wrap"></div>
     <div id="pt-label" class="hidden" aria-hidden="true"></div>
     <div id="loader"><div class="spinner"></div><div>Загружаю модель…</div></div>
-    <a href="osobenniy.html" style="position:fixed;top:12px;left:12px;z-index:9999;padding:8px 14px;border-radius:99px;background:rgba(0,0,0,.55);color:#f5efe0;text-decoration:none;border:1px solid rgba(255,255,255,.3);font-size:.85rem;backdrop-filter:blur(6px);">← К курсу</a>
     <div class="scene-header">
+      <a class="back-link" href="osobenniy.html">← К курсу</a>
       <h1>Курс по духовным и телесным зажимам «Особенный»</h1>
       <div class="sub">Лекарь Абу Мухаммад</div>
       <div class="hint">ЛКМ — вращение · колесо — масштаб · ПКМ — сдвиг · нажмите точку</div>
@@ -122,11 +125,11 @@
       <span><i class="dot soul"></i> Душа</span>
     </div>
     <div class="controls" id="controls">
-      <button id="btn-filter" onclick="cycleFilter()">👁 Все</button>
-      <button id="btn-view" onclick="cycleView()">🎨 Вид</button>
-      <label>🎨<input type="color" id="color-input" value="#c9a961"></label>
-      <button id="btn-rotate" class="active" onclick="toggleRotate()">⏸ Авто</button>
-      <button id="btn-reset" onclick="resetView()">⟳ Камера</button>
+      <button id="btn-filter" onclick="cycleFilter()" title="Фильтр: все / тело / душа">👁 Все</button>
+      <button id="btn-view" onclick="cycleView()" title="Сменить цвет модели">🎨 Вид</button>
+      <label title="Свой цвет модели"><input type="color" id="color-input" value="#c9a961"></label>
+      <button id="btn-rotate" class="active" onclick="toggleRotate()" title="Автоповорот вкл/выкл">⏸ Авто</button>
+      <button id="btn-reset" onclick="resetView()" title="Сбросить камеру">⟳ Камера</button>
     </div>
   </div>
 
@@ -4129,7 +4132,7 @@ renderer.setSize(wrap.clientWidth, wrap.clientHeight);
 if('outputColorSpace' in renderer) renderer.outputColorSpace=THREE.SRGBColorSpace; else renderer.outputEncoding=THREE.sRGBEncoding;
 wrap.appendChild(renderer.domElement);
 
-scene.add(new THREE.HemisphereLight(0xffffff,0x35323f,0.9));
+scene.add(new THREE.HemisphereLight(0xffffff,0x1f3a2f,0.9));
 const key=new THREE.DirectionalLight(0xffffff,1.4); key.position.set(4,7,6); scene.add(key);
 const fillL=new THREE.DirectionalLight(0xaeb6ff,0.55); fillL.position.set(-6,3,4); scene.add(fillL);
 const back=new THREE.DirectionalLight(0xffc9a8,0.55); back.position.set(0,5,-7); scene.add(back);
@@ -4225,27 +4228,44 @@ dom.addEventListener('touchend', e=>{
   }
 }, {passive:false});
 
-const ray=new THREE.Raycaster(); const mouse=new THREE.Vector2();
-function setMouse(e){ const r=dom.getBoundingClientRect(); mouse.x=((e.clientX-r.left)/r.width)*2-1; mouse.y=-((e.clientY-r.top)/r.height)*2+1; }
+const ray=new THREE.Raycaster(); const mouse=new THREE.Vector2(); const _pv=new THREE.Vector3();
+// Выбор точки по ближайшей ЭКРАННОЙ позиции клика: надёжно — не цепляет соседнюю точку и не выбирает точку «за телом».
+function pickPoint(clientX, clientY){
+  const r=dom.getBoundingClientRect();
+  const px=clientX-r.left, py=clientY-r.top;
+  if(px<0||py<0||px>=r.width||py>=r.height) return null;
+  mouse.x=(px/r.width)*2-1; mouse.y=-((py/r.height)*2-1);
+  ray.setFromCamera(mouse,camera);
+  let modelDist=Infinity; // глубина поверхности тела на этом луче (для проверки перекрытия)
+  if(modelMeshes.length){ const mh=ray.intersectObjects(modelMeshes,false); if(mh.length) modelDist=mh[0].distance; }
+  const threshold=IS_MOBILE?34:26; // радиус попадания в пикселях
+  let bestId=null, bestD=threshold+1;
+  points.forEach(p=>{
+    if(!p.group.visible) return;
+    p.group.getWorldPosition(_pv);
+    const along=_pv.clone().sub(ray.ray.origin).dot(ray.ray.direction);
+    if(along<=0) return;                                     // точка позади камеры
+    if(along>modelDist+pointRadius*2) return;                // тело ближе — точка скрыта за моделью
+    _pv.project(camera);
+    const sx=(_pv.x*0.5+0.5)*r.width, sy=(-_pv.y*0.5+0.5)*r.height;
+    const d=Math.hypot(sx-px, sy-py);
+    if(d<bestD){ bestD=d; bestId=p.id; }
+  });
+  return bestId;
+}
 dom.addEventListener('click', e=>{
   if(Math.abs(e.clientX-downX)>4||Math.abs(e.clientY-downY)>4) return;
-  setMouse(e); ray.setFromCamera(mouse,camera);
-  const hits=ray.intersectObjects(points.filter(p=>p.group.visible).flatMap(p=>p.group.children),false);
-  if(hits.length) selectPoint(hits[0].object.parent.userData.id);
+  const id=pickPoint(e.clientX,e.clientY); if(id) selectPoint(id);
 });
-function handleTap(t){ if(!t) return; setMouse(t); ray.setFromCamera(mouse,camera);
-  const hits=ray.intersectObjects(points.filter(p=>p.group.visible).flatMap(p=>p.group.children),false);
-  if(hits.length) selectPoint(hits[0].object.parent.userData.id);
-}
+function handleTap(t){ if(!t) return; const id=pickPoint(t.clientX,t.clientY); if(id) selectPoint(id); }
 
 // ===== Точки =====
 function makePointMesh(type){
   const g=new THREE.Group();
-  const core=new THREE.Mesh(new THREE.SphereGeometry(1,18,18), new THREE.MeshStandardMaterial({color:COL[type], emissive:COL[type], emissiveIntensity:0.95, roughness:0.3}));
-  const halo=new THREE.Mesh(new THREE.SphereGeometry(1.7,18,18), new THREE.MeshBasicMaterial({color:COL[type], transparent:true, opacity:0.22}));
-  // Невидимая увеличенная зона нажатия (удобнее попадать пальцем на телефоне)
-  const hit=new THREE.Mesh(new THREE.SphereGeometry(IS_MOBILE?3.6:2.4,10,10), new THREE.MeshBasicMaterial({transparent:true, opacity:0, depthWrite:false, depthTest:false}));
-  g.add(core); g.add(halo); g.add(hit); return {g,core,halo};
+  // Ядро — неосвещённый (Basic) материал с точным цветом, чтобы кодировка Тело/Душа не «выбивалась» в белый от света.
+  const core=new THREE.Mesh(new THREE.SphereGeometry(1,18,18), new THREE.MeshBasicMaterial({color:COL[type], toneMapped:false}));
+  const halo=new THREE.Mesh(new THREE.SphereGeometry(1.7,18,18), new THREE.MeshBasicMaterial({color:COL[type], transparent:true, opacity:0.22, depthWrite:false}));
+  g.add(core); g.add(halo); return {g,core,halo};
 }
 function clearPoints(){ points.slice().forEach(p=>pointsGroup.remove(p.group)); points=[]; selectedId=null; }
 function addPoint(d){
@@ -4350,10 +4370,10 @@ window.cycleFilter=function(){
 };
 window.toggleRotate=function(){ autoRotate=!autoRotate; updateRotateBtn(); };
 function updateRotateBtn(){ const b=document.getElementById('btn-rotate'); if(b){ b.textContent=autoRotate?'⏸ Авто':'▶ Авто'; b.classList.toggle('active',autoRotate);} }
-window.resetView=function(){ if(model) frameModel(); };
+window.resetView=function(){ if(model) frameModel(true); };
 
 // ===== Кадрирование =====
-function frameModel(){
+function frameModel(keepRotate){
   human.rotation.set(0,0,0);
   const box=new THREE.Box3().setFromObject(model); const size=new THREE.Vector3(); box.getSize(size); const center=new THREE.Vector3(); box.getCenter(center);
   model.position.sub(center); model.position.y+=size.y/2;
@@ -4362,7 +4382,7 @@ function frameModel(){
   rotY=0; rotX=0; panX=0; panY=size.y/2;
   const fov=camera.fov*Math.PI/180;
   dist=(size.y*0.62)/Math.tan(fov/2)+size.z; dist=Math.max(dist, maxDim*1.4);
-  autoRotate=true; updateRotateBtn();
+  if(!keepRotate){ autoRotate=true; updateRotateBtn(); }
   modelBox={h:size.y,w:size.x,d:size.z};
 }
 
@@ -4399,7 +4419,7 @@ function animate(){
   const t=clock.getElapsedTime();
   if(autoRotate&&model) rotY+=0.005;
   human.rotation.set(rotX,rotY,0);
-  points.forEach((p,i)=>{ const s=1+Math.sin(t*2+i)*0.18; p.halo.scale.setScalar(s); const sel=p.id===selectedId; p.core.scale.setScalar(sel?1.7:1); p.core.material.emissiveIntensity=sel?1.9:0.95; });
+  points.forEach((p,i)=>{ const s=1+Math.sin(t*2+i)*0.18; p.halo.scale.setScalar(s); const sel=p.id===selectedId; p.core.scale.setScalar(sel?1.7:1); p.halo.material.opacity=sel?0.42:0.22; });
   camera.position.set(panX,panY,dist); camera.lookAt(panX,panY,0);
   camera.updateMatrixWorld();
   updatePointLabelPos();
